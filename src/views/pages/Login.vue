@@ -74,8 +74,10 @@ export default {
       Login(this.param.name, this.param.password)
         .then((res) => {
           console.log("Login ok:", res);
-          this.$router.push("/dashboard");
-          this.$message("登陆成功");
+          this.$msgOk("登录成功");
+          setTimeout(()=>{
+            this.$router.push("/dashboard");
+          },1000)
         })
         .catch((err) => {
           console.log(
@@ -83,7 +85,23 @@ export default {
             err.response ? err.response.data || "服务器错误" : "网络错误",
             err
           );
-          this.$message("登录失败","danger");
+          switch (err.response ? err.response.status : 0) {
+            case 404:
+              this.$msgErr("登录失败:未找到用户");
+              break;
+            case 511:
+              this.$msgErr("登录失败:密码错误");
+              break;
+            case 512:
+              this.$msgErr("登录失败:安装错误");
+              break;
+            case 500:
+              this.$msgErr(err.response ? err.response.data || "服务器错误" : "网络错误");
+              break;
+            default:
+              this.$msgErr("登录失败");
+              break;
+          }
         });
     },
   },

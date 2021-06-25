@@ -385,11 +385,8 @@ export default {
     }
   },
   mounted () {
-    Login('haha', '123').then(res => {
-      console.log('Login ok:', res);
-    }).catch(err => {
-      console.log('Login err:', err.response ? err.response.data || '服务器错误' : '网络错误', err);
-    });
+    console.log('hello')
+    // this.$msgErr('hello')
   },
   methods: {
     color (value) {

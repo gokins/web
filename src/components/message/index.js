@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Message from './message.vue'
 
-Vue.prototype.$message = function (content, type, time) {
+const msgFun=function (content, type, time) {
     let options = {}
     if (typeof content === 'string') {
         options.content = content
-    }else if (typeof content === 'object') {
+    } else if (typeof content === 'object') {
         options.content = toString(content)
     }
-    
+
     if (typeof type == 'string') {
         options.type = type
     }
@@ -20,8 +20,15 @@ Vue.prototype.$message = function (content, type, time) {
         data: options
     }).$mount()
     document.body.appendChild(component.$el)
+};
+
+const plug = {
+    install(Vue) {
+        Vue.component(Message.name, Message);
+
+        Vue.prototype.$message = msgFun;
+        Vue.prototype.$msgOk = (cont)=>msgFun(cont,'success');
+        Vue.prototype.$msgErr = (cont)=>msgFun(cont,'danger');
+    }
 }
-Message.install = function (Vue) {
-    Vue.component(Message.name, Message);
-}
-export default Message
+export default plug

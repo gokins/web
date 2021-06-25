@@ -9,7 +9,11 @@
                 <CForm>
                   <h1>Login</h1>
                   <p class="text-muted">Sign In to your account</p>
-                  <CInput placeholder="Username" autocomplete="username email">
+                  <CInput
+                    placeholder="Username"
+                    autocomplete="username email"
+                    v-model="param.name"
+                  >
                     <template #prepend-content
                       ><CIcon name="cil-user"
                     /></template>
@@ -18,6 +22,7 @@
                     placeholder="Password"
                     type="password"
                     autocomplete="curent-password"
+                    v-model="param.password"
                   >
                     <template #prepend-content
                       ><CIcon name="cil-lock-locked"
@@ -25,7 +30,9 @@
                   </CInput>
                   <CRow>
                     <CCol col="6" class="text-left">
-                      <CButton color="info" class="px-4" @click="login">Login</CButton>
+                      <CButton color="info" class="px-4" @click="login"
+                        >Login</CButton
+                      >
                     </CCol>
                     <CCol col="6" class="text-right">
                       <CButton color="link" class="px-0"
@@ -57,12 +64,18 @@
 import { Login } from "@/assets/js/apis";
 export default {
   name: "Login",
+  data() {
+    return {
+      param: {},
+    };
+  },
   methods: {
     login() {
-      Login("admin", "123456")
+      Login(this.param.name, this.param.password)
         .then((res) => {
           console.log("Login ok:", res);
-          this.$router.push('/dashboard')
+          this.$router.push("/dashboard");
+          this.$message("登陆成功");
         })
         .catch((err) => {
           console.log(
@@ -70,7 +83,7 @@ export default {
             err.response ? err.response.data || "服务器错误" : "网络错误",
             err
           );
-
+          this.$message("登录失败","danger");
         });
     },
   },

@@ -6,9 +6,11 @@ import CoreuiVue from '@coreui/vue'
 import { iconsSet as icons } from './assets/icons/icons.js'
 import store from './store'
 import api from '@/assets/js/api'
+import Message from '@/components/message'
 
 Vue.config.performance = true;
 Vue.use(CoreuiVue);
+Vue.use(Message)
 Vue.prototype.$log = console.log.bind(console);
 Vue.prototype.$post = api.post;
 

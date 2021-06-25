@@ -14,6 +14,16 @@ export default [
       },
       {
         _name: 'CSidebarNavTitle',
+        _children: ['Gokins']
+      },
+      {
+        _name: 'CSidebarNavItem',
+        name: '组织',
+        to: '/org/list',
+        icon: 'cil-drop'
+      },
+      {
+        _name: 'CSidebarNavTitle',
         _children: ['Theme']
       },
       {

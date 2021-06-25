@@ -304,6 +304,21 @@ function configRoutes () {
               component: Modals
             }
           ]
+        },
+        {
+          path:'/org',
+          redirect: '/org/list',
+          name: 'Orgs',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'list',
+              name: 'orgList',
+              component: ()=>import('@/views/orgs/list')
+            },
+          ]
         }
       ]
     },

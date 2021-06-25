@@ -1,6 +1,6 @@
 <template>
   <div>
-    <WidgetsDropdown/>
+    <WidgetsDropdown />
     <CCard>
       <CCardBody>
         <CRow>
@@ -10,79 +10,49 @@
           </CCol>
           <CCol sm="7" class="d-none d-md-block">
             <CButton color="primary" class="float-right">
-              <CIcon name="cil-cloud-download"/>
+              <CIcon name="cil-cloud-download" />
             </CButton>
             <CButtonGroup class="float-right mr-3">
-              <CButton
-                color="outline-secondary"
-                v-for="(value, key) in ['Day', 'Month', 'Year']"
-                :key="key"
-                class="mx-0"
-                :pressed="value === selected ? true : false"
-                @click="selected = value"
-              >
+              <CButton color="outline-secondary" v-for="(value, key) in ['Day', 'Month', 'Year']" :key="key"
+                class="mx-0" :pressed="value === selected ? true : false" @click="selected = value">
                 {{value}}
               </CButton>
             </CButtonGroup>
           </CCol>
         </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;"/>
+        <MainChartExample style="height:300px;margin-top:40px;" />
       </CCardBody>
       <CCardFooter>
         <CRow class="text-center">
           <CCol md sm="12" class="mb-sm-2 mb-0">
             <div class="text-muted">Visits</div>
             <strong>29.703 Users (40%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="success"
-              :value="40"
-            />
+            <CProgress class="progress-xs mt-2" :precision="1" color="success" :value="40" />
           </CCol>
           <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
             <div class="text-muted">Unique</div>
             <strong>24.093 Users (20%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="info"
-              :value="20"
-            />
+            <CProgress class="progress-xs mt-2" :precision="1" color="info" :value="20" />
           </CCol>
           <CCol md sm="12" class="mb-sm-2 mb-0">
             <div class="text-muted">Pageviews</div>
             <strong>78.706 Views (60%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="warning"
-              :value="60"
-            />
+            <CProgress class="progress-xs mt-2" :precision="1" color="warning" :value="60" />
           </CCol>
           <CCol md sm="12" class="mb-sm-2 mb-0">
             <div class="text-muted">New Users</div>
             <strong>22.123 Users (80%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="danger"
-              :value="80"
-            />
+            <CProgress class="progress-xs mt-2" :precision="1" color="danger" :value="80" />
           </CCol>
           <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
             <div class="text-muted">Bounce Rate</div>
             <strong>Average Rate (40.15%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              :value="40"
-            />
+            <CProgress class="progress-xs mt-2" :precision="1" :value="40" />
           </CCol>
         </CRow>
       </CCardFooter>
     </CCard>
-    <WidgetsBrand/>
+    <WidgetsBrand />
     <CRow>
       <CCol md="12">
         <CCard>
@@ -114,16 +84,8 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      color="info"
-                      :value="34"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      color="danger"
-                      :value="78"
-                    />
+                    <CProgress class="progress-xs" color="info" :value="34" />
+                    <CProgress class="progress-xs" color="danger" :value="78" />
                   </div>
                 </div>
                 <div class="progress-group mb-4">
@@ -133,16 +95,8 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="56"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="94"
-                      color="danger"
-                    />
+                    <CProgress class="progress-xs" :value="56" color="info" />
+                    <CProgress class="progress-xs" :value="94" color="danger" />
                   </div>
                 </div>
                 <div class="progress-group mb-4">
@@ -152,16 +106,8 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="12"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="67"
-                      color="danger"
-                    />
+                    <CProgress class="progress-xs" :value="12" color="info" />
+                    <CProgress class="progress-xs" :value="67" color="danger" />
                   </div>
                 </div>
                 <div class="progress-group mb-4">
@@ -171,16 +117,8 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="43"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="91"
-                      color="danger"
-                    />
+                    <CProgress class="progress-xs" :value="43" color="info" />
+                    <CProgress class="progress-xs" :value="91" color="danger" />
                   </div>
                 </div>
                 <div class="progress-group mb-4">
@@ -190,16 +128,8 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="22"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="73"
-                      color="danger"
-                    />
+                    <CProgress class="progress-xs" :value="22" color="info" />
+                    <CProgress class="progress-xs" :value="73" color="danger" />
                   </div>
                 </div>
                 <div class="progress-group mb-4">
@@ -209,16 +139,8 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="53"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="82"
-                      color="danger"
-                    />
+                    <CProgress class="progress-xs" :value="53" color="info" />
+                    <CProgress class="progress-xs" :value="82" color="danger" />
                   </div>
                 </div>
                 <div class="progress-group mb-4">
@@ -228,24 +150,20 @@
                     </span>
                   </div>
                   <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="9"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="69"
-                      color="danger"
-                    />
+                    <CProgress class="progress-xs" :value="9" color="info" />
+                    <CProgress class="progress-xs" :value="69" color="danger" />
                   </div>
                 </div>
                 <div class="legend text-center">
                   <small>
-                    <sup><CBadge shape="pill" color="info">&nbsp;</CBadge></sup>
+                    <sup>
+                      <CBadge shape="pill" color="info">&nbsp;</CBadge>
+                    </sup>
                     New clients
                     &nbsp;&nbsp;
-                    <sup><CBadge shape="pill" color="danger">&nbsp;</CBadge></sup>
+                    <sup>
+                      <CBadge shape="pill" color="danger">&nbsp;</CBadge>
+                    </sup>
                     Recurring clients
                   </small>
                 </div>
@@ -269,132 +187,87 @@
                 <ul class="horizontal-bars type-2">
                   <div class="progress-group">
                     <div class="progress-group-header">
-                      <CIcon name="cil-user" class="progress-group-icon"/>
+                      <CIcon name="cil-user" class="progress-group-icon" />
                       <span class="title">Male</span>
                       <span class="ml-auto font-weight-bold">43%</span>
                     </div>
                     <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="43"
-                        color="warning"
-                      />
+                      <CProgress class="progress-xs" :value="43" color="warning" />
                     </div>
                   </div>
                   <div class="progress-group mb-5">
                     <div class="progress-group-header">
-                      <CIcon name="cil-user-female" class="progress-group-icon"/>
+                      <CIcon name="cil-user-female" class="progress-group-icon" />
                       <span class="title">Female</span>
                       <span class="ml-auto font-weight-bold">37%</span>
                     </div>
                     <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="37"
-                        color="warning"
-                      />
+                      <CProgress class="progress-xs" :value="37" color="warning" />
                     </div>
                   </div>
                   <div class="progress-group">
                     <div class="progress-group-header">
-                      <CIcon name="cil-globe-alt" class="progress-group-icon"/>
+                      <CIcon name="cil-globe-alt" class="progress-group-icon" />
                       <span class="title">Organic Search</span>
                       <span class="ml-auto font-weight-bold">
                         191,235 <span class="text-muted small">(56%)</span>
                       </span>
                     </div>
                     <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="56"
-                        color="success"
-                      />
+                      <CProgress class="progress-xs" :value="56" color="success" />
                     </div>
                   </div>
                   <div class="progress-group">
                     <div class="progress-group-header">
-                      <CIcon
-                        name="cib-facebook"
-                        height="17"
-                        class="progress-group-icon"
-                      />
+                      <CIcon name="cib-facebook" height="17" class="progress-group-icon" />
                       <span class="title">Facebook</span>
                       <span class="ml-auto font-weight-bold">
                         51,223 <span class="text-muted small">(15%)</span>
                       </span>
                     </div>
                     <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="15"
-                        color="success"
-                      />
+                      <CProgress class="progress-xs" :value="15" color="success" />
                     </div>
                   </div>
                   <div class="progress-group">
                     <div class="progress-group-header">
-                      <CIcon
-                        name="cib-twitter"
-                        height="17"
-                        class="progress-group-icon"
-                      />
+                      <CIcon name="cib-twitter" height="17" class="progress-group-icon" />
                       <span class="title">Twitter</span>
                       <span class="ml-auto font-weight-bold">
                         37,564 <span class="text-muted small">(11%)</span>
                       </span>
                     </div>
                     <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="11"
-                        color="success"
-                      />
+                      <CProgress class="progress-xs" :value="11" color="success" />
                     </div>
                   </div>
                   <div class="progress-group">
                     <div class="progress-group-header">
-                      <CIcon
-                        name="cib-linkedin"
-                        height="17"
-                        class="progress-group-icon"
-                      />
+                      <CIcon name="cib-linkedin" height="17" class="progress-group-icon" />
                       <span class="title">LinkedIn</span>
                       <span class="ml-auto font-weight-bold">
                         27,319 <span class="text-muted small">&nbsp;(8%)</span>
                       </span>
                     </div>
                     <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="8"
-                        color="success"
-                      />
+                      <CProgress class="progress-xs" :value="8" color="success" />
                     </div>
                   </div>
                   <div class="divider text-center">
                     <CButton color="link" size="sm" class="text-muted">
-                      <CIcon name="cil-options"/>
+                      <CIcon name="cil-options" />
                     </CButton>
                   </div>
                 </ul>
               </CCol>
             </CRow>
-            <br/>
-            <CDataTable
-              class="mb-0 table-outline"
-              hover
-              :items="tableItems"
-              :fields="tableFields"
-              head-color="light"
-              no-sorting
-            >
+            <br />
+            <CDataTable class="mb-0 table-outline" hover :items="tableItems" :fields="tableFields" head-color="light"
+              no-sorting>
               <td slot="avatar" class="text-center" slot-scope="{item}">
                 <div class="c-avatar">
                   <img :src="item.avatar.url" class="c-avatar-img" alt="">
-                  <span
-                    class="c-avatar-status"
-                    :class="`bg-${item.avatar.status || 'secondary'}`"
-                  ></span>
+                  <span class="c-avatar-status" :class="`bg-${item.avatar.status || 'secondary'}`"></span>
                 </div>
               </td>
               <td slot="user" slot-scope="{item}">
@@ -406,15 +279,8 @@
                   </span> | Registered: {{item.user.registered}}
                 </div>
               </td>
-              <td
-                slot="country"
-                slot-scope="{item}"
-                class="text-center"
-              >
-                <CIcon
-                  :name="item.country.flag"
-                  height="25"
-                />
+              <td slot="country" slot-scope="{item}" class="text-center">
+                <CIcon :name="item.country.flag" height="25" />
               </td>
               <td slot="usage" slot-scope="{item}">
                 <div class="clearfix">
@@ -425,21 +291,10 @@
                     <small class="text-muted">{{item.usage.period}}</small>
                   </div>
                 </div>
-                <CProgress
-                  class="progress-xs"
-                  v-model="item.usage.value"
-                  :color="color(item.usage.value)"
-                />
+                <CProgress class="progress-xs" v-model="item.usage.value" :color="color(item.usage.value)" />
               </td>
-              <td
-                slot="payment"
-                slot-scope="{item}"
-                class="text-center"
-              >
-                <CIcon
-                  :name="item.payment.icon"
-                  height="25"
-                />
+              <td slot="payment" slot-scope="{item}" class="text-center">
+                <CIcon :name="item.payment.icon" height="25" />
               </td>
               <td slot="activity" slot-scope="{item}">
                 <div class="small text-muted">Last login</div>
@@ -454,6 +309,7 @@
 </template>
 
 <script>
+import { Login } from '@/assets/js/apis'
 import MainChartExample from './charts/MainChartExample'
 import WidgetsDropdown from './widgets/WidgetsDropdown'
 import WidgetsBrand from './widgets/WidgetsBrand'
@@ -527,6 +383,13 @@ export default {
         { key: 'activity' },
       ]
     }
+  },
+  mounted () {
+    Login('haha', '123').then(res => {
+      console.log('Login ok:', res);
+    }).catch(err => {
+      console.log('Login err:', err);
+    });
   },
   methods: {
     color (value) {

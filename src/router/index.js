@@ -308,15 +308,20 @@ function configRoutes () {
         {
           path:'/org',
           redirect: '/org/list',
-          name: 'Orgs',
+          name: 'Org',
           component: {
             render (c) { return c('router-view') }
           },
           children: [
             {
               path: 'list',
-              name: 'orgList',
+              name: 'List',
               component: ()=>import('@/views/orgs/list')
+            },
+            {
+              path: 'edit',
+              name: 'Edit',
+              component: ()=>import('@/views/orgs/edit')
             },
           ]
         }

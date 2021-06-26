@@ -39,13 +39,14 @@
   </div>
 </template>
 <script>
-import { UtilCatch, PipelineInfo } from "@/assets/js/apis";
+import { UtilCatch, PipelineInfo, SavePipeline } from "@/assets/js/apis";
 export default {
   data() {
     return {
       formData: {
         name: "",
         content: "",
+        pipelineId: "",
       },
     };
   },
@@ -58,30 +59,31 @@ export default {
       this.$router.push("/404");
       return;
     }
+    this.formData.pipelineId = this.$route.params.id;
     this.getInfo(this.$route.params.id);
   },
   methods: {
     subFun() {
-      //   if (this.formData.name == "") {
-      //     this.$msgErr("请输入名称");
-      //     return;
-      //   }
-      //   if (this.formData.content == "") {
-      //     this.$msgErr("请输入Yaml");
-      //     return;
-      //   }
-      //   NewPipeline(this.formData)
-      //     .then((res) => {
-      //       //   this.$msgOk('')
-      //       this.$router.push("/pipeline/list");
-      //     })
-      //     .catch((err) => UtilCatch(this, err));
+      if (this.formData.name == "") {
+        this.$msgErr("请输入名称");
+        return;
+      }
+      if (this.formData.content == "") {
+        this.$msgErr("请输入Yaml");
+        return;
+      }
+      SavePipeline(this.formData)
+        .then((res) => {
+          this.$msgOk("成功");
+        })
+        .catch((err) => UtilCatch(this, err));
     },
     getInfo(id) {
       PipelineInfo({ id: id })
         .then((res) => {
-          this.formData.name = res.name;
-          this.formData.content = res.content;
+          console.log(res);
+          this.formData.name = res.data.name;
+          this.formData.content = res.data.jsonContent;
         })
         .catch((err) => UtilCatch(this, err));
     },
@@ -90,5 +92,5 @@ export default {
 </script>
 <style lang="sass" scoped>
 .subRow
-    margin-top: 10px
+  margin-top: 10px
 </style>

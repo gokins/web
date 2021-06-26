@@ -24,12 +24,6 @@ export default [
       },
       {
         _name: 'CSidebarNavItem',
-        name: 'Org流水线',
-        to: '/pipeline/orglist',
-        icon: 'cil-drop'
-      },
-      {
-        _name: 'CSidebarNavItem',
         name: 'My流水线',
         to: '/pipeline/list',
         icon: 'cil-drop'

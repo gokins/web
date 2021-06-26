@@ -32,3 +32,4 @@ export const PipelineList = pars => Post('/pipeline/pipelines', pars);
 export const OrgPipelineList = pars => Post('/pipeline/org/pipelines', pars);
 export const NewPipeline = pars => Post('/pipeline/new', pars);
 export const PipelineInfo = pars => Post('/pipeline/info', pars);
+export const SavePipeline = pars => Post('/pipeline/save', pars);

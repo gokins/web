@@ -46,8 +46,19 @@ export default {
       formData: {
         name: "",
         content: "",
+        orgId: "",
       },
     };
+  },
+  mounted() {
+    if (
+      this.$route.params != null &&
+      this.$route.params.orgId != null &&
+      this.$route.params.orgId != ""
+    ) {
+      this.formData.orgId = this.$route.params.orgId;
+    }
+    this.formData.orgId = this.$route.params.orgId;
   },
   methods: {
     subFun() {
@@ -61,7 +72,7 @@ export default {
       }
       NewPipeline(this.formData)
         .then((res) => {
-        //   this.$msgOk('')
+          //   this.$msgOk('')
           this.$router.push("/pipeline/list");
         })
         .catch((err) => UtilCatch(this, err));
@@ -71,5 +82,5 @@ export default {
 </script>
 <style lang="sass" scoped>
 .subRow
-    margin-top: 10px
+  margin-top: 10px
 </style>

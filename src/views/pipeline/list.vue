@@ -8,7 +8,7 @@
             size="sm"
             color="info"
             variant="outline"
-            @click="$router.push('new')"
+            @click="goNew"
             >新建流水线</CButton
           >
         </div>
@@ -23,9 +23,17 @@
           :fields="fields"
           :items="items"
         >
-          <template #status="{ item }">
-            <td>
-              <CBadge :color="getBadge(item.status)" @click="goEdit(item.id)">编辑</CBadge>
+          <template #edit="{ item }">
+            <td class="py-2">
+              <CButton
+                color="primary"
+                variant="outline"
+                square
+                size="sm"
+                @click="goEdit(item.id)"
+              >
+                编辑
+              </CButton>
             </td>
           </template>
         </CDataTable>
@@ -41,22 +49,58 @@
   </div>
 </template>
 <script>
-import { UtilCatch, PipelineList } from "@/assets/js/apis";
+import { UtilCatch, PipelineList, OrgPipelineList } from "@/assets/js/apis";
 export default {
   data() {
     return {
-      fields: ["id", "name", "displayName", "status"],
+      fields: [
+        {
+          key: "id",
+          label: "id",
+        },
+        {
+          key: "name",
+          label: "名称",
+        },
+        {
+          key: "displayName",
+          label: "描述",
+        },
+        {
+          key: "edit",
+          label: "操作",
+          sorter: false,
+          filter: false,
+        },
+      ],
       items: [],
       page: 0,
       pages: 0,
+      orgId: "",
     };
   },
   mounted() {
+    if (
+      this.$route.params != null &&
+      this.$route.params.orgId != null &&
+      this.$route.params.orgId != ""
+    ) {
+      this.orgId = this.$route.params.orgId;
+    }
     this.getList(0);
   },
   methods: {
     getList(pg) {
-      PipelineList({ page: pg })
+      if (this.orgId != "") {
+        OrgPipelineList({ page: pg, orgId: this.orgId })
+          .then((res) => {
+            this.page = res.data.page;
+            this.pages = res.data.pages;
+            this.items = res.data.data;
+          })
+          .catch((err) => UtilCatch(this, err));
+      }
+      PipelineList({ page: pg, orgId: this.orgId })
         .then((res) => {
           this.page = res.data.page;
           this.pages = res.data.pages;
@@ -65,18 +109,10 @@ export default {
         .catch((err) => UtilCatch(this, err));
     },
     goEdit(id) {
-      this.$router.push('info/'+id)
+      this.$router.push("/pipeline/info/" + id);
     },
-    getBadge(status) {
-      return status === "Active"
-        ? "success"
-        : status === "Inactive"
-        ? "secondary"
-        : status === "Pending"
-        ? "warning"
-        : status === "Banned"
-        ? "danger"
-        : "primary";
+    goNew() {
+      this.$router.push('/pipeline/new/'+this.orgId)
     },
   },
 };

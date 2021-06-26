@@ -339,6 +339,21 @@ function configRoutes () {
           },
           children: [
             {
+              path: 'list/:orgId',
+              name: 'List',
+              component: ()=>import('@/views/pipeline/list')
+            },
+            {
+              path: 'new/:orgId',
+              name: 'New',
+              component: ()=>import('@/views/pipeline/new')
+            },
+            {
+              path: 'info/:id',
+              name: 'Info',
+              component: ()=>import('@/views/pipeline/info')
+            },
+            {
               path: 'list',
               name: 'List',
               component: ()=>import('@/views/pipeline/list')
@@ -349,12 +364,7 @@ function configRoutes () {
               component: ()=>import('@/views/pipeline/new')
             },
             {
-              path: 'orglist',
-              name: 'OrgList',
-              component: ()=>import('@/views/pipeline/orglist')
-            },
-            {
-              path: 'info/:id',
+              path: 'info',
               name: 'Info',
               component: ()=>import('@/views/pipeline/info')
             },

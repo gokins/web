@@ -22,10 +22,32 @@
           :fixed="true"
           :fields="fields"
           :items="items"
-          :items-per-page="5"
-          pagination
         >
+        <template #aid="{item}">
+          <td style="text-align:center">
+            <CLink :to="'info/'+item.aid"># {{item.aid}}</CLink>
+          </td>
+        </template>
+        <template #name="{item}">
+          <td>
+            <CLink :to="'info/'+item.aid">{{item.name}}</CLink>
+          </td>
+        </template>
+        <!-- <template #btns-header>
+            操作
+        </template>
+        <template #btns="{it}">
+          <td>
+            <CButton size="sm" color="info">ok</CButton>
+          </td>
+        </template> -->
         </CDataTable>
+        <CPagination
+        :activePage="page"
+        :pages="pages"
+        @update:activePage="getList"
+        style="float:right"
+        />
       </CCardBody>
     </CCard>
   </div>
@@ -35,9 +57,23 @@ import { UtilCatch, OrgList } from "@/assets/js/apis";
 export default {
   data() {
     return {
-      fields: ["id", "name"],
+      fields: [{
+        key:"aid",
+        label:'编号',
+        _style:'width:80px;text-align:center'
+      }, {
+        key:"name",
+        label:'名称',
+      },{
+        key:"desc",
+        label:'描述',
+      },{
+        key:"created",
+        label:'创建时间',
+      }],
       items: [],
       page:0,
+      pages:0
     };
   },
   mounted() {
@@ -47,6 +83,7 @@ export default {
     getList(pg) {
       OrgList({ page: pg }).then((res) => {
         this.page=res.data.page;
+        this.pages=res.data.pages;
         this.items=res.data.data;
       }).catch((err) => UtilCatch(this, err));
     },

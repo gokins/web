@@ -1,6 +1,7 @@
 import {Post} from '@/assets/js/api';
 
 export const Login = (name, pass) => Post('/lg/login', { name: name, pass: pass });
+export const UInfo = () => Post('/lg/info', {  });
 
 //catch
 export const UtilCatch=(that,err,fn) => {

@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const state = {
+  userStat:false,
+  userInfo:{},
   sidebarShow: 'responsive',
   sidebarMinimize: false
 }
@@ -18,6 +20,10 @@ const mutations = {
   },
   set (state, [variable, value]) {
     state[variable] = value
+  },
+  setUserInfo(state,info){
+    state.userStat=info.login;
+    state.userInfo=info;
   }
 }
 

@@ -3,8 +3,8 @@ import { getToken } from '@/assets/js/token';
 
 // const apiUrl = process.env.NODE_ENV === 'production' ? 'http://gokins.cn:8030/api' : "http://localhost:8030/api";
 
-const apiUrl = 'http://localhost:8030/api';
-// const apiUrl = 'http://192.168.123.98:8030/api';
+// const apiUrl = 'http://localhost:8030/api';
+const apiUrl = '/api';
 const serv = axios.create({
     baseURL: apiUrl, // api base_url
     // baseURL: 'http://localhost:8082', // api base_url
@@ -14,7 +14,7 @@ const serv = axios.create({
 
 export const ApiUrl=apiUrl;
 export const Post=function(path,params,headers){
-    let hds={'abc':'123'};
+    let hds={'Accept': '*','abc':'123'};
     if(headers)hds=headers;
     let token = getToken();
     if(token)hds['Authorization']='TOKEN '+token;

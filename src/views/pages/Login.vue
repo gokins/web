@@ -61,7 +61,7 @@
 </template>
 
 <script>
-import { getToken,setToken,removeToken } from '@/assets/js/token';
+import { getToken, setToken, removeToken } from "@/assets/js/token";
 import { Login } from "@/assets/js/apis";
 export default {
   name: "Login",
@@ -74,18 +74,13 @@ export default {
     login() {
       Login(this.param.name, this.param.password)
         .then((res) => {
-          setToken(res.data.token)
+          setToken(res.data.token);
           this.$msgOk("登录成功");
-          setTimeout(()=>{
+          setTimeout(() => {
             this.$router.push("/dashboard");
-          },1000)
+          }, 1000);
         })
         .catch((err) => {
-          console.log(
-            "Login err:",
-            err.response ? err.response.data || "服务器错误" : "网络错误",
-            err
-          );
           switch (err.response ? err.response.status : 0) {
             case 404:
               this.$msgErr("登录失败:未找到用户");
@@ -97,9 +92,12 @@ export default {
               this.$msgErr("登录失败:安装错误");
               break;
             case 500:
-              this.$msgErr(err.response ? err.response.data || "服务器错误" : "网络错误");
+              this.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+              );
               break;
             default:
+              console.log("Login err:", err);
               this.$msgErr("登录失败");
               break;
           }

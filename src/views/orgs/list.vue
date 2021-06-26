@@ -22,8 +22,6 @@
           :fixed="true"
           :fields="fields"
           :items="items"
-          :items-per-page="5"
-          pagination
         >
         <template #aid="{item}">
           <td style="text-align:center">
@@ -44,6 +42,12 @@
           </td>
         </template> -->
         </CDataTable>
+        <CPagination
+        :activePage="page"
+        :pages="pages"
+        @update:activePage="getList"
+        style="float:right"
+        />
       </CCardBody>
     </CCard>
   </div>
@@ -69,6 +73,7 @@ export default {
       }],
       items: [],
       page:0,
+      pages:0
     };
   },
   mounted() {
@@ -78,6 +83,7 @@ export default {
     getList(pg) {
       OrgList({ page: pg }).then((res) => {
         this.page=res.data.page;
+        this.pages=res.data.pages;
         this.items=res.data.data;
       }).catch((err) => UtilCatch(this, err));
     },

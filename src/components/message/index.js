@@ -22,7 +22,7 @@ const msgFun=function (content, type, time) {
     document.body.appendChild(component.$el)
 };
 
-const plug = {
+export default {
     install(Vue) {
         Vue.component(Message.name, Message);
 
@@ -31,4 +31,3 @@ const plug = {
         Vue.prototype.$msgErr = (cont)=>msgFun(cont,'danger');
     }
 }
-export default plug

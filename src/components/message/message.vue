@@ -1,9 +1,9 @@
 <template>
-  <div class="message">
-    <CAlert :show.sync="dismissCountDown" :color="type" fade>
-      {{ content }}
-    </CAlert>
-  </div>
+  <!-- <div class="message" v-if="dismissCountDown>0"> -->
+  <CAlert :show.sync="dismissCountDown" :color="type" fade class="message">
+    {{ content }}
+  </CAlert>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -27,4 +27,5 @@ export default {
   top: 10%
   left: 50%
   transform: translate(-50%, -50%)
+  z-index: 10000
 </style>

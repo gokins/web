@@ -1,7 +1,27 @@
-// const apiUrl = process.env.NODE_ENV === 'production' ? 'http://gokins.cn:8030/api' : "http://localhost:8030/api";
+import Vue from 'vue';
+import { Post, ApiUrl } from '@/assets/js/api'
 
-const apiUrl = 'http://localhost:8030/api';
-// const apiUrl = 'http://192.168.123.98:8030/api';
+const utilCatch = (that,err,fn) => {
+    debugger
+    const stat = err.response ? err.response.status : 0;
+    if (stat == 403) {
+        that.$router.push('/pages/login')
+        return true;
+    }
+    if(fn&&typeof fn==='function'){
+        fn(err);
+        return true;
+    }else{
+        that.$msgErr(
+          err.response ? err.response.data || "服务器错误" : "网络错误"
+        );
+        return false;
+    }
+}
 export default {
-    ApiUrl: apiUrl,
+    install(Vue) {
+        Vue.prototype.$post = Post;
+        Vue.prototype.$ApiUrl = ApiUrl;
+        Vue.prototype.$utilCatch = utilCatch;
+    }
 }

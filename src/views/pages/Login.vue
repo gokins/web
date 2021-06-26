@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import { getToken,setToken,removeToken } from '@/assets/js/token';
 import { Login } from "@/assets/js/apis";
 export default {
   name: "Login",
@@ -73,7 +74,7 @@ export default {
     login() {
       Login(this.param.name, this.param.password)
         .then((res) => {
-          console.log("Login ok:", res);
+          setToken(res.data.token)
           this.$msgOk("登录成功");
           setTimeout(()=>{
             this.$router.push("/dashboard");

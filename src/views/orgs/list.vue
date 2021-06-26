@@ -4,7 +4,7 @@
       <CCardHeader>
         <CIcon name="cil-grid" /> 组织列表
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="goEdit()">新建组织</CButton>
+          <CButton size="sm" color="info" variant="outline" @click="$router.push('new')">新建组织</CButton>
         </div>
       </CCardHeader>
       <CCardBody>
@@ -35,7 +35,7 @@ export default {
   mounted() {},
   methods:{
       goEdit(){
-          this.$router.push('edit')
+          this.$router.push('info')
       }
   }
 };

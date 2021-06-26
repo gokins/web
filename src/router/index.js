@@ -319,9 +319,9 @@ function configRoutes () {
               component: ()=>import('@/views/orgs/list')
             },
             {
-              path: 'edit',
-              name: 'Edit',
-              component: ()=>import('@/views/orgs/edit')
+              path: 'new',
+              name: 'New',
+              component: ()=>import('@/views/orgs/new')
             },
           ]
         }

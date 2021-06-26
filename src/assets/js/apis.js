@@ -25,3 +25,9 @@ export const UtilCatch=(that,err,fn) => {
 export const OrgList = pars => Post('/org/list', pars);
 export const OrgNew = pars => Post('/org/new', pars);
 export const OrgInfo = id => Post('/org/info', {id:id});
+
+//Pipeline
+export const PipelineList = pars => Post('/pipeline/pipelines', pars);
+export const OrgPipelineList = pars => Post('/pipeline/org/pipelines', pars);
+export const NewPipeline = pars => Post('/pipeline/new', pars);
+export const PipelineInfo = pars => Post('/pipeline/info', pars);

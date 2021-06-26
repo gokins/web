@@ -329,6 +329,36 @@ function configRoutes () {
               component: ()=>import('@/views/orgs/info')
             },
           ]
+        },
+        {
+          path:'/pipeline',
+          redirect: '/pipeline/list',
+          name: 'Pipeline',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'list',
+              name: 'List',
+              component: ()=>import('@/views/pipeline/list')
+            },
+            {
+              path: 'new',
+              name: 'New',
+              component: ()=>import('@/views/pipeline/new')
+            },
+            {
+              path: 'orglist',
+              name: 'OrgList',
+              component: ()=>import('@/views/pipeline/orglist')
+            },
+            {
+              path: 'info/:id',
+              name: 'Info',
+              component: ()=>import('@/views/pipeline/info')
+            },
+          ]
         }
       ]
     },

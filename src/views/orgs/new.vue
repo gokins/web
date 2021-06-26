@@ -65,6 +65,7 @@ export default {
       }
       OrgNew(this.formData).then(res => {
           // this.$msgOk('')
+          this.$router.push('info/'+res.data.id)
       }).catch(err => UtilCatch(this, err));
     },
   },

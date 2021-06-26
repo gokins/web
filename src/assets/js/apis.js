@@ -10,7 +10,7 @@ export const UtilCatch=(that,err,fn) => {
         return true;
     }
     if(fn&&typeof fn==='function'){
-        fn(err);
+        fn(err,that);
         return true;
     }else{
         that.$msgErr(
@@ -22,6 +22,5 @@ export const UtilCatch=(that,err,fn) => {
 
 
 //Org
-export const OrgNew = pars => {
-    console.log('what',Post)
-    return Post('/org/new', pars)};
+export const OrgNew = pars => Post('/org/new', pars);
+export const OrgInfo = id => Post('/org/info', {id:id});

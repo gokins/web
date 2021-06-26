@@ -323,6 +323,11 @@ function configRoutes () {
               name: 'New',
               component: ()=>import('@/views/orgs/new')
             },
+            {
+              path: 'info/:id',
+              name: 'Info',
+              component: ()=>import('@/views/orgs/info')
+            },
           ]
         }
       ]

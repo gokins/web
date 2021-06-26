@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { UtilCatch, UInfo } from "@/assets/js/apis";
 import TheSidebar from './TheSidebar'
 import TheHeader from './TheHeader'
 import TheFooter from './TheFooter'
@@ -28,6 +29,28 @@ export default {
     TheSidebar,
     TheHeader,
     TheFooter
+  }, destroyed () {
+    this.$EventBus.$off('refreshUserInfo');
+  },mounted(){
+    this.getUInfo();
+    this.$EventBus.$on('refreshUserInfo', () => {
+      console.log('event refreshUserInfo!!!');
+      this.getUInfo();
+    });
+  },methods:{
+    getUInfo(){
+      UInfo().then(res=>{
+        if (res.data.login!=true){
+          this.$router.push('/login')
+          return
+        }
+        this.$store.commit('setUserInfo',res.data);
+        this.$EventBus.$emit('onGetUserInfo', res.data);
+      }).catch(err=>{
+        console.log('getUInfo err',err);
+          this.$router.push('/login')
+      })
+    }
   }
 }
 </script>

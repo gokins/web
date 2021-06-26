@@ -13,6 +13,7 @@
             class="c-avatar-img "
           />
         </div>
+        {{uname}}
       </CHeaderNavLink>
     </template>
     <CDropdownHeader tag="div" class="text-center" color="light">
@@ -59,18 +60,34 @@
     <CDropdownItem>
       <CIcon name="cil-shield-alt" /> Lock Account
     </CDropdownItem>
-    <CDropdownItem>
+    <CDropdownItem @click="logoutFun">
       <CIcon name="cil-lock-locked" /> Logout
     </CDropdownItem>
   </CDropdown>
 </template>
 
 <script>
+import { removeToken } from "@/assets/js/token";
 export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
     return { 
-      itemsCount: 42
+      uname:'1',
+      itemsCount: 42,
+    }
+  }, destroyed () {
+    this.$offUInfo(this.uinfo);
+  },mounted(){
+    this.$mntdUInfo(this.uinfo);
+  },methods:{
+    uinfo(info){
+      console.log('header drop uinfo:',info.nick);
+      this.uname=info.nick;
+      if(this.uname=='')
+        this.uname=info.name;
+    },logoutFun(){
+      removeToken();
+      this.$router.push('/login');
     }
   }
 }

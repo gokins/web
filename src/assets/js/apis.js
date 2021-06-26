@@ -6,7 +6,7 @@ export const Login = (name, pass) => Post('/lg/login', { name: name, pass: pass 
 export const UtilCatch=(that,err,fn) => {
     const stat = err.response ? err.response.status : 0;
     if (stat == 403) {
-        that.$router.push('/pages/login')
+        that.$router.push('/login')
         return true;
     }
     if(fn&&typeof fn==='function'){
@@ -22,5 +22,6 @@ export const UtilCatch=(that,err,fn) => {
 
 
 //Org
+export const OrgList = pars => Post('/org/list', pars);
 export const OrgNew = pars => Post('/org/new', pars);
 export const OrgInfo = id => Post('/org/info', {id:id});

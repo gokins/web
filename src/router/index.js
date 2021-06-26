@@ -361,7 +361,27 @@ function configRoutes () {
           component: Register
         }
       ]
-    }
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/500',
+      name: 'Page500',
+      component: Page500
+    },
+    {
+      path: '/404',
+      name: 'Page404',
+      component: Page404
+    },
+    {
+      path: '*',
+      name: 'Page404',
+      component: Page404
+    },
   ]
 }
 

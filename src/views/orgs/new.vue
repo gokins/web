@@ -45,7 +45,7 @@
   </div>
 </template>
 <script>
-import { OrgNew } from "@/assets/js/apis";
+import { UtilCatch,OrgNew } from "@/assets/js/apis";
 export default {
   data() {
     return {
@@ -65,7 +65,7 @@ export default {
       }
       OrgNew(this.formData).then(res => {
           // this.$msgOk('')
-      }).catch(err => this.$utilCatch(this, err));
+      }).catch(err => UtilCatch(this, err));
     },
   },
 };

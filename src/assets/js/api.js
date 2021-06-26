@@ -14,7 +14,7 @@ const serv = axios.create({
 
 export const ApiUrl=apiUrl;
 export const Post=function(path,params,headers){
-    let hds={'Accept': '*','abc':'123'};
+    let hds={};
     if(headers)hds=headers;
     let token = getToken();
     if(token)hds['Authorization']='TOKEN '+token;

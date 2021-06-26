@@ -18,12 +18,12 @@ module.exports = {
     https: false, // 启用https
     proxy: {
       '/api': {
-        target: 'http://localhost:8030/api',
+        target: 'http://localhost:8030',
         changeOrigin: true,
         secure: false,
-        pathRewrite: {
+        /* pathRewrite: {
           '^/api': '/api'
-        }
+        } */
       }
     }
   }

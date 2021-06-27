@@ -7,6 +7,7 @@ export const UInfo = () => Post('/lg/info', {  });
 export const UtilCatch=(that,err,fn) => {
     const stat = err.response ? err.response.status : 0;
     if (stat == 403) {
+        that.$store.commit('clearUserInfo');
         that.$router.push('/login')
         return true;
     }

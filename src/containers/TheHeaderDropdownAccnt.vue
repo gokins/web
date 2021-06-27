@@ -87,6 +87,7 @@ export default {
         this.uname=info.name;
     },logoutFun(){
       removeToken();
+      this.$store.commit('clearUserInfo');
       this.$router.push('/login');
     }
   }

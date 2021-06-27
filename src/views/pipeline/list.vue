@@ -99,6 +99,7 @@ export default {
             this.items = res.data.data;
           })
           .catch((err) => UtilCatch(this, err));
+          return
       }
       PipelineList({ page: pg, orgId: this.orgId })
         .then((res) => {

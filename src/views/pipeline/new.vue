@@ -73,7 +73,10 @@ export default {
       NewPipeline(this.formData)
         .then((res) => {
           //   this.$msgOk('')
-          this.$router.push("/pipeline/list");
+          if(this.formData.orgId!='')
+            this.$router.push("/pipeline/list/"+this.formData.orgId);
+          else
+            this.$router.push("/pipeline/list");
         })
         .catch((err) => UtilCatch(this, err));
     },

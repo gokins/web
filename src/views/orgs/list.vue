@@ -40,7 +40,7 @@
                 variant="outline"
                 square
                 size="sm"
-                @click="goOrgPipelines(item.id)"
+                @click="goOrgPipelines(item.aid)"
               >
                 查看流水线
               </CButton>

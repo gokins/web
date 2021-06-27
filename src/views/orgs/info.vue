@@ -121,16 +121,23 @@
                     </div>
                     <div class="tools">{{ it.nick }}</div>
                     <div class="tools">
-                      <CBadge color="info">{{it.permRw==1?'可编辑':'不可编辑'}}</CBadge>
-                      <CBadge color="info">{{it.permExec==1?'可执行':'不可执行'}}</CBadge>
+                      <CBadge color="info">{{
+                        it.permRw == 1 ? "可编辑" : "不可编辑"
+                      }}</CBadge>
+                      <CBadge color="info">{{
+                        it.permExec == 1 ? "可执行" : "不可执行"
+                      }}</CBadge>
                     </div>
                     <div class="tools">
+                      <CButton color="warning" size="sm" @click="upPermFun(it)"
+                        ><CIcon :content="$options.coreics['cilPenAlt']" />
+                      </CButton>
                       <CButton
                         color="danger"
                         size="sm"
                         @click="rmUserFun(it.id)"
-                        ></CButton
-                      ><CIcon :content="$options.coreics['cliXcircle']"/>
+                        ><CIcon :content="$options.coreics['cilXCircle']" />
+                      </CButton>
                     </div>
                   </div>
                 </div>
@@ -176,6 +183,7 @@
     </CCard>
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" />
+    <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
   </div>
 </template>
 <script>
@@ -188,11 +196,12 @@ import {
   OrgSave,
   OrgUserEdit,
 } from "@/assets/js/apis";
-import { freeSet } from '@coreui/icons'
+import { freeSet } from "@coreui/icons";
 import SelectUser from "@/components/modals/selectUser";
+import OrgUserPerm from "@/components/modals/orgUserPerm";
 export default {
-  coreics:freeSet,
-  components: { SelectUser },
+  coreics: freeSet,
+  components: { SelectUser, OrgUserPerm },
   data() {
     return {
       info: {},
@@ -225,10 +234,11 @@ export default {
 
       selAdm: false,
       selUsr: false,
+      selPerm: false,
+      curPerm: { rw: false, exec: false },
     };
   },
   mounted() {
-    console.log('$options.coreics',this.$options.coreics['cliXcircle'])
     if (
       this.$route.params == null ||
       this.$route.params.id == null ||
@@ -352,6 +362,30 @@ export default {
             }
           })
         );
+    },
+    upPermFun(it) {
+      this.curPerm = {
+        id: it.id,
+        rw: it.permRw == 1,
+        exec: it.permExec == 1,
+      };
+      this.selPerm = true;
+    },
+    upUsrPermFun(data) {
+      console.log("upUsrPermFun", data);
+      OrgUserEdit({
+        id: this.info.id,
+        uid: data.id,
+        adm: false,
+        rw: data.rw,
+        ex: data.exec,
+      })
+        .then((res) => {
+          this.selPerm = false;
+          this.getUserList();
+          this.$msgOk("修改成功");
+        })
+        .catch((err) => UtilCatch(this, err));
     },
   },
 };

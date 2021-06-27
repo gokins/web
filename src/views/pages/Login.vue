@@ -75,10 +75,11 @@ export default {
       Login(this.param.name, this.param.password)
         .then((res) => {
           setToken(res.data.token);
+          this.$refreshUInfo();
           this.$msgOk("登录成功");
           setTimeout(() => {
             this.$router.push("/dashboard");
-          }, 1000);
+          }, 500);
         })
         .catch((err) => {
           switch (err.response ? err.response.status : 0) {

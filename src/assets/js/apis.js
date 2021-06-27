@@ -7,6 +7,7 @@ export const UInfo = () => Post('/lg/info', {  });
 export const UtilCatch=(that,err,fn) => {
     const stat = err.response ? err.response.status : 0;
     if (stat == 403) {
+        that.$store.commit('clearUserInfo');
         that.$router.push('/login')
         return true;
     }
@@ -37,6 +38,8 @@ export const OrgUsers = id => Post('/org/users', {id:id});
 export const OrgSave = pars => Post('/org/save', pars);
 export const OrgUserEdit = pars => Post('/org/user/edit', pars);
 export const OrgUserRm = (id,uid) => Post('/org/user/rm', {id,uid});
+export const OrgPipeAdd = (id,pipeId) => Post('/org/pipe/add', {id,pipeId});
+export const OrgPipeRm = (id,pipeId) => Post('/org/pipe/rm', {id,pipeId});
 
 //Pipeline
 export const PipelineList = pars => Post('/pipeline/pipelines', pars);

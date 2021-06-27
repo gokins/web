@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { removeToken } from "@/assets/js/token";
 Vue.use(Vuex)
 
 const state = {
@@ -24,6 +25,11 @@ const mutations = {
   setUserInfo(state,info){
     state.userStat=info.login;
     state.userInfo=info;
+  },
+  clearUserInfo(state){
+    state.userStat=false;
+    state.userInfo={};
+    removeToken();
   }
 }
 

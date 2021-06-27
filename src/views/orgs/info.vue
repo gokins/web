@@ -3,7 +3,25 @@
     <CCard>
       <CCardHeader>
         <strong>组织: {{ info.name }}</strong>
-        <!-- <div class="card-header-actions"></div> -->
+        <div class="card-header-actions">
+          <CButton
+            size="sm"
+            color="info"
+            variant="outline"
+            @click="selPip = true"
+          >
+            添加流水线
+          </CButton>
+          &nbsp;
+          <CButton
+            size="sm"
+            color="primary"
+            variant="outline"
+            @click="$router.push('/pipeline/new/' + info.aid)"
+          >
+            新建流水线
+          </CButton>
+        </div>
       </CCardHeader>
       <CCardBody>
         <CTabs
@@ -33,6 +51,10 @@
                     @click="goEdit(item.id)"
                   >
                     编辑
+                  </CButton>
+                  &nbsp;
+                  <CButton color="danger" size="sm" @click="rmPipeFun(item.id)">
+                    <CIcon :content="$options.coreics['cilXCircle']" />移除
                   </CButton>
                 </td>
               </template>
@@ -86,8 +108,9 @@
                         color="danger"
                         size="sm"
                         @click="rmUserFun(it.id)"
-                        >删除</CButton
                       >
+                        <CIcon :content="$options.coreics['cilXCircle']" />移除
+                      </CButton>
                     </div>
                   </div>
                 </div>
@@ -129,8 +152,8 @@
                       }}</CBadge>
                     </div>
                     <div class="tools">
-                      <CButton color="warning" size="sm" @click="upPermFun(it)"
-                        ><CIcon :content="$options.coreics['cilPenAlt']" />
+                      <CButton color="warning" size="sm" @click="upPermFun(it)">
+                        <CIcon :content="$options.coreics['cilPenAlt']" />
                       </CButton>
                       <CButton
                         color="danger"
@@ -181,6 +204,7 @@
         </CTabs>
       </CCardBody>
     </CCard>
+    <SelectPipe :shown.sync="selPip" @addFun="addPipFun" />
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" />
     <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
@@ -195,13 +219,16 @@ import {
   OrgPipelineList,
   OrgSave,
   OrgUserEdit,
+  OrgPipeAdd,
+  OrgPipeRm,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
+import SelectPipe from "@/components/modals/selectPipe";
 import SelectUser from "@/components/modals/selectUser";
 import OrgUserPerm from "@/components/modals/orgUserPerm";
 export default {
   coreics: freeSet,
-  components: { SelectUser, OrgUserPerm },
+  components: { SelectPipe, SelectUser, OrgUserPerm },
   data() {
     return {
       info: {},
@@ -232,6 +259,7 @@ export default {
         public: false,
       },
 
+      selPip: false,
       selAdm: false,
       selUsr: false,
       selPerm: false,
@@ -298,6 +326,38 @@ export default {
         .then((res) => {
           this.$msgOk("保存成功");
           // this.$router.push('info/'+res.data.id)
+        })
+        .catch((err) => UtilCatch(this, err));
+    },
+    addPipFun(pipeid, fn) {
+      OrgPipeAdd(this.info.id, pipeid)
+        .then((res) => {
+          fn(true);
+          this.getPipeList();
+          this.$msgOk("添加成功");
+        })
+        .catch((err) =>
+          UtilCatch(this, err, (err) => {
+            fn(false);
+            const stat = err.response ? err.response.status : 0;
+            if (stat == 405) {
+              this.$msgErr("此操作只有创建者拥有权限");
+            } else if (stat == 511) {
+              fn(true);
+              this.$msgErr("流水线已存在");
+            } else {
+              this.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+              );
+            }
+          })
+        );
+    },
+    rmPipeFun(pipeid) {
+      OrgPipeRm(this.info.id, pipeid)
+        .then((res) => {
+          this.getPipeList();
+          this.$msgOk("操作成功");
         })
         .catch((err) => UtilCatch(this, err));
     },

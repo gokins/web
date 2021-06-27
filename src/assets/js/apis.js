@@ -13,6 +13,9 @@ export const UtilCatch=(that,err,fn) => {
     if(fn&&typeof fn==='function'){
         fn(err,that);
         return true;
+    }else if (stat == 405){
+        that.$msgErr('无权限');
+        return true;
     }else{
         that.$msgErr(
           err.response ? err.response.data || "服务器错误" : "网络错误"
@@ -26,6 +29,7 @@ export const UtilCatch=(that,err,fn) => {
 export const OrgList = pars => Post('/org/list', pars);
 export const OrgNew = pars => Post('/org/new', pars);
 export const OrgInfo = id => Post('/org/info', {id:id});
+export const OrgSave = pars => Post('/org/save', pars);
 
 //Pipeline
 export const PipelineList = pars => Post('/pipeline/pipelines', pars);

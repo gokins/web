@@ -29,6 +29,12 @@ export default [
         icon: 'cil-drop'
       },
       {
+        _name: 'CSidebarNavItem',
+        name: '构建历史',
+        to: '/pipelineVersion/list',
+        icon: 'cil-drop'
+      },
+      {
         _name: 'CSidebarNavTitle',
         _children: ['Theme']
       },

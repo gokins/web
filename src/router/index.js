@@ -331,6 +331,26 @@ function configRoutes () {
           ]
         },
         {
+          path:'/pipelineVersion',
+          redirect: '/pipelineVersion/list',
+          name: 'PipelineVersions',
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: 'list/:pipelineId',
+              name: 'List',
+              component: ()=>import('@/views/pipelineversions/list')
+            },
+            {
+              path: 'list',
+              name: 'List',
+              component: ()=>import('@/views/pipelineversions/list')
+            },
+          ]
+        },
+        {
           path:'/pipeline',
           redirect: '/pipeline/list',
           name: 'Pipeline',

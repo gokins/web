@@ -2,11 +2,11 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid" /> 流水线
+        <CIcon name="cil-grid" /> 构建历史
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="goNew"
+          <!-- <CButton size="sm" color="info" variant="outline" @click="goNew"
             >新建流水线</CButton
-          >
+          > -->
         </div>
       </CCardHeader>
       <CCardBody>
@@ -18,8 +18,12 @@
           :fixed="true"
           :fields="fields"
           :items="items"
-          @row-clicked="rowClick"
         >
+          <template #number="{ item }">
+            <td>
+              <CLink># {{ item.number }}</CLink>
+            </td>
+          </template>
           <template #edit="{ item }">
             <td class="py-2">
               <CButton
@@ -37,7 +41,6 @@
                 square
                 size="sm"
                 @click="run(item.id)"
-                style="margin-left:5px"
               >
                 运行
               </CButton>
@@ -56,83 +59,75 @@
   </div>
 </template>
 <script>
-import {
-  UtilCatch,
-  PipelineList,
-  OrgPipelineList,
-  RunPipeline,
-} from "@/assets/js/apis";
+import { UtilCatch, PipelineVersions } from "@/assets/js/apis";
 export default {
   data() {
     return {
       fields: [
         {
-          key: "id",
-          label: "id",
+          key: "number",
+          label: "number",
         },
         {
-          key: "name",
-          label: "名称",
+          key: "pipelineName",
+          label: "流水线名称",
         },
         {
-          key: "displayName",
-          label: "描述",
+          key: "pipelineDisplayName",
+          label: "流水线描述",
         },
         {
-          key: "edit",
-          label: "操作",
-          sorter: false,
-          filter: false,
+          key: "repoName",
+          label: "仓库名称",
         },
       ],
       items: [],
       page: 0,
       pages: 0,
       orgId: "",
+      pipelineId: "",
     };
   },
   mounted() {
     if (
       this.$route.params != null &&
-      this.$route.params.orgId != null &&
-      this.$route.params.orgId != ""
+      this.$route.params.pipelineId != null &&
+      this.$route.params.pipelineId != ""
     ) {
-      this.orgId = this.$route.params.orgId;
+      this.pipelineId = this.$route.params.pipelineId;
     }
     this.getList(0);
   },
   methods: {
     getList(pg) {
-      if (this.orgId != "") {
-        OrgPipelineList({ page: pg, orgId: this.orgId })
-          .then((res) => {
-            this.page = res.data.page;
-            this.pages = res.data.pages;
-            this.items = res.data.data;
-          })
-          .catch((err) => UtilCatch(this, err));
-        return;
-      }
-      PipelineList({ page: pg, orgId: this.orgId })
+      // if (this.orgId != "") {
+      PipelineVersions({
+        page: pg,
+        orgId: this.orgId,
+        pipelineId: this.pipelineId,
+      })
         .then((res) => {
           this.page = res.data.page;
           this.pages = res.data.pages;
           this.items = res.data.data;
         })
         .catch((err) => UtilCatch(this, err));
+      return;
+      // }
+      // PipelineList({ page: pg, orgId: this.orgId })
+      //   .then((res) => {
+      //     this.page = res.data.page;
+      //     this.pages = res.data.pages;
+      //     this.items = res.data.data;
+      //   })
+      //   .catch((err) => UtilCatch(this, err));
     },
     run(id) {
       RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
         .then((res) => {
-          this.getVersion(id);
+          console.log(res);
         })
         .catch((err) => UtilCatch(this, err));
-    },
-    rowClick(item) {
-      this.goEdit(item.id);
-    },
-    goVersion(id) {
-      this.$router.push("/pipelineVersion/list/" + id);
     },
     goEdit(id) {
       this.$router.push("/pipeline/info/" + id);

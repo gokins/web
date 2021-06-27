@@ -6,7 +6,10 @@
         <!-- <div class="card-header-actions"></div> -->
       </CCardHeader>
       <CCardBody>
-        <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
+        <CTabs
+          variant="pills"
+          :vertical="{ navs: 'col-md-2', content: 'col-md-10' }"
+        >
           <CTab active>
             <template slot="title">
               <CIcon name="cil-calculator" /> 流水线
@@ -44,13 +47,92 @@
               </CCardHeader>
               <CCardBody>
                 <div>
-                <div class="c-avatar">
-                  <img
-                    src="img/avatars/6.jpg"
-                    class="c-avatar-img "
-                  />
+                  <div class="c-avatar">
+                    <img src="img/avatars/6.jpg" class="c-avatar-img" />
+                  </div>
+                  {{ user.nick }}
                 </div>
-                {{user.nick}}
+              </CCardBody>
+            </CCard>
+            <CCard>
+              <CCardHeader>
+                <strong>管理员</strong>
+                <div class="card-header-actions">
+                  <CButton
+                    size="sm"
+                    color="info"
+                    variant="outline"
+                    @click="selAdm = true"
+                  >
+                    新增用户
+                  </CButton>
+                </div>
+              </CCardHeader>
+              <CCardBody>
+                <div class="org-users">
+                  <div
+                    class="item"
+                    v-for="it in this.adms"
+                    :key="'adm:' + it.id"
+                  >
+                    <div class="tools">
+                      <div class="c-avatar">
+                        <img src="img/avatars/6.jpg" class="c-avatar-img" />
+                      </div>
+                    </div>
+                    <div class="tools">{{ it.nick }}</div>
+                    <div class="tools">
+                      <CButton
+                        color="danger"
+                        size="sm"
+                        @click="rmUserFun(it.id)"
+                        >删除</CButton
+                      >
+                    </div>
+                  </div>
+                </div>
+              </CCardBody>
+            </CCard>
+            <CCard>
+              <CCardHeader>
+                <strong>普通用户</strong>
+                <div class="card-header-actions">
+                  <CButton
+                    size="sm"
+                    color="info"
+                    variant="outline"
+                    @click="selUsr = true"
+                  >
+                    新增用户
+                  </CButton>
+                </div>
+              </CCardHeader>
+              <CCardBody>
+                <div class="org-users">
+                  <div
+                    class="item"
+                    v-for="it in this.usrs"
+                    :key="'adm:' + it.id"
+                  >
+                    <div class="tools">
+                      <div class="c-avatar">
+                        <img src="img/avatars/6.jpg" class="c-avatar-img" />
+                      </div>
+                    </div>
+                    <div class="tools">{{ it.nick }}</div>
+                    <div class="tools">
+                      <CBadge color="info">{{it.permRw==1?'可编辑':'不可编辑'}}</CBadge>
+                      <CBadge color="info">{{it.permExec==1?'可执行':'不可执行'}}</CBadge>
+                    </div>
+                    <div class="tools">
+                      <CButton
+                        color="danger"
+                        size="sm"
+                        @click="rmUserFun(it.id)"
+                        ></CButton
+                      ><CIcon :content="$options.coreics['cliXcircle']"/>
+                    </div>
+                  </div>
                 </div>
               </CCardBody>
             </CCard>
@@ -92,15 +174,31 @@
         </CTabs>
       </CCardBody>
     </CCard>
+    <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" />
+    <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" />
   </div>
 </template>
 <script>
-import { UtilCatch, OrgInfo, OrgPipelineList, OrgSave } from "@/assets/js/apis";
+import {
+  UtilCatch,
+  OrgInfo,
+  OrgUsers,
+  OrgUserRm,
+  OrgPipelineList,
+  OrgSave,
+  OrgUserEdit,
+} from "@/assets/js/apis";
+import { freeSet } from '@coreui/icons'
+import SelectUser from "@/components/modals/selectUser";
 export default {
+  coreics:freeSet,
+  components: { SelectUser },
   data() {
     return {
       info: {},
       user: {},
+      adms: [],
+      usrs: [],
       pipefields: [
         {
           key: "name",
@@ -124,9 +222,13 @@ export default {
         desc: "",
         public: false,
       },
+
+      selAdm: false,
+      selUsr: false,
     };
   },
   mounted() {
+    console.log('$options.coreics',this.$options.coreics['cliXcircle'])
     if (
       this.$route.params == null ||
       this.$route.params.id == null ||
@@ -146,7 +248,8 @@ export default {
           this.formData.id = this.info.id;
           this.formData.name = this.info.name;
           this.formData.desc = this.info.desc;
-          this.formData.public = this.info.public;
+          this.formData.public = this.info.public == 1;
+          this.getUserList();
           this.getPipeList();
         })
         .catch((err) =>
@@ -154,6 +257,14 @@ export default {
             this.$router.push("/500");
           })
         );
+    },
+    getUserList() {
+      OrgUsers(this.info.id)
+        .then((res) => {
+          this.adms = res.data.adms || [];
+          this.usrs = res.data.usrs || [];
+        })
+        .catch((err) => UtilCatch(this, err));
     },
     getPipeList() {
       OrgPipelineList({ page: 0, orgId: this.info.id })
@@ -180,10 +291,78 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
+    addAdmFun(uid, fn) {
+      console.log("addAdmFun", uid);
+      OrgUserEdit({ add: true, id: this.info.id, uid: uid, adm: true })
+        .then((res) => {
+          fn(true);
+          this.getUserList();
+          this.$msgOk("添加成功");
+        })
+        .catch((err) =>
+          UtilCatch(this, err, (err) => {
+            fn(false);
+            const stat = err.response ? err.response.status : 0;
+            if (stat == 405) {
+              this.$msgErr("此操作只有创建者拥有权限");
+            } else {
+              this.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+              );
+            }
+          })
+        );
+    },
+    addUsrFun(uid, fn) {
+      console.log("addUserFun", uid);
+      OrgUserEdit({ add: true, id: this.info.id, uid: uid, adm: false })
+        .then((res) => {
+          fn(true);
+          this.getUserList();
+          this.$msgOk("添加成功,请稍后给予权限");
+        })
+        .catch((err) =>
+          UtilCatch(this, err, (err) => {
+            fn(false);
+            const stat = err.response ? err.response.status : 0;
+            if (stat == 405) {
+              this.$msgErr("无权限");
+            } else {
+              this.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+              );
+            }
+          })
+        );
+    },
+    rmUserFun(uid) {
+      OrgUserRm(this.info.id, uid)
+        .then((res) => {
+          this.getUserList();
+        })
+        .catch((err) =>
+          UtilCatch(this, err, (err) => {
+            const stat = err.response ? err.response.status : 0;
+            if (stat == 405) {
+              this.$msgErr("无权限");
+            } else {
+              this.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+              );
+            }
+          })
+        );
+    },
   },
 };
 </script>
 <style lang="sass" scoped>
 .subRow
   margin-top: 10px
+.org-users
+  display: flex
+  .item
+    width: 100px
+  .tools
+    text-align: center
 </style>

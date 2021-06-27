@@ -25,11 +25,18 @@ export const UtilCatch=(that,err,fn) => {
 }
 
 
+//User
+export const UserPage = pars => Post('/user/page', pars);
+
+
 //Org
 export const OrgList = pars => Post('/org/list', pars);
 export const OrgNew = pars => Post('/org/new', pars);
 export const OrgInfo = id => Post('/org/info', {id:id});
+export const OrgUsers = id => Post('/org/users', {id:id});
 export const OrgSave = pars => Post('/org/save', pars);
+export const OrgUserEdit = pars => Post('/org/user/edit', pars);
+export const OrgUserRm = (id,uid) => Post('/org/user/rm', {id,uid});
 
 //Pipeline
 export const PipelineList = pars => Post('/pipeline/pipelines', pars);

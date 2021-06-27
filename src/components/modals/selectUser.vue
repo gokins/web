@@ -1,21 +1,15 @@
 <template>
-  <div>
-    <CCard>
-      <CCardHeader>
-        <CIcon name="cil-grid" /> 组织列表
-        <div class="card-header-actions">
-          <CButton
-            size="sm"
-            color="info"
-            variant="outline"
-            @click="$router.push('new')"
-          >
-            新建组织
-          </CButton>
-        </div>
-      </CCardHeader>
-      <CCardBody>
+  <CModal
+    title="选择用户"
+    size="lg"
+    :show="shown"
+    @update:show="(val) => $emit('update:shown', val)"
+  >
+    <template #footer>
+      <CButton color="warning" @click="$emit('update:shown', false )">关闭</CButton>
+    </template>
         <CDataTable
+        ref="table"
           :hover="true"
           :striped="true"
           :border="true"
@@ -26,24 +20,19 @@
         >
           <template #aid="{ item }">
             <td style="text-align: center">
-              <CLink :to="'info/' + item.aid"># {{ item.aid }}</CLink>
+              # {{ item.aid }}
             </td>
           </template>
-          <template #name="{ item }">
-            <td>
-              <CLink :to="'info/' + item.aid">{{ item.name }}</CLink>
-            </td>
-          </template>
-          <template #pipelines="{ item }">
+          <template #btns="{ item }">
             <td class="py-2">
               <CButton
-                color="primary"
-                variant="outline"
+                color="info"
                 square
                 size="sm"
-                @click="goOrgPipelines(item.aid)"
+                @click="addFun(item)"
+                :disabled="item.added==true"
               >
-                查看流水线
+                添加
               </CButton>
             </td>
           </template>
@@ -54,13 +43,19 @@
           @update:activePage="getList"
           style="float: right"
         />
-      </CCardBody>
-    </CCard>
-  </div>
+  </CModal>
 </template>
 <script>
-import { UtilCatch, OrgList } from "@/assets/js/apis";
+import { UtilCatch, UserPage } from "@/assets/js/apis";
 export default {
+  props: {
+    shown: Boolean,
+  },
+  watch: {
+    shown(nv) {
+      if (nv == true) this.getList(0);
+    },
+  },
   data() {
     return {
       fields: [
@@ -74,15 +69,15 @@ export default {
           label: "名称",
         },
         {
-          key: "desc",
-          label: "描述",
+          key: "nick",
+          label: "昵称",
         },
         {
           key: "created",
           label: "创建时间",
         },
         {
-          key: "pipelines",
+          key: "btns",
           label: "操作",
           sorter: false,
           filter: false,
@@ -90,28 +85,26 @@ export default {
       ],
       items: [],
       page: 0,
-      pages: 0,
+      pages: 0
     };
-  },
-  mounted() {
-    this.getList(0);
   },
   methods: {
     getList(pg) {
-      OrgList({ page: pg })
+      UserPage({ page: pg })
         .then((res) => {
           this.page = res.data.page;
           this.pages = res.data.pages;
           this.items = res.data.data;
         })
         .catch((err) => UtilCatch(this, err));
-    },
-    goOrgPipelines(orgId) {
-      this.$router.push("/org/info/" + orgId);
-    },
-    goEdit() {
-      this.$router.push("info");
-    },
+    },addFun(user){
+      this.$emit('addFun',user.id,ok=>{
+        if(ok==true){
+          user.added=true;
+          this.$refs.table.$forceUpdate()
+        }
+      })
+    }
   },
 };
 </script>

@@ -106,7 +106,7 @@ export default {
         .catch((err) => UtilCatch(this, err));
     },
     goOrgPipelines(orgId) {
-      this.$router.push("/pipeline/list/" + orgId);
+      this.$router.push("/org/info/" + orgId);
     },
     goEdit() {
       this.$router.push("info");

@@ -6,44 +6,54 @@
         <!-- <div class="card-header-actions"></div> -->
       </CCardHeader>
       <CCardBody>
-        <CTabs variant="pills" vertical>
+        <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
           <CTab active>
             <template slot="title">
               <CIcon name="cil-calculator" /> 流水线
             </template>
-        <CDataTable
-          :hover="true"
-          :striped="true"
-          :border="false"
-          :small="true"
-          :fixed="true"
-          :fields="pipefields"
-          :items="pipeitems"
-        >
-          <template #edit="{ item }">
-            <td class="py-2">
-              <CButton
-                color="primary"
-                variant="outline"
-                square
-                size="sm"
-                @click="goEdit(item.id)"
-              >
-                编辑
-              </CButton>
-            </td>
-          </template>
-        </CDataTable>
+            <CDataTable
+              :hover="true"
+              :striped="true"
+              :border="false"
+              :small="true"
+              :fixed="true"
+              :fields="pipefields"
+              :items="pipeitems"
+            >
+              <template #edit="{ item }">
+                <td class="py-2">
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    square
+                    size="sm"
+                    @click="goEdit(item.id)"
+                  >
+                    编辑
+                  </CButton>
+                </td>
+              </template>
+            </CDataTable>
           </CTab>
           <CTab>
             <template slot="title"> <CIcon name="cil-basket" /> 成员 </template>
-            2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat. Duis aute irure dolor in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-            pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum.
+            <CCard>
+              <CCardHeader>
+                <strong>所有者</strong>
+                <!-- <div class="card-header-actions"></div> -->
+              </CCardHeader>
+              <CCardBody>
+                <div>
+                <div class="c-avatar">
+                  <img
+                    src="img/avatars/6.jpg"
+                    class="c-avatar-img "
+                  />
+                </div>
+                {{user.nick}}
+                </div>
+              </CCardBody>
+            </CCard>
           </CTab>
           <CTab>
             <template slot="title">
@@ -75,7 +85,7 @@
             </CRow>
             <CRow class="subRow">
               <CCol sm="6">
-                <CButton color="info" @click="subFun()">新建</CButton>
+                <CButton color="info" @click="subFun()">保存</CButton>
               </CCol>
             </CRow>
           </CTab>
@@ -85,7 +95,7 @@
   </div>
 </template>
 <script>
-import { UtilCatch, OrgInfo,OrgPipelineList,OrgSave } from "@/assets/js/apis";
+import { UtilCatch, OrgInfo, OrgPipelineList, OrgSave } from "@/assets/js/apis";
 export default {
   data() {
     return {
@@ -109,7 +119,7 @@ export default {
       ],
       pipeitems: [],
       formData: {
-        id:'',
+        id: "",
         name: "",
         desc: "",
         public: false,
@@ -133,10 +143,10 @@ export default {
         .then((res) => {
           this.info = res.data.org;
           this.user = res.data.user;
-          this.formData.id=this.info.id;
-          this.formData.name=this.info.name;
-          this.formData.desc=this.info.desc;
-          this.formData.public=this.info.public;
+          this.formData.id = this.info.id;
+          this.formData.name = this.info.name;
+          this.formData.desc = this.info.desc;
+          this.formData.public = this.info.public;
           this.getPipeList();
         })
         .catch((err) =>
@@ -163,10 +173,12 @@ export default {
         this.$msgErr("请输入名称");
         return;
       }
-      OrgSave(this.formData).then(res => {
-          this.$msgOk('保存成功')
+      OrgSave(this.formData)
+        .then((res) => {
+          this.$msgOk("保存成功");
           // this.$router.push('info/'+res.data.id)
-      }).catch(err => UtilCatch(this, err));
+        })
+        .catch((err) => UtilCatch(this, err));
     },
   },
 };

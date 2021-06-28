@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>组织: </strong>
+        <strong>构建历史: </strong>
         <!-- <div class="card-header-actions"></div> -->
       </CCardHeader>
       <CCardBody>

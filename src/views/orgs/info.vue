@@ -50,11 +50,28 @@
                     size="sm"
                     @click="goEdit(item.id)"
                   >
-                    编辑
+                    查看
                   </CButton>
-                  &nbsp;
-                  <CButton color="danger" size="sm" @click="rmPipeFun(item.id)">
-                    <CIcon :content="$options.coreics['cilXCircle']" />移除
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    square
+                    size="sm"
+                    @click="run(item.id)"
+                    style="margin-left: 5px"
+                  >
+                    运行
+                  </CButton>
+                  <CButton
+                    color="danger"
+                    size="sm"
+                    @click="rmPipeFun(item.id)"
+                    style="margin-left: 5px"
+                  >
+                    <CIcon
+                      :content="$options.coreics['cilXCircle']"
+                      size="sm"
+                    />移除
                   </CButton>
                 </td>
               </template>
@@ -221,6 +238,7 @@ import {
   OrgUserEdit,
   OrgPipeAdd,
   OrgPipeRm,
+  RunPipeline,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 import SelectPipe from "@/components/modals/selectPipe";
@@ -295,6 +313,13 @@ export default {
             this.$router.push("/500");
           })
         );
+    },
+    run(id) {
+      RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
+        .then((res) => {
+          this.getVersion(id);
+        })
+        .catch((err) => UtilCatch(this, err));
     },
     getUserList() {
       OrgUsers(this.info.id)

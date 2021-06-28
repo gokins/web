@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>构建历史: </strong>
+        <strong>流水线名称:{{pipelineName}} </strong>
         <!-- <div class="card-header-actions"></div> -->
       </CCardHeader>
       <CCardBody>
@@ -94,7 +94,6 @@ import {
   UtilCatch,
   PipelineInfo,
   SavePipeline,
-  PipelineList,
   PipelineVersions,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
@@ -122,6 +121,7 @@ export default {
           label: "仓库名称",
         },
       ],
+      pipelineName:"",
       versionitems: [],
       formData: {
         name: "",
@@ -149,6 +149,7 @@ export default {
           this.formData.name = res.data.name;
           this.formData.content = res.data.jsonContent;
           this.formData.pipelineId = id;
+          this.pipelineName = res.data.name;
         })
         .catch((err) =>
           UtilCatch(this, err, (err) => {

@@ -7,8 +7,11 @@ import { iconsSet as icons } from './assets/icons/icons.js'
 import store from './store'
 import comm from '@/assets/comm'
 import Message from '@/components/message'
+import VueCodemirror from 'vue-codemirror';
+import 'codemirror/lib/codemirror.css';
 
 Vue.config.performance = true;
+Vue.use(VueCodemirror);
 Vue.use(CoreuiVue);
 Vue.use(Message);
 Vue.use(comm);

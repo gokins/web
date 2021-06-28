@@ -138,7 +138,7 @@ export default {
       this.$router.push("/pipeline/info/" + id);
     },
     goNew() {
-      this.$router.push("/pipeline/new/" + this.orgId);
+      this.$router.push("/pipeline/new");
     },
   },
 };

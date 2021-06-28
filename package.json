@@ -38,7 +38,10 @@
     "@coreui/vue": "^3.2.9",
     "@coreui/vue-chartjs": "^1.0.6",
     "axios": "^0.21.1",
+    "codemirror": "^5.62.0",
+    "js-yaml": "^4.1.0",
     "vue": "~2.6.12",
+    "vue-codemirror": "^4.0.6",
     "vue-router": "^3.5.1",
     "vuex": "~3.6.2"
   },

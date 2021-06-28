@@ -309,7 +309,6 @@
 </template>
 
 <script>
-import { Login } from '@/assets/js/apis'
 import MainChartExample from './charts/MainChartExample'
 import WidgetsDropdown from './widgets/WidgetsDropdown'
 import WidgetsBrand from './widgets/WidgetsBrand'

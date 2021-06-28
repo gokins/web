@@ -10,21 +10,12 @@
           <CCardBody>
             <CRow>
               <CCol sm="12">
-                <CInput
-                  label="流水线名称"
-                  v-model="formData.name"
-                  placeholder="请输入流水线名称"
-                  Max="10"
-                />
+                <CInput label="流水线名称" v-model="formData.name" placeholder="请输入流水线名称" Max="10" />
               </CCol>
             </CRow>
             <CRow>
               <CCol sm="12">
-                <CTextarea
-                  label="Yaml"
-                  v-model="formData.content"
-                  placeholder="Yaml"
-                />
+                <CTextarea label="Yaml" v-model="formData.content" placeholder="Yaml" />
               </CCol>
             </CRow>
             <CRow class="subRow">
@@ -41,7 +32,7 @@
 <script>
 import { UtilCatch, NewPipeline } from "@/assets/js/apis";
 export default {
-  data() {
+  data () {
     return {
       formData: {
         name: "",
@@ -50,7 +41,7 @@ export default {
       },
     };
   },
-  mounted() {
+  mounted () {
     if (
       this.$route.params != null &&
       this.$route.params.orgId != null &&
@@ -61,7 +52,7 @@ export default {
     this.formData.orgId = this.$route.params.orgId;
   },
   methods: {
-    subFun() {
+    subFun () {
       if (this.formData.name == "") {
         this.$msgErr("请输入名称");
         return;
@@ -73,8 +64,8 @@ export default {
       NewPipeline(this.formData)
         .then((res) => {
           //   this.$msgOk('')
-          if(this.formData.orgId!='')
-            this.$router.push("/pipeline/list/"+this.formData.orgId);
+          if (this.formData.orgId && this.formData.orgId != '')
+            this.$router.push("/pipeline/list/" + this.formData.orgId);
           else
             this.$router.push("/pipeline/list");
         })

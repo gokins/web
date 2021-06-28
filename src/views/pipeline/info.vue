@@ -6,37 +6,26 @@
         <!-- <div class="card-header-actions"></div> -->
       </CCardHeader>
       <CCardBody>
-        <CTabs
-          variant="pills"
-          :vertical="{ navs: 'col-md-2', content: 'col-md-10' }"
-        >
+        <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
           <CTab active>
             <template slot="title">
               <CIcon name="cil-calculator" /> 构建历史
             </template>
-            <CDataTable
-              :hover="true"
-              :striped="true"
-              :border="false"
-              :small="true"
-              :fixed="true"
-              :fields="versionfields"
-              :items="versionitems"
-            >
+            <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
+              :fields="versionfields" :items="versionitems">
               <template #number="{ item }">
                 <td>
-                  <CLink># {{ item.number }}</CLink>
+                  <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
+                </td>
+              </template>
+              <template #pipelineName="{ item }">
+                <td>
+                  <CLink :to="'../build/'+item.id">{{ item.pipelineName }}</CLink>
                 </td>
               </template>
               <template #edit="{ item }">
                 <td class="py-2">
-                  <CButton
-                    color="primary"
-                    variant="outline"
-                    square
-                    size="sm"
-                    @click="goEdit(item.id)"
-                  >
+                  <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
                     编辑
                   </CButton>
                 </td>
@@ -57,21 +46,12 @@
                   <CCardBody>
                     <CRow>
                       <CCol sm="12">
-                        <CInput
-                          label="流水线名称"
-                          v-model="formData.name"
-                          placeholder="请输入流水线名称"
-                          Max="10"
-                        />
+                        <CInput label="流水线名称" v-model="formData.name" placeholder="请输入流水线名称" Max="10" />
                       </CCol>
                     </CRow>
                     <CRow>
                       <CCol sm="12">
-                        <CTextarea
-                          label="Yaml"
-                          v-model="formData.content"
-                          placeholder="Yaml"
-                        />
+                        <CTextarea label="Yaml" v-model="formData.content" placeholder="Yaml" />
                       </CCol>
                     </CRow>
                     <CRow class="subRow">
@@ -102,7 +82,7 @@ import SelectUser from "@/components/modals/selectUser";
 export default {
   coreics: freeSet,
   components: { SelectUser },
-  data() {
+  data () {
     return {
       versionfields: [
         {
@@ -130,7 +110,7 @@ export default {
       },
     };
   },
-  mounted() {
+  mounted () {
     console.log("$options.coreics", this.$options.coreics["cliXcircle"]);
     if (
       this.$route.params == null ||
@@ -143,7 +123,7 @@ export default {
     this.getPipeList(this.$route.params.id);
   },
   methods: {
-    getInfo(id) {
+    getInfo (id) {
       PipelineInfo({ id: id })
         .then((res) => {
           this.formData.name = res.data.name;
@@ -156,7 +136,7 @@ export default {
           })
         );
     },
-    getPipeList(id) {
+    getPipeList (id) {
       PipelineVersions({
         page: 0,
         orgId: this.orgId,
@@ -170,10 +150,10 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    goEdit(id) {
+    goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    subFun() {
+    subFun () {
       if (this.formData.name == "") {
         console.log("name");
         this.$msgErr("请输入名称");

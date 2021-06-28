@@ -8,6 +8,9 @@ import store from './store'
 import comm from '@/assets/comm'
 import Message from '@/components/message'
 
+import '@/assets/css/comm.css'
+import '@/assets/css/icon.sass'
+
 Vue.config.performance = true;
 Vue.use(CoreuiVue);
 Vue.use(Message);

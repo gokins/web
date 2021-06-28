@@ -23,6 +23,7 @@
                     type="password"
                     autocomplete="curent-password"
                     v-model="param.password"
+                    @keyup.enter="login"
                   >
                     <template #prepend-content
                       ><CIcon name="cil-lock-locked"
@@ -30,7 +31,7 @@
                   </CInput>
                   <CRow>
                     <CCol col="6" class="text-left">
-                      <CButton color="info" class="px-4" @click="login"
+                      <CButton color="info" class="px-4" @click="login" 
                         >Login</CButton
                       >
                     </CCol>

@@ -3,10 +3,10 @@
     <CCard>
       <CCardHeader>
         <div class="hd-tit">
-          <div class="icon rotateDiv">
-            <span class="iconfont icon-success color-success" style="font-size:30px" />
-            <span class="iconfont icon-chacha color-error" style="font-size:30px" />
-            <span class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" />
+          <div class="icons rotateDiv">
+            <i class="iconfont icon-success color-success" style="font-size:30px" />
+            <i class="iconfont icon-chacha color-error" style="font-size:30px" />
+            <i class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" />
           </div>
           <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
           <!-- <div class="card-header-actions"></div> -->
@@ -17,14 +17,40 @@
           <div class="stages">
             <div class="tit">构建阶段</div>
             <div class="stage">
-              <ul>
-                <li class="rotateDiv">
-                  <div><span class="iconfont icon-success color-success" style="font-size:30px" /></div>
-                  Job1
-                </li>
-              </ul>
+              <div class="tits" @click="collapse=!collapse">
+                <div class="iconstage">
+                  <CIcon :content="$options.coreics[collapse==true?'cilCaretBottom':'cilCaretLeft']" />
+                </div>
+                <div class="icons rotateDiv">
+                  <i class="iconfont icon-success color-success" style="font-size:30px" />
+                </div>
+                <div class="titcont">Stage1<small>第一个任务的防撒旦发射撒旦法</small></div>
+              </div>
+              <CCollapse :show="collapse" :duration="400">
+                <ul>
+                  <li>
+                    <div class="icons rotateDiv"><i class="iconfont icon-success color-success"
+                        style="font-size:30px" />
+                    </div>
+                    <div class="titcont">Job1<small>第一个任务</small></div>
+                  </li>
+                  <li>
+                    <div class="icons rotateDiv"><i class="iconfont icon-jiazaizhong color-runing"
+                        style="font-size:30px" />
+                    </div>
+                    <div class="titcont">Job2<small>第一个任务</small></div>
+                  </li>
+                  <li>
+                    <div class="icons rotateDiv"><i class="iconfont icon-jiazaizhong color-runing"
+                        style="font-size:30px" />
+                    </div>
+                    <div class="titcont">Job3<small>第一个任务</small></div>
+                  </li>
+                </ul>
+              </CCollapse>
             </div>
           </div>
+          <div class="logdiv">1</div>
         </div>
       </CCardBody>
     </CCard>
@@ -43,11 +69,14 @@ import {
   UtilCatch,
   PipelineVersion,
 } from "@/assets/js/apis";
+import { freeSet } from "@coreui/icons";
 export default {
+  coreics: freeSet,
   data () {
     return {
       pv: {},
-      pipe: {}
+      pipe: {},
+      collapse: false,
     }
   }, mounted () {
     if (
@@ -79,9 +108,9 @@ export default {
 .hd-tit
   line-height: 30px
   display: flex
-  .icon
-    width: 30px
-    margin-right: 10px
+.icons
+  width: 30px
+  margin-right: 10px
 
 .contbody
   padding-left: 0
@@ -91,8 +120,10 @@ export default {
   padding-left: 0
   margin-left: 0
   .stages
-    width: 320px
-    border-right: 1px solid #ccc
+    font-size: 16px
+    width: 350px
+    // border-right: 1px solid #ccc
+    // border-left: 1px solid #ccc
     .tit
       border-top: 2px solid #ccc
       border-bottom: 2px solid #ccc
@@ -100,10 +131,29 @@ export default {
       font-weight: bold
       line-height: 50px
       text-align: center
+    .titcont
+      font-size: 16px
+      small
+        color: #aaa
+        margin-left: 10px
     .stage
       padding: 10px
+      .iconstage
+        margin-right: 5px
+        line-height: 35px
+      .tits
+        display: flex
+        line-height: 40px
+        cursor: pointer
       ul
         margin: 0
-        padding: 0
+        padding: 0 5px 0 20px
         list-style: none
+        li
+          display: flex
+          line-height: 40px
+  .logdiv
+    flex: 1
+    height: 400px
+    background: #272b34
 </style>

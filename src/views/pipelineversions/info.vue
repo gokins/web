@@ -4,9 +4,10 @@
       <CCardHeader>
         <div class="hd-tit">
           <div class="icons rotateDiv">
-            <i class="iconfont icon-success color-success" style="font-size:30px" />
-            <i class="iconfont icon-chacha color-error" style="font-size:30px" />
-            <i class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" />
+            <i class="iconfont icon-success color-success" style="font-size:30px" v-if="build.status=='ok'" />
+            <i class="iconfont icon-chacha color-error" style="font-size:30px" v-else-if="build.status=='error'" />
+            <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px" v-else-if="build.status=='cancel'" />
+            <i class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" v-else />
           </div>
           <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
           <!-- <div class="card-header-actions"></div> -->
@@ -16,35 +17,35 @@
         <div class="container">
           <div class="stages">
             <div class="tit">构建阶段</div>
-            <div class="stage">
-              <div class="tits" @click="collapse=!collapse">
+            <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
+              <div class="tits" @click="toggleStage(stageid)">
                 <div class="iconstage">
-                  <CIcon :content="$options.coreics[collapse==true?'cilCaretBottom':'cilCaretLeft']" />
+                  <CIcon :content="$options.coreics[stages[stageid].collapse==true?'cilCaretBottom':'cilCaretLeft']" />
                 </div>
                 <div class="icons rotateDiv">
-                  <i class="iconfont icon-success color-success" style="font-size:30px" />
+                  <i class="iconfont icon-success color-success" style="font-size:20px"
+                    v-if="stages[stageid].status=='ok'" />
+                  <i class="iconfont icon-chacha color-error" style="font-size:20px"
+                    v-else-if="stages[stageid].status=='error'" />
+                  <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
+                    v-else-if="stages[stageid].status=='cancel'" />
+                  <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
                 </div>
-                <div class="titcont">Stage1<small>第一个任务的防撒旦发射撒旦法</small></div>
+                <div class="titcont">{{stages[stageid].name}}<small>{{stages[stageid].displayName}}</small></div>
               </div>
-              <CCollapse :show="collapse" :duration="400">
+              <CCollapse :show="stages[stageid].collapse" :duration="400">
                 <ul>
-                  <li>
-                    <div class="icons rotateDiv"><i class="iconfont icon-success color-success"
-                        style="font-size:30px" />
+                  <li v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid">
+                    <div class="icons rotateDiv">
+                      <i class="iconfont icon-success color-success" style="font-size:20px"
+                        v-if="steps[stepid].status=='ok'" />
+                      <i class="iconfont icon-chacha color-error" style="font-size:20px"
+                        v-else-if="steps[stepid].status=='error'" />
+                      <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
+                        v-else-if="steps[stepid].status=='cancel'" />
+                      <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
                     </div>
-                    <div class="titcont">Job1<small>第一个任务</small></div>
-                  </li>
-                  <li>
-                    <div class="icons rotateDiv"><i class="iconfont icon-jiazaizhong color-runing"
-                        style="font-size:30px" />
-                    </div>
-                    <div class="titcont">Job2<small>第一个任务</small></div>
-                  </li>
-                  <li>
-                    <div class="icons rotateDiv"><i class="iconfont icon-jiazaizhong color-runing"
-                        style="font-size:30px" />
-                    </div>
-                    <div class="titcont">Job3<small>第一个任务</small></div>
+                    <div class="titcont">{{steps[stepid].name}}<small>{{steps[stepid].displayName}}</small></div>
                   </li>
                 </ul>
               </CCollapse>
@@ -68,6 +69,7 @@
 import {
   UtilCatch,
   PipelineVersion,
+  RuntimeStages,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 export default {
@@ -76,7 +78,11 @@ export default {
     return {
       pv: {},
       pipe: {},
+      build: {},
       collapse: false,
+      stageids: {},
+      stages: {},
+      steps: {}
     }
   }, mounted () {
     if (
@@ -94,12 +100,27 @@ export default {
         .then((res) => {
           this.pv = res.data.pv;
           this.pipe = res.data.pipe;
+          this.build = res.data.build;
+          this.getStages();
         })
         .catch((err) =>
           UtilCatch(this, err, _ => {
             this.$router.push("/500");
           })
         );
+    }, getStages () {
+      RuntimeStages(this.pv.id).then(res => {
+        for (let i in res.data.ids) {
+          let id = res.data.ids[i];
+          res.data.stages[id].collapse = true;
+        }
+        this.steps = res.data.steps;
+        this.stages = res.data.stages;
+        this.stageids = res.data.ids;
+      }).catch(err => UtilCatch(this, err))
+    }, toggleStage (id) {
+      this.stages[id].collapse = !this.stages[id].collapse;
+      this.$forceUpdate()
     }
   }
 }
@@ -110,7 +131,7 @@ export default {
   display: flex
 .icons
   width: 30px
-  margin-right: 10px
+  margin-right: 5px
 
 .contbody
   padding-left: 0

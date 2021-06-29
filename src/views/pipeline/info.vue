@@ -49,12 +49,7 @@
               <CIcon name="cil-chart-pie"/>
               设置
             </template>
-            <CRow>
-              <CCol sm="2"></CCol>
-              <CCol sm="8">
                 <PipeNew :pipeId.sync="this.$route.params.id" :editf="true"/>
-              </CCol>
-            </CRow>
           </CTab>
         </CTabs>
       </CCardBody>
@@ -133,12 +128,12 @@ export default {
     run() {
       RunPipeline({ pipelineId: this.$route.params.id, repoId: "1" })
           .then((res) => {
-            this.goVersion(this.$route.params.id);
+            this.goVersion(res.data.id);
           })
           .catch((err) => UtilCatch(this, err));
     },
     goVersion(id) {
-      this.$router.push("/pipelineVersion/list/" + id);
+      this.$router.push("/pipeline/build/" + id);
     },
     goEdit(id) {
       this.$router.push("/pipeline/info/" + id);

@@ -253,7 +253,7 @@ export default {
     run (id) {
       RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
         .then((res) => {
-          this.getVersion(id);
+          this.goVersion(res.data.id);
         })
         .catch((err) => UtilCatch(this, err));
     },
@@ -264,6 +264,9 @@ export default {
           this.usrs = res.data.usrs || [];
         })
         .catch((err) => UtilCatch(this, err));
+    },
+    goVersion(id) {
+      this.$router.push("/pipeline/build/" + id);
     },
     getPipeList () {
       OrgPipelineList({ page: 0, orgId: this.info.id })

@@ -1,80 +1,292 @@
 <template>
-  <div>
-    <CRow>
-      <CCol sm="2"></CCol>
-      <CCol sm="8">
-        <CCard>
-          <CCardHeader>
-            <strong>流水线</strong>
-          </CCardHeader>
-          <CCardBody>
-            <CRow>
-              <CCol sm="12">
-                <CInput label="流水线名称" v-model="formData.name" placeholder="请输入流水线名称" Max="10" />
-              </CCol>
-            </CRow>
-            <CRow>
-              <CCol sm="12">
-                <CTextarea label="Yaml" v-model="formData.content" placeholder="Yaml" />
-              </CCol>
-            </CRow>
-            <CRow class="subRow">
-              <CCol sm="6">
-                <CButton color="info" @click="subFun()">新建</CButton>
-              </CCol>
-            </CRow>
-          </CCardBody>
-        </CCard>
-      </CCol>
-    </CRow>
+  <div class="mainbox">
+    <div class="pmainbox">
+      <div class="pipebox">
+        <CRow>
+          <CCol>
+            <CCard>
+              <CCardHeader>
+                <strong>流水线</strong>
+              </CCardHeader>
+              <CCardBody>
+                <CRow>
+                  <CCol>
+                    <CInput
+                        label="流水线名称: "
+                        placeholder="请输入流水线名称"
+                        v-model="formData.name"
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <CInput
+                        label="仓库地址: "
+                        placeholder="仓库URL地址或者仓库目录(例如:https://xxx.com/test.git 或者 ~/dev/test)"
+                        v-model="formData.url"
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <div>
+                      <label>yaml:</label>
+                      <codemirror
+                          ref="code"
+                          v-model="formData.content"
+                          :options="cmOptions"
+                          class="json-editor"
+                      ></codemirror>
+                    </div>
+                  </CCol>
+                </CRow>
+                <hr/>
+                <CRow class="subRow" sm="16">
+                  <CCol sm="8">
+                    <CButton color="info" @click="subFun()">保存</CButton>
+                  </CCol>
+                </CRow>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
+      <div class="tabbox">
+        <CRow>
+          <CCol>
+            <CCard>
+              <CCardBody class="tabh">
+                <CTabs
+                    variant="tabs"
+                >
+                  <CTab active>
+                    <template slot="title">
+                      安全
+                    </template>
+                    <CRow style="margin-top: 10px">
+                      <CCol>
+                        <CInput
+                            label="账号: "
+                            placeholder="clone仓库的账号"
+                            v-model="formData.username"
+                        />
+                        <label class="tips"
+                        >tips: 如果是公开或者仓库目录模式下,不用填写</label
+                        >
+                      </CCol>
+                    </CRow>
+                    <CRow>
+                      <CCol>
+                        <CInput
+                            label="Access Token: "
+                            placeholder="clone仓库的用户Access Token"
+                            v-model="formData.accessToken"
+                        />
+                        <label class="tips"
+                        >tips: 如果是公开或者仓库目录模式下,不用填写</label
+                        >
+                      </CCol>
+                    </CRow>
+                  </CTab>
+                  <CTab>
+                    <template slot="title">
+                      插件
+                    </template>
+                    <CRow>
+                      <CCol
+                      >
+                        <span @click="showPlugin(itme)" v-for="(itme, index) in pluginInfos">
+                          <CWidgetIcon
+                              :header="itme.name"
+                              :text="itme.content"
+                              color="gradient-warning"
+                          >
+                          <CIcon name="cil-moon" width="24"/>
+                        </CWidgetIcon>
+                        </span>
+                      </CCol>
+                    </CRow>
+                  </CTab>
+                  <CTab>
+                    <template slot="title">
+                      触发器
+                    </template>
+                    123
+                  </CTab>
+                </CTabs>
+              </CCardBody>
+            </CCard>
+          </CCol>
+        </CRow>
+      </div>
+    </div>
+<!--    <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml"/>-->
   </div>
 </template>
 <script>
-import { UtilCatch, NewPipeline } from "@/assets/js/apis";
+import "codemirror/addon/lint/lint.css";
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/eclipse.css";
+import "codemirror/mode/yaml/yaml";
+import "codemirror/addon/lint/lint";
+import "codemirror/addon/lint/yaml-lint";
+// import pluginView from "@/components/modals/pluginView";
+import {NewPipeline, PipelineInfo, SavePipeline, UtilCatch} from "@/assets/js/apis";
+
+window.jsyaml = require("js-yaml"); // 引入js-yaml为codemirror提高语法检查核心支持
 export default {
-  data () {
+  name: "PipeNew",
+  // components: {pluginView},
+  props: {
+    editf: false,
+    pipeId: String
+  },
+  data() {
     return {
       formData: {
         name: "",
-        content: "",
-        orgId: "",
+        url: "",
+        username: "",
+        accessToken: "",
+        content: "123",
+      },
+      pluginInfos: [
+        {
+          name: "git", "content": "git 插件", ymlcontent: "" +
+              "Clone1:\n" +
+              "" +
+              "    git: github\n" +
+              "" +
+              "    repo: https://github.com/koderover/sample\n" +
+              "" +
+              "    revision: master\n" +
+              "" +
+              "    title: git clone\n" +
+              "" +
+              "    type: git-clone\n" +
+              "" +
+              "    working_directory: ${{KR_VOLUME_PATH}}\n" +
+              "" +
+              ""
+        },
+        {
+          name: "git2", "content": "git2 插件", ymlcontent: "" +
+              "Clone2:\n" +
+              "" +
+              "    git: github\n" +
+              "" +
+              "    repo: https://github.com/koderover/sample\n" +
+              "" +
+              "    revision: master\n" +
+              "" +
+              "    title: git clone\n" +
+              "" +
+              "    type: git-clone\n" +
+              "" +
+              "    working_directory: ${{KR_VOLUME_PATH}}\n" +
+              "" +
+              ""
+        }
+      ],
+      pluginShow: false,
+      pluginyml: "",
+      cmOptions: {
+        lineNumbers: true,
+        mode: "text/x-yaml",
+        gutters: ["CodeMirror-lint-markers"],
+        theme: "eclipse",
       },
     };
   },
-  mounted () {
-    if (
-      this.$route.params != null &&
-      this.$route.params.orgId != null &&
-      this.$route.params.orgId != ""
-    ) {
-      this.formData.orgId = this.$route.params.orgId;
+  mounted() {
+    if (this.pipeId && this.pipeId != "") {
+      this.pipeInfo(this.pipeId)
     }
-    this.formData.orgId = this.$route.params.orgId;
+    if (this.$refs?.code?.cminstance) {
+      this.$refs?.code?.cminstance.setSize("600px", "400px");
+    }
   },
   methods: {
-    subFun () {
-      if (this.formData.name == "") {
-        this.$msgErr("请输入名称");
-        return;
-      }
-      if (this.formData.content == "") {
-        this.$msgErr("请输入Yaml");
-        return;
-      }
-      NewPipeline(this.formData)
-        .then((res) => {
-          //   this.$msgOk('')
-          if (this.formData.orgId && this.formData.orgId != '')
-            this.$router.push("/pipeline/list/" + this.formData.orgId);
-          else
-            this.$router.push("/pipeline/list");
-        })
-        .catch((err) => UtilCatch(this, err));
+    showPlugin(e) {
+      this.pluginShow = true
+      this.pluginyml = e.ymlcontent
     },
+    subFun() {
+      if (this.editf) {
+        this.savePie()
+        return
+      }
+      this.newPie()
+    },
+    pipeInfo(id) {
+      PipelineInfo({id: id}).then((res) => {
+        this.formData.name = res.data.name
+        this.formData.url = res.data.url
+        this.formData.username = res.data.username
+        this.formData.accessToken = res.data.accessToken
+        // this.formData.content = res.data.ymlContent
+        this.$refs?.code?.cminstance.getDoc().setValue(res.data.ymlContent);
+        this.$refs?.code?.cminstance.refresh();
+        // console.log(this.$refs?.code?.cminstance)
+        // this.$forceUpdate()
+      }).catch((err) => UtilCatch(this, err));
+    },
+    newPie() {
+      NewPipeline(this.formData)
+          .then((res) => {
+            this.$msgOk("成功");
+          })
+          .catch((err) => UtilCatch(this, err));
+    },
+    savePie() {
+      let formData = this.formData;
+      formData.pipelineId = this.pipeId
+      SavePipeline(formData)
+          .then((res) => {
+            this.$msgOk("成功");
+            this.pipeInfo(this.pipeId)
+          })
+          .catch((err) => UtilCatch(this, err));
+    }
   },
 };
 </script>
 <style lang="sass" scoped>
+.pmainbox
+  display: flex
+
+.mainbox
+
+.pipebox
+  width: 100%
+  height: 1000px
+
+.tabbox
+  width: 600px
+  margin-left: 10px
+  height: 1000px
+
+.tabh[data-v-8d88a766]
+  width: 400px
+
 .subRow
   margin-top: 10px
+
+.row
+  margin-top: 10px
+
+.tips
+  font-size: 5px
+
+hr
+  margin-top: 50px
+
+.json-editor
+  border: #768192 1px solid
+
+.tabh
+  height: 807px
+
+.card
+  margin-bottom: 0px
 </style>

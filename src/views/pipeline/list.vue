@@ -18,7 +18,6 @@
           :fixed="true"
           :fields="fields"
           :items="items"
-          @row-clicked="rowClick"
         >
           <template #edit="{ item }">
             <td class="py-2">
@@ -124,12 +123,9 @@ export default {
     run(id) {
       RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
         .then((res) => {
-          this.getVersion(id);
+          this.goVersion(id);
         })
         .catch((err) => UtilCatch(this, err));
-    },
-    rowClick(item) {
-      this.goEdit(item.id);
     },
     goVersion(id) {
       this.$router.push("/pipelineVersion/list/" + id);
@@ -138,7 +134,7 @@ export default {
       this.$router.push("/pipeline/info/" + id);
     },
     goNew() {
-      this.$router.push("/pipeline/new/" + this.orgId);
+      this.$router.push("/pipeline/new");
     },
   },
 };

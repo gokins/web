@@ -69,8 +69,8 @@
                   <div style="float:right">{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
                   {{stepcmds[cmdid].content}}
                 </div>
-                <ul>
-                  <li v-for="(log,$i) in steplogs[showStepid][cmdid]" :key="'log:'+log.id+'-'+$i">
+                <ul v-if="steplogs[showStepid]&&steplogs[showStepid].logs">
+                  <li v-for="(log,$i) in steplogs[showStepid].logs[cmdid]" :key="'log:'+log.id+'-'+$i">
                     <div class="num">{{$i+1}}</div>
                     <div class="cont">
                       <div style="float:right">{{$dateFmt(log.times)}}</div>
@@ -174,12 +174,14 @@ export default {
         this.$forceUpdate()
         this.getLogs(stepid);
       }).catch(err => UtilCatch(this, err));
-    }, getLogs (stepid, off) {
+    }, getLogs (stepid) {
+      let off = this.steplogs[stepid]?.offset;
       RuntimeLogs(stepid, off).then(res => {
-        let logs = this.steplogs[stepid]
+        let logs = this.steplogs[stepid]?.logs;
         if (!logs || (off && off <= 0)) {
           logs = {}
-          this.steplogs[stepid] = logs
+          this.steplogs[stepid] = {};
+          this.steplogs[stepid].logs = logs
         }
         for (let i in res.data) {
           let log = res.data[i];
@@ -191,6 +193,7 @@ export default {
             loge.push(log)
             logs[log.id] = loge
           }
+          this.steplogs[stepid].offset = log.offset;
         }
         this.$forceUpdate()
       }).catch(err => {
@@ -231,6 +234,16 @@ export default {
                     stpe.started = stp.started;
                     stpe.finished = stp.finished;
                     stpe.updated = stp.updated;
+                    if (stp.cmds)
+                      for (let k in stp.cmds) {
+                        let cmd = stp.cmds[k];
+                        let cmde = this.stepcmds[cmd.id];
+                        if (cmde) {
+                          cmde.status = cmd.status;
+                          cmde.started = cmd.started;
+                          cmde.finished = cmd.finished;
+                        }
+                      }
                   }
                 }
             }

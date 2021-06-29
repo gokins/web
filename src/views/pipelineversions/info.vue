@@ -66,6 +66,7 @@
             <div v-if="showStepid!=''&&stepcmdids[showStepid]">
               <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:'+cmdid">
                 <div class="cmdline">
+                  <div style="float:right">{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
                   {{stepcmds[cmdid].content}}
                 </div>
                 <ul>
@@ -73,7 +74,8 @@
                     <div class="num">{{$i+1}}</div>
                     <div class="cont">
                       <div style="float:right">{{$dateFmt(log.times)}}</div>
-                      {{log.content}}
+                      <div style="color:#ff0042" v-if="log.errs==true">{{log.content}}</div>
+                      <div v-else>{{log.content}}</div>
                     </div>
                   </li>
                 </ul>

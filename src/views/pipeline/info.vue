@@ -2,17 +2,29 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>流水线名称:{{pipelineName}} </strong>
-        <!-- <div class="card-header-actions"></div> -->
+        <strong>流水线名称:{{ pipelineName }} </strong>
+        <div class="card-header-actions">
+          <CButton
+              color="primary"
+              variant="outline"
+              square
+              size="sm"
+              @click="run()"
+              style="margin-left:5px"
+          >
+            运行
+          </CButton>
+        </div>
       </CCardHeader>
       <CCardBody>
         <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
           <CTab active>
             <template slot="title">
-              <CIcon name="cil-calculator" /> 构建历史
+              <CIcon name="cil-calculator"/>
+              构建历史
             </template>
             <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
-              :fields="versionfields" :items="versionitems">
+                        :fields="versionfields" :items="versionitems">
               <template #number="{ item }">
                 <td>
                   <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
@@ -34,33 +46,13 @@
           </CTab>
           <CTab>
             <template slot="title">
-              <CIcon name="cil-chart-pie" /> 设置
+              <CIcon name="cil-chart-pie"/>
+              设置
             </template>
             <CRow>
               <CCol sm="2"></CCol>
               <CCol sm="8">
-                <CCard>
-                  <CCardHeader>
-                    <strong>流水线</strong>
-                  </CCardHeader>
-                  <CCardBody>
-                    <CRow>
-                      <CCol sm="12">
-                        <CInput label="流水线名称" v-model="formData.name" placeholder="请输入流水线名称" Max="10" />
-                      </CCol>
-                    </CRow>
-                    <CRow>
-                      <CCol sm="12">
-                        <CTextarea label="Yaml" v-model="formData.content" placeholder="Yaml" />
-                      </CCol>
-                    </CRow>
-                    <CRow class="subRow">
-                      <CCol sm="6">
-                        <CButton color="info" @click="subFun()">保存</CButton>
-                      </CCol>
-                    </CRow>
-                  </CCardBody>
-                </CCard>
+                <PipeNew :pipeId.sync="this.$route.params.id" :editf="true"/>
               </CCol>
             </CRow>
           </CTab>
@@ -70,18 +62,14 @@
   </div>
 </template>
 <script>
-import {
-  UtilCatch,
-  PipelineInfo,
-  SavePipeline,
-  PipelineVersions,
-} from "@/assets/js/apis";
-import { freeSet } from "@coreui/icons";
-import SelectUser from "@/components/modals/selectUser";
+import {PipelineInfo, PipelineVersions,RunPipeline, UtilCatch,} from "@/assets/js/apis";
+import {freeSet} from "@coreui/icons";
+import PipeNew from "./new";
+
 export default {
   coreics: freeSet,
-  components: { SelectUser },
-  data () {
+  components: {PipeNew},
+  data() {
     return {
       versionfields: [
         {
@@ -101,7 +89,7 @@ export default {
           label: "仓库名称",
         },
       ],
-      pipelineName:"",
+      pipelineName: "",
       versionitems: [],
       formData: {
         name: "",
@@ -110,12 +98,12 @@ export default {
       },
     };
   },
-  mounted () {
+  mounted() {
     console.log("$options.coreics", this.$options.coreics["cliXcircle"]);
     if (
-      this.$route.params == null ||
-      this.$route.params.id == null ||
-      this.$route.params.id == ""
+        this.$route.params == null ||
+        this.$route.params.id == null ||
+        this.$route.params.id == ""
     ) {
       this.$router.push("/404");
       return;
@@ -123,54 +111,37 @@ export default {
     this.getPipeList(this.$route.params.id);
   },
   methods: {
-    getInfo (id) {
-      PipelineInfo({ id: id })
-        .then((res) => {
-          this.formData.name = res.data.name;
-          this.formData.content = res.data.jsonContent;
-          this.formData.pipelineId = id;
-          this.pipelineName = res.data.name;
-        })
-        .catch((err) =>
-          UtilCatch(this, err, (err) => {
-            this.$router.push("/500");
-          })
-        );
-    },
-    getPipeList (id) {
+    getPipeList(id) {
       PipelineVersions({
         page: 0,
         orgId: this.orgId,
         pipelineId: id,
       })
-        .then((res) => {
-          this.page = res.data.page;
-          this.pages = res.data.pages;
-          this.versionitems = res.data.data;
-          this.getInfo(id);
-        })
-        .catch((err) => UtilCatch(this, err));
+          .then((res) => {
+            this.page = res.data.page;
+            this.pages = res.data.pages;
+            this.versionitems = res.data.data;
+            this.pipeInfo(id)
+          })
+          .catch((err) => UtilCatch(this, err));
     },
-    goEdit (id) {
+    pipeInfo(pipeid) {
+      PipelineInfo({id: pipeid}).then((res) => {
+        this.pipelineName = res.data.name
+      }).catch((err) => UtilCatch(this, err));
+    },
+    run() {
+      RunPipeline({ pipelineId: this.$route.params.id, repoId: "1" })
+          .then((res) => {
+            this.goVersion(this.$route.params.id);
+          })
+          .catch((err) => UtilCatch(this, err));
+    },
+    goVersion(id) {
+      this.$router.push("/pipelineVersion/list/" + id);
+    },
+    goEdit(id) {
       this.$router.push("/pipeline/info/" + id);
-    },
-    subFun () {
-      if (this.formData.name == "") {
-        console.log("name");
-        this.$msgErr("请输入名称");
-        return;
-      }
-      if (this.formData.content == "") {
-        console.log("content");
-        this.$msgErr("请输入yaml");
-        return;
-      }
-      SavePipeline(this.formData)
-        .then((res) => {
-          this.$msgOk("保存成功");
-          // this.$router.push('info/'+res.data.id)
-        })
-        .catch((err) => UtilCatch(this, err));
     },
   },
 };
@@ -178,10 +149,13 @@ export default {
 <style lang="sass" scoped>
 .subRow
   margin-top: 10px
+
 .org-users
   display: flex
+
 .item
   width: 100px
+
 .tools
   text-align: center
 </style>

@@ -161,6 +161,7 @@ export default {
       this.showStepid = stepid;
       if (!this.stepcmdids[stepid])
         this.getCmds(stepid);
+      this.getLogs(stepid);
     }, getCmds (stepid) {
       RuntimeCmds(stepid).then(res => {
         let ids = [];
@@ -172,7 +173,6 @@ export default {
         }
         this.stepcmdids[stepid] = ids;
         this.$forceUpdate()
-        this.getLogs(stepid);
       }).catch(err => UtilCatch(this, err));
     }, getLogs (stepid) {
       let off = this.steplogs[stepid]?.offset;

@@ -9,8 +9,8 @@
 <script>
 export default {
   name: "Message",
-  mounted() {},
-  data() {
+  mounted () { },
+  data () {
     return {
       type: "info",
       dismissCountDown: 2,
@@ -23,7 +23,7 @@ export default {
 <style lang="sass" scoped>
 .message
   margin: 0
-  position: absolute
+  position: fixed
   top: 10%
   left: 50%
   transform: translate(-50%, -50%)

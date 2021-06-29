@@ -1,5 +1,4 @@
 <template>
-  <div class="mainbox">
     <div class="pmainbox">
       <div class="pipebox">
         <CRow>
@@ -29,15 +28,13 @@
                 </CRow>
                 <CRow>
                   <CCol>
-                    <div>
                       <label>yaml:</label>
                       <codemirror
-                          ref="code"
+                          ref="myCm"
                           v-model="formData.content"
                           :options="cmOptions"
                           class="json-editor"
                       ></codemirror>
-                    </div>
                   </CCol>
                 </CRow>
                 <hr/>
@@ -92,10 +89,8 @@
                     <template slot="title">
                       插件
                     </template>
-                    <CRow>
-                      <CCol
-                      >
-                        <span @click="showPlugin(itme)" v-for="(itme, index) in pluginInfos">
+                    <CRow  @click="showPlugin(itme)" v-for="(itme, index) in pluginInfos">
+                      <CCol>
                           <CWidgetIcon
                               :header="itme.name"
                               :text="itme.content"
@@ -103,7 +98,6 @@
                           >
                           <CIcon name="cil-moon" width="24"/>
                         </CWidgetIcon>
-                        </span>
                       </CCol>
                     </CRow>
                   </CTab>
@@ -111,7 +105,6 @@
                     <template slot="title">
                       触发器
                     </template>
-                    123
                   </CTab>
                 </CTabs>
               </CCardBody>
@@ -119,24 +112,26 @@
           </CCol>
         </CRow>
       </div>
-    </div>
-<!--    <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml"/>-->
+    <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml"/>
   </div>
 </template>
 <script>
+import { codemirror } from 'vue-codemirror'
 import "codemirror/addon/lint/lint.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/eclipse.css";
 import "codemirror/mode/yaml/yaml";
 import "codemirror/addon/lint/lint";
 import "codemirror/addon/lint/yaml-lint";
-// import pluginView from "@/components/modals/pluginView";
+import "codemirror/addon/display/autorefresh"
+
+import pluginView from "@/components/modals/pluginView";
 import {NewPipeline, PipelineInfo, SavePipeline, UtilCatch} from "@/assets/js/apis";
 
 window.jsyaml = require("js-yaml"); // 引入js-yaml为codemirror提高语法检查核心支持
 export default {
   name: "PipeNew",
-  // components: {pluginView},
+  components: {pluginView,codemirror},
   props: {
     editf: false,
     pipeId: String
@@ -148,7 +143,7 @@ export default {
         url: "",
         username: "",
         accessToken: "",
-        content: "123",
+        content: "",
       },
       pluginInfos: [
         {
@@ -195,7 +190,7 @@ export default {
         mode: "text/x-yaml",
         gutters: ["CodeMirror-lint-markers"],
         theme: "eclipse",
-        viewportMargin: 10,
+        autoRefresh:true
       },
     };
   },
@@ -222,9 +217,9 @@ export default {
         this.formData.url = res.data.url
         this.formData.username = res.data.username
         this.formData.accessToken = res.data.accessToken
-        // this.formData.content = res.data.ymlContent
-        this.$refs?.code?.cminstance.getDoc().setValue(res.data.ymlContent);
-        this.$refs?.code?.cminstance.refresh();
+        this.formData.content = res.data.ymlContent
+        // this.$refs?.code?.cminstance.getDoc().setValue(res.data.ymlContent);
+        // this.$refs?.code?.cminstance.refresh();
         // console.log(this.$refs?.code?.cminstance)
         // this.$forceUpdate()
       }).catch((err) => UtilCatch(this, err));
@@ -252,15 +247,10 @@ export default {
 <style lang="sass" scoped>
 .pmainbox
   display: flex
-
-.mainbox
-
-.pipebox
-  flex: 1
-
-.tabbox
-  width: 350px
-  margin-left: 10px
+  .pipebox
+   flex: 1
+  .tabbox
+   margin-left: 10px
 
 .subRow
   margin-top: 10px

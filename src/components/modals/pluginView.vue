@@ -1,6 +1,6 @@
 <template>
   <CModal
-      title="选择用户"
+      title="步骤"
       size="lg"
       :show="shown"
       :pluginyml="pluginyml"
@@ -10,16 +10,10 @@
     <codemirror
         v-model="pluginyml"
         :options="cOptions"
-        class="json-editor"
     ></codemirror>
   </CModal>
 </template>
 <script>
-import "codemirror/addon/lint/lint.css";
-import "codemirror/lib/codemirror.css";
-import "codemirror/theme/eclipse.css";
-import "codemirror/mode/yaml/yaml";
-
 export default {
   props: {
     shown: Boolean,

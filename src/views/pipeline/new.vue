@@ -40,7 +40,7 @@
                 <hr/>
                 <CRow class="subRow" sm="16">
                   <CCol sm="8">
-                    <CButton color="info" @click="subFun()">保存</CButton>
+                    <CButton color="info" @click="subFun()" :disabled="saveBtu">保存</CButton>
                   </CCol>
                 </CRow>
               </CCardBody>
@@ -67,9 +67,7 @@
                             placeholder="clone仓库的账号"
                             v-model="formData.username"
                         />
-                        <label class="tips"
-                        >tips: 如果是公开或者仓库目录模式下,不用填写</label
-                        >
+                        <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
                       </CCol>
                     </CRow>
                     <CRow>
@@ -185,6 +183,7 @@ export default {
       ],
       pluginShow: false,
       pluginyml: "",
+      saveBtu:false,
       cmOptions: {
         lineNumbers: true,
         mode: "text/x-yaml",
@@ -205,6 +204,11 @@ export default {
       this.pluginyml = e.ymlcontent
     },
     subFun() {
+      this.saveBtu = true
+      if (!this.checkForm()){
+        this.saveBtu = false
+        return;
+      }
       if (this.editf) {
         this.savePie()
         return
@@ -218,28 +222,47 @@ export default {
         this.formData.username = res.data.username
         this.formData.accessToken = res.data.accessToken
         this.formData.content = res.data.ymlContent
-        // this.$refs?.code?.cminstance.getDoc().setValue(res.data.ymlContent);
-        // this.$refs?.code?.cminstance.refresh();
-        // console.log(this.$refs?.code?.cminstance)
-        // this.$forceUpdate()
       }).catch((err) => UtilCatch(this, err));
     },
     newPie() {
       NewPipeline(this.formData)
           .then((res) => {
+            this.saveBtu = false
             this.$msgOk("成功");
           })
-          .catch((err) => UtilCatch(this, err));
+          .catch((err) => {
+            this.saveBtu = false
+            UtilCatch(this, err)
+          });
     },
     savePie() {
       let formData = this.formData;
       formData.pipelineId = this.pipeId
       SavePipeline(formData)
           .then((res) => {
+            this.saveBtu = false
             this.$msgOk("成功");
             this.pipeInfo(this.pipeId)
           })
-          .catch((err) => UtilCatch(this, err));
+          .catch((err) => {
+            this.saveBtu = false
+            UtilCatch(this, err)
+          });
+    },
+    checkForm(){
+      if(!this.formData.name|| this.formData.name===""){
+        this.$msgErr("请输入流水线名称");
+        return false
+      }
+      if(!this.formData.url|| this.formData.url===""){
+        this.$msgErr("请输入仓库地址");
+        return false
+      }
+      if(!this.formData.content || this.formData.content===""){
+        this.$msgErr("请输入yaml");
+        return false
+      }
+      return true
     }
   },
 };

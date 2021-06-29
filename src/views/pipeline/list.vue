@@ -123,12 +123,12 @@ export default {
     run(id) {
       RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
         .then((res) => {
-          this.goVersion(id);
+          this.goVersion(res.data.id);
         })
         .catch((err) => UtilCatch(this, err));
     },
     goVersion(id) {
-      this.$router.push("/pipelineVersion/list/" + id);
+      this.$router.push("/pipeline/build/" + id);
     },
     goEdit(id) {
       this.$router.push("/pipeline/info/" + id);

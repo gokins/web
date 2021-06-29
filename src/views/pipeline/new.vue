@@ -195,15 +195,13 @@ export default {
         mode: "text/x-yaml",
         gutters: ["CodeMirror-lint-markers"],
         theme: "eclipse",
+        viewportMargin: 10,
       },
     };
   },
   mounted() {
     if (this.pipeId && this.pipeId != "") {
       this.pipeInfo(this.pipeId)
-    }
-    if (this.$refs?.code?.cminstance) {
-      this.$refs?.code?.cminstance.setSize("600px", "400px");
     }
   },
   methods: {
@@ -258,16 +256,11 @@ export default {
 .mainbox
 
 .pipebox
-  width: 100%
-  height: 1000px
+  flex: 1
 
 .tabbox
-  width: 600px
+  width: 350px
   margin-left: 10px
-  height: 1000px
-
-.tabh[data-v-8d88a766]
-  width: 400px
 
 .subRow
   margin-top: 10px
@@ -284,9 +277,12 @@ hr
 .json-editor
   border: #768192 1px solid
 
-.tabh
-  height: 807px
-
 .card
   margin-bottom: 0px
+</style>
+<style lang="sass">
+.CodeMirror
+  height: auto
+.CodeMirror-scroll
+  min-height: 300px
 </style>

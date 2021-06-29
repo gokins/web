@@ -9,16 +9,26 @@
             <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px" v-else-if="build.status=='cancel'" />
             <i class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" v-else />
           </div>
-          <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
-          <!-- <div class="card-header-actions"></div> -->
+          <div style="flex:1">
+            <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
+          </div>
+          <div>
+            <CButton size="sm" color="info" variant="outline" @click="selPip = true">
+              重新构建
+            </CButton>
+            &nbsp;
+            <CButton size="sm" color="warning" variant="outline" @click="$router.push('/pipeline/new/' + info.aid)">
+              删除构建
+            </CButton>
+          </div>
         </div>
       </CCardHeader>
       <CCardBody class="contbody">
-        <div class="container">
+        <div class="buildcont">
           <div class="stages">
             <div class="tit">构建阶段</div>
             <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
-              <div class="tits" @click="toggleStage(stageid)">
+              <div class="tits clickitem" @click="toggleStage(stageid)">
                 <div class="iconstage">
                   <CIcon :content="$options.coreics[stages[stageid].collapse==true?'cilCaretBottom':'cilCaretLeft']" />
                 </div>
@@ -35,7 +45,8 @@
               </div>
               <CCollapse :show="stages[stageid].collapse" :duration="400">
                 <ul>
-                  <li v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid">
+                  <li class="clickitem" v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid"
+                    @click="showStep(stepid)">
                     <div class="icons rotateDiv">
                       <i class="iconfont icon-success color-success" style="font-size:20px"
                         v-if="steps[stepid].status=='ok'" />
@@ -51,16 +62,25 @@
               </CCollapse>
             </div>
           </div>
-          <div class="logdiv">1</div>
+          <div class="logdiv">
+            <div v-if="showStepid!=''&&stepcmdids[showStepid]">
+              <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:'+cmdid">
+                <div class="cmdline">
+                  {{stepcmds[cmdid].content}}
+                </div>
+                <ul>
+                  <li v-for="(log,$i) in stepcmds[cmdid].logs" :key="'log:'+log.id+'-'+$i">
+                    <div class="num">{{$i+1}}</div>
+                    <div class="cont">
+                      <div style="float:right">{{$dateFmt(log.times)}}</div>
+                      {{log.content}}
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
-      </CCardBody>
-    </CCard>
-    <CCard>
-      <CCardHeader>
-        <strong>构建详情: {{ pipe.name }}</strong>
-        <!-- <div class="card-header-actions"></div> -->
-      </CCardHeader>
-      <CCardBody>
       </CCardBody>
     </CCard>
   </div>
@@ -70,6 +90,8 @@ import {
   UtilCatch,
   PipelineVersion,
   RuntimeStages,
+  RuntimeCmds,
+  RuntimeLogs,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 export default {
@@ -79,10 +101,12 @@ export default {
       pv: {},
       pipe: {},
       build: {},
-      collapse: false,
       stageids: {},
       stages: {},
-      steps: {}
+      steps: {},
+      showStepid: '',
+      stepcmdids: {},
+      stepcmds: {},
     }
   }, mounted () {
     if (
@@ -117,10 +141,43 @@ export default {
         this.steps = res.data.steps;
         this.stages = res.data.stages;
         this.stageids = res.data.ids;
+        if (this.stageids && this.stageids.length > 0) {
+          let stage = this.stages[this.stageids[0]];
+          if (stage && stage.stepids && stage.stepids.length > 0)
+            this.showStep(this.steps[stage.stepids[0]].id)
+        }
       }).catch(err => UtilCatch(this, err))
     }, toggleStage (id) {
       this.stages[id].collapse = !this.stages[id].collapse;
       this.$forceUpdate()
+    }, showStep (stepid) {
+      this.showStepid = stepid;
+      if (!this.stepcmdids[stepid])
+        this.getCmds(stepid);
+    }, getCmds (stepid) {
+      RuntimeCmds(stepid).then(res => {
+        let ids = [];
+        for (let i in res.data) {
+          let cmd = res.data[i];
+          cmd.logs = [];
+          ids.push(cmd.id);
+          this.stepcmds[cmd.id] = cmd;
+        }
+        this.stepcmdids[stepid] = ids;
+        this.$forceUpdate()
+        this.getLogs(stepid);
+      }).catch(err => UtilCatch(this, err));
+    }, getLogs (stepid) {
+      RuntimeLogs(stepid).then(res => {
+        for (let i in res.data) {
+          let log = res.data[i];
+          if (this.stepcmds[log.id])
+            this.stepcmds[log.id].logs.push(log);
+        }
+        this.$forceUpdate()
+      }).catch(err => {
+
+      });
     }
   }
 }
@@ -135,16 +192,23 @@ export default {
 
 .contbody
   padding-left: 0
-  margin-left: 5px
-.container
+  margin-left: 8px
+  padding-right: 0
+  margin-right: 8px
+.buildcont
   display: flex
-  padding-left: 0
-  margin-left: 0
+  padding: 0
+  margin: 0
   .stages
     font-size: 16px
     width: 350px
     // border-right: 1px solid #ccc
     // border-left: 1px solid #ccc
+    .clickitem
+      cursor: pointer
+      border-radius: 10px
+      &:hover
+        background: #eee
     .tit
       border-top: 2px solid #ccc
       border-bottom: 2px solid #ccc
@@ -158,23 +222,51 @@ export default {
         color: #aaa
         margin-left: 10px
     .stage
-      padding: 10px
+      padding: 10px 10px 0 0
       .iconstage
         margin-right: 5px
         line-height: 35px
       .tits
         display: flex
         line-height: 40px
-        cursor: pointer
+        padding: 0 10px
       ul
         margin: 0
-        padding: 0 5px 0 20px
+        padding: 0
         list-style: none
         li
+          padding-left: 30px
           display: flex
           line-height: 40px
   .logdiv
     flex: 1
-    height: 400px
+    min-height: 400px
     background: #272b34
+    color: #c4c4c4
+    padding: 10px
+    overflow: hidden
+    .cmdcont
+      .cmdline
+        color: #40bcff
+        padding: 3px 5px
+        &:hover
+          background: #002b34
+      ul
+        list-style: none
+        margin: 0
+        padding: 0
+        margin-left: 10px
+        border-left: 1px dashed #aaa
+        li
+          display: flex
+          padding: 3px 5px 3px 10px
+          &:hover
+            background: #002b34
+          .num
+            width: 50px
+            height: 100%
+          .cont
+            flex: 1
+            white-space: break-word
+            overflow: hidden
 </style>

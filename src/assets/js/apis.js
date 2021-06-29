@@ -53,3 +53,6 @@ export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id })
 
 //Runtime
 export const RuntimeStages = (pvId) => Post('/runtime/stages', { pvId });
+export const RuntimeCmds = (stepId) => Post('/runtime/cmds', { stepId });
+export const RuntimeBuild = (buildId) => Post('/runtime/build', { buildId });
+export const RuntimeLogs = (stepId, offset) => Post('/runtime/logs', { stepId, offset });

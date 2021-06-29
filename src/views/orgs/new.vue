@@ -11,26 +11,17 @@
           <CCardBody>
             <CRow>
               <CCol sm="12">
-                <CInput
-                  label="名称"
-                  v-model="formData.name"
-                  placeholder="请输入组织名称"
-                  Max="10"
-                />
+                <CInput label="名称" v-model="formData.name" placeholder="请输入组织名称" Max="10" />
               </CCol>
             </CRow>
             <CRow>
               <CCol sm="12">
-                <CTextarea
-                  label="描述"
-                  v-model="formData.desc"
-                  placeholder="请输入组织描述"
-                />
+                <CTextarea label="描述" v-model="formData.desc" placeholder="请输入组织描述" rows="10" />
               </CCol>
             </CRow>
             <CRow>
               <CCol sm="6">
-                <CInputCheckbox label="公开" :checked.sync="formData.public" />
+                <CInputCheckbox label="公开  (登录可见)" :checked.sync="formData.public" />
               </CCol>
             </CRow>
             <CRow class="subRow">
@@ -45,9 +36,9 @@
   </div>
 </template>
 <script>
-import { UtilCatch,OrgNew } from "@/assets/js/apis";
+import { UtilCatch, OrgNew } from "@/assets/js/apis";
 export default {
-  data() {
+  data () {
     return {
       formData: {
         name: "",
@@ -57,15 +48,15 @@ export default {
     };
   },
   methods: {
-    subFun() {
+    subFun () {
       if (this.formData.name == "") {
         console.log("name");
         this.$msgErr("请输入名称");
         return;
       }
       OrgNew(this.formData).then(res => {
-          // this.$msgOk('')
-          this.$router.push('info/'+res.data.id)
+        // this.$msgOk('')
+        this.$router.push('info/' + res.data.id)
       }).catch(err => UtilCatch(this, err));
     },
   },

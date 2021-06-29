@@ -10,6 +10,9 @@ import Message from '@/components/message'
 import VueCodemirror from 'vue-codemirror';
 import 'codemirror/lib/codemirror.css';
 
+import '@/assets/css/comm.css'
+import '@/assets/css/icon.sass'
+
 Vue.config.performance = true;
 Vue.use(VueCodemirror);
 Vue.use(CoreuiVue);

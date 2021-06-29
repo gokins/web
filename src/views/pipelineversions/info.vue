@@ -70,7 +70,7 @@
                   {{stepcmds[cmdid].content}}
                 </div>
                 <ul>
-                  <li v-for="(log,$i) in stepcmds[cmdid].logs" :key="'log:'+log.id+'-'+$i">
+                  <li v-for="(log,$i) in steplogs[showStepid][cmdid]" :key="'log:'+log.id+'-'+$i">
                     <div class="num">{{$i+1}}</div>
                     <div class="cont">
                       <div style="float:right">{{$dateFmt(log.times)}}</div>
@@ -93,6 +93,7 @@ import {
   PipelineVersion,
   RuntimeStages,
   RuntimeCmds,
+  RuntimeBuild,
   RuntimeLogs,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
@@ -109,6 +110,8 @@ export default {
       showStepid: '',
       stepcmdids: {},
       stepcmds: {},
+      steplogs: {},
+      builded: false,
     }
   }, mounted () {
     if (
@@ -119,22 +122,24 @@ export default {
       this.$router.push("/404");
       return;
     }
-    this.getInfo(this.$route.params.id);
+    this.getInfo(this.$route.params.id, true);
   }, methods: {
-    getInfo (id) {
+    getInfo (id, first) {
       PipelineVersion(id)
         .then((res) => {
           this.pv = res.data.pv;
           this.pipe = res.data.pipe;
           this.build = res.data.build;
-          this.getStages();
+          this.builded = this.$isEndStatus(this.build.status);
+          if (!this.builded) this.upBuild();
+          this.getStages(first);
         })
         .catch((err) =>
           UtilCatch(this, err, _ => {
             this.$router.push("/500");
           })
         );
-    }, getStages () {
+    }, getStages (first) {
       RuntimeStages(this.pv.id).then(res => {
         for (let i in res.data.ids) {
           let id = res.data.ids[i];
@@ -143,7 +148,7 @@ export default {
         this.steps = res.data.steps;
         this.stages = res.data.stages;
         this.stageids = res.data.ids;
-        if (this.stageids && this.stageids.length > 0) {
+        if (first && this.stageids && this.stageids.length > 0) {
           let stage = this.stages[this.stageids[0]];
           if (stage && stage.stepids && stage.stepids.length > 0)
             this.showStep(this.steps[stage.stepids[0]].id)
@@ -169,16 +174,74 @@ export default {
         this.$forceUpdate()
         this.getLogs(stepid);
       }).catch(err => UtilCatch(this, err));
-    }, getLogs (stepid) {
-      RuntimeLogs(stepid).then(res => {
+    }, getLogs (stepid, off) {
+      RuntimeLogs(stepid, off).then(res => {
+        let logs = this.steplogs[stepid]
+        if (!logs || (off && off <= 0)) {
+          logs = {}
+          this.steplogs[stepid] = logs
+        }
         for (let i in res.data) {
           let log = res.data[i];
-          if (this.stepcmds[log.id])
-            this.stepcmds[log.id].logs.push(log);
+          let loge = logs[log.id];
+          if (loge)
+            loge.push(log)
+          else {
+            loge = [];
+            loge.push(log)
+            logs[log.id] = loge
+          }
         }
         this.$forceUpdate()
       }).catch(err => {
 
+      });
+    }, upBuild () {
+      const reExecFn = () => {
+        if (!this.builded) this.upBuild();
+      }
+      RuntimeBuild(this.build.id).then(res => {
+        setTimeout(reExecFn, 1000);
+        this.build.status = res.data.status;
+        this.build.error = res.data.error;
+        this.build.event = res.data.event;
+        this.build.started = res.data.started;
+        this.build.finished = res.data.finished;
+        this.build.updated = res.data.updated;
+        this.builded = this.$isEndStatus(this.build.status);
+        if (res.data.stages)
+          for (let i in res.data.stages) {
+            let stg = res.data.stages[i];
+            let stge = this.stages[stg.id];
+            if (stge) {
+              stge.status = stg.status;
+              stge.event = stg.event;
+              stge.error = stg.error;
+              stge.started = stg.started;
+              stge.finished = stg.finished;
+              stge.updated = stg.updated;
+              if (stg.steps)
+                for (let j in stg.steps) {
+                  let stp = stg.steps[j];
+                  let stpe = this.steps[stp.id];
+                  if (stpe) {
+                    stpe.status = stp.status;
+                    stpe.event = stp.event;
+                    stpe.error = stp.error;
+                    stpe.started = stp.started;
+                    stpe.finished = stp.finished;
+                    stpe.updated = stp.updated;
+                  }
+                }
+            }
+          }
+        this.$forceUpdate()
+      }).catch(err => {
+        const stat = err.response ? err.response.status : 0;
+        if (stat == 404) {
+          this.getInfo(this.pv.id);
+        }
+        setTimeout(reExecFn, 1000);
       });
     }
   }

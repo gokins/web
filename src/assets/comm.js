@@ -42,7 +42,7 @@ export default {
                 case 3:
                     return mom.format('mm:ss');
             }
-            return mom.format('YYYY-MMM-DD hh:mm:ss');
+            return mom.format('YYYY-MM-DD hh:mm:ss');
         }
     }
 }

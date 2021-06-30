@@ -27,6 +27,8 @@
             <small>仓库地址: {{ pipe.url }}</small>
             <small style="color:#333">开始时间: {{ $dateFmt(pv.created) }}</small>
             <small style="color:#333">运行: {{ $dateCha(build.started,build.finished) }}</small>
+            <small style="color:red" v-if="build.status=='error'&&build.error&&build.error!=''">错误:
+              {{ build.error }}</small>
           </div>
           <div></div>
         </div>

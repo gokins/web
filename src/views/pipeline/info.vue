@@ -23,33 +23,51 @@
               <CIcon name="cil-calculator"/>
               构建历史
             </template>
-            <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
-                        :fields="versionfields" :items="versionitems">
-              <template #number="{ item }">
-                <td>
-                  <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
-                </td>
-              </template>
-              <template #pipelineName="{ item }">
-                <td>
-                  <CLink :to="'../build/'+item.id">{{ item.pipelineName }}</CLink>
-                </td>
-              </template>
-              <template #edit="{ item }">
-                <td class="py-2">
-                  <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
-                    编辑
-                  </CButton>
-                </td>
-              </template>
-            </CDataTable>
+              <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
+                          :fields="versionfields" :items="versionitems">
+                <template #number="{ item }">
+                  <td>
+                    <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
+                  </td>
+                </template>
+                <template #pipelineName="{ item }">
+                  <td>
+                    <CLink :to="'../build/'+item.id">{{ item.pipelineName }}</CLink>
+                  </td>
+                </template>
+                <template #edit="{ item }">
+                  <td class="py-2">
+                    <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
+                      编辑
+                    </CButton>
+                  </td>
+                </template>
+              </CDataTable>
           </CTab>
           <CTab>
             <template slot="title">
               <CIcon name="cil-chart-pie"/>
               设置
             </template>
+            <CCard>
                 <PipeNew :pipeId.sync="this.$route.params.id" :editf="true"/>
+            </CCard>
+            <CCard>
+              <CCardHeader style="background-color: #ffe8e6">
+                <strong>危险操作区</strong>
+              </CCardHeader>
+              <CCardBody style="display: flex">
+                <div style="flex: 1">
+                  <h5>删除流水线</h5>
+                  <p>流水线删除之后无法恢复.请谨慎操作</p>
+                </div>
+                <div >
+                  <CButton color="danger" variant="outline" square  @click="deletedPipe">
+                    删除流水线
+                  </CButton>
+                </div>
+              </CCardBody>
+            </CCard>
           </CTab>
         </CTabs>
       </CCardBody>
@@ -57,7 +75,7 @@
   </div>
 </template>
 <script>
-import {PipelineInfo, PipelineVersions,RunPipeline, UtilCatch,} from "@/assets/js/apis";
+import {PipelineInfo, PipelineVersions, RunPipeline,DeletedPipeline, UtilCatch,} from "@/assets/js/apis";
 import {freeSet} from "@coreui/icons";
 import PipeNew from "./new";
 
@@ -87,6 +105,7 @@ export default {
         content: "",
         pipelineId: "",
       },
+      pipelineId:"",
     };
   },
   mounted() {
@@ -99,30 +118,31 @@ export default {
       this.$router.push("/404");
       return;
     }
-    this.getPipeList(this.$route.params.id);
+    this.pipelineId = this.$route.params.id
+    this.getPipeList();
+    this.pipeInfo()
   },
   methods: {
-    getPipeList(id) {
+    getPipeList() {
       PipelineVersions({
         page: 0,
         orgId: this.orgId,
-        pipelineId: id,
+        pipelineId: this.pipelineId,
       })
           .then((res) => {
             this.page = res.data.page;
             this.pages = res.data.pages;
             this.versionitems = res.data.data;
-            this.pipeInfo(id)
           })
           .catch((err) => UtilCatch(this, err));
     },
-    pipeInfo(pipeid) {
-      PipelineInfo({id: pipeid}).then((res) => {
+    pipeInfo() {
+      PipelineInfo({id: this.pipelineId}).then((res) => {
         this.pipelineName = res.data.name
       }).catch((err) => UtilCatch(this, err));
     },
     run() {
-      RunPipeline({ pipelineId: this.$route.params.id, repoId: "1" })
+      RunPipeline({pipelineId: this.$route.params.id, repoId: "1"})
           .then((res) => {
             this.goVersion(res.data.id);
           })
@@ -134,6 +154,17 @@ export default {
     goEdit(id) {
       this.$router.push("/pipeline/info/" + id);
     },
+    deletedPipe(){
+      console.log(this.pipelineId)
+      this.$confirm("确定要删除流水线?",null,()=>{
+        DeletedPipeline(this.pipelineId)
+            .then((res) => {
+              this.$router.back(-1)
+            })
+            .catch((err) => UtilCatch(this, err));
+      })
+
+    }
   },
 };
 </script>

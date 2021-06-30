@@ -79,10 +79,6 @@ export default {
           key: "pipelineDisplayName",
           label: "流水线描述",
         },
-        {
-          key: "repoName",
-          label: "仓库名称",
-        },
       ],
       pipelineName: "",
       versionitems: [],

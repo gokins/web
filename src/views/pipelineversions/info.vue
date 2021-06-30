@@ -18,15 +18,22 @@
             </CButton>
             &nbsp;
             <CButton size="sm" color="warning" variant="outline" @click="$router.push('/pipeline/new/' + info.aid)">
-              删除构建
+              查看配置
             </CButton>
           </div>
         </div>
-        <div class="hd-infos">{{ pipe.displayName }}</div>
+        <div class="hd-infos">
+          <div style="flex:1">{{ pipe.displayName }}
+            <small>仓库地址: {{ pipe.url }}</small>
+            <small style="color:#333">开始时间: {{ $dateFmt(pv.created) }}</small>
+            <small style="color:#333">运行: {{ $dateCha(build.started,build.finished) }}</small>
+          </div>
+          <div></div>
+        </div>
       </CCardHeader>
-      <CCardHeader>
+      <!-- <CCardHeader>
         123
-      </CCardHeader>
+      </CCardHeader> -->
       <CCardBody class="contbody">
         <div class="buildcont">
           <div class="stages">
@@ -330,6 +337,8 @@ export default {
   display: flex
   line-height: 30px
   margin-left: 35px
+  small
+    margin-left: 10px
 .icons
   width: 30px
   margin-right: 5px

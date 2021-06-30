@@ -9,13 +9,13 @@ const confirm = function (content, conf, yes, no) {
         options.content = toString(content)
     }
 
-    if (typeof conf === 'object') {
+    if (typeof conf === 'object' && conf != null) {
         options.conf = conf
     }
-    if (typeof yes === 'function') {
+    if (typeof yes === 'function' && yes != null) {
         options.yes = yes
     }
-    if (typeof no === 'function') {
+    if (typeof no === 'function' && no != null) {
         options.no = no
     }
 

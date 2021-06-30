@@ -53,6 +53,7 @@ export const SavePipeline = pars => Post('/pipeline/save', pars);
 export const RunPipeline = pars => Post('/pipeline/run', pars);
 export const PipelineVersions = pars => Post('/pipeline/pipelineVersions', pars);
 export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id });
+export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id:id });
 
 //Runtime
 export const RuntimeStages = (pvId) => Post('/runtime/stages', { pvId });

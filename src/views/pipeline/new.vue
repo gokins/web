@@ -268,14 +268,10 @@ export default {
 .subRow
   margin-top: 10px
 
-.row
-  margin-top: 10px
-
 .tips
   font-size: 5px
 
-hr
-  margin-top: 50px
+
 
 .json-editor
   border: #768192 1px solid

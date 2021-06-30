@@ -12,7 +12,7 @@
       <CButtonClose @click="modalShow = false" class="text-white"/>
     </template>
     <template #footer>
-      <CButton @click="Discard" color="danger">取消</CButton>
+      <CButton @click="Discard" color="light">取消</CButton>
       <CButton @click="Accept" color="info">确认</CButton>
     </template>
   </CModal>

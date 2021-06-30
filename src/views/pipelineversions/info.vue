@@ -153,7 +153,10 @@ export default {
       stepcmds: {},
       steplogs: {},
       builded: false,
+      isrun: false,
     }
+  }, destroyed () {
+    this.isrun = false;
   }, mounted () {
     if (
       this.$route.params == null ||
@@ -163,6 +166,7 @@ export default {
       this.$router.push("/404");
       return;
     }
+    this.isrun = true;
     this.getInfo(this.$route.params.id, true);
   }, methods: {
     getInfo (id, first) {
@@ -243,7 +247,7 @@ export default {
       });
     }, upBuild () {
       const reExecFn = () => {
-        if (!this.builded) this.upBuild();
+        if (this.isrun && !this.builded) this.upBuild();
       }
       this.getLogs();
       RuntimeBuild(this.build.id).then(res => {

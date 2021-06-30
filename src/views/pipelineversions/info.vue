@@ -52,9 +52,9 @@
                   <!-- <div style="flex:1"></div> -->
                   <div>{{stages[stageid].displayName}}</div>
                 </div>
-                <div class="errs" style="margin-left:60px">
+                <!-- <div class="errs" style="margin-left:60px">
                   {{stages[stageid].error}}
-                </div>
+                </div> -->
               </div>
               <CCollapse :show="stages[stageid].collapse" :duration="400">
                 <ul>
@@ -79,9 +79,9 @@
                       <!-- <div style="flex:1"></div> -->
                       <div>{{steps[stepid].displayName}}</div>
                     </div>
-                    <div class="errs">
+                    <!-- <div class="errs">
                       {{steps[stepid].error}}
-                    </div>
+                    </div> -->
                   </li>
                 </ul>
               </CCollapse>
@@ -89,21 +89,37 @@
           </div>
           <div class="logdiv">
             <div v-if="showStepid!=''&&stepcmdids[showStepid]">
-              <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:'+cmdid">
-                <div class="cmdline">
-                  <div style="float:right">{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
-                  {{stepcmds[cmdid].content}}
+              <div class="logs">
+                <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:'+cmdid">
+                  <div class="cmdline">
+                    <div style="float:right">{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
+                    {{stepcmds[cmdid].content}}
+                  </div>
+                  <ul v-if="steplogs[showStepid]&&steplogs[showStepid].logs">
+                    <li v-for="(log,$i) in steplogs[showStepid].logs[cmdid]" :key="'log:'+log.id+'-'+$i">
+                      <div class="num">{{$i+1}}</div>
+                      <div class="cont">
+                        <div style="float:right">{{$dateFmt(log.times)}}</div>
+                        <div style="color:#ff0042" v-if="log.errs==true">{{log.content}}</div>
+                        <div v-else>{{log.content}}</div>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
-                <ul v-if="steplogs[showStepid]&&steplogs[showStepid].logs">
-                  <li v-for="(log,$i) in steplogs[showStepid].logs[cmdid]" :key="'log:'+log.id+'-'+$i">
-                    <div class="num">{{$i+1}}</div>
-                    <div class="cont">
-                      <div style="float:right">{{$dateFmt(log.times)}}</div>
-                      <div style="color:#ff0042" v-if="log.errs==true">{{log.content}}</div>
-                      <div v-else>{{log.content}}</div>
-                    </div>
-                  </li>
-                </ul>
+              </div>
+              <div class="status">
+                <div class="icons rotateDiv">
+                  <i class="iconfont icon-success color-success" style="font-size:30px"
+                    v-if="steps[showStepid].status=='ok'" />
+                  <i class="iconfont icon-chacha color-error" style="font-size:30px"
+                    v-else-if="steps[showStepid].status=='error'" />
+                  <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px"
+                    v-else-if="steps[showStepid].status=='cancel'" />
+                  <i class="iconfont icon-jiazaizhong color-runing" style="font-size:30px" v-else />
+                </div>
+                <div class="suc" v-if="steps[showStepid].status=='ok'">Success</div>
+                <div class="err" v-if="steps[showStepid].status=='error'">{{steps[showStepid].error}}</div>
+                <div class="cncl" v-if="steps[showStepid].status=='cancel'">Cancel</div>
               </div>
             </div>
           </div>
@@ -361,6 +377,7 @@ export default {
           padding-right: 10px
   .logdiv
     flex: 1
+    position: relative
     min-height: 400px
     background: #272b34
     color: #c4c4c4
@@ -390,4 +407,19 @@ export default {
             flex: 1
             white-space: break-word
             overflow: hidden
+    .logs
+      margin-bottom: 70px
+    .status
+      display: flex
+      line-height: 45px
+      padding: 5px 10px
+      background: #4c505a
+      border-radius: 15px 15px 0 0
+      font-size: 16px
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      .icons
+        margin: 3px 10px 0 15px
 </style>

@@ -22,11 +22,15 @@
             </CButton>
           </div>
         </div>
+        <div class="hd-infos">{{ pipe.displayName }}</div>
+      </CCardHeader>
+      <CCardHeader>
+        123
       </CCardHeader>
       <CCardBody class="contbody">
         <div class="buildcont">
           <div class="stages">
-            <div class="tit">构建阶段</div>
+            <div class="tit">流水线阶段</div>
             <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
               <div class="tits clickitem" @click="toggleStage(stageid)">
                 <div class="kktit">
@@ -320,6 +324,12 @@ export default {
 .hd-tit
   line-height: 30px
   display: flex
+.hd-infos
+  color: #acacac
+  font-size: 14px
+  display: flex
+  line-height: 30px
+  margin-left: 35px
 .icons
   width: 30px
   margin-right: 5px

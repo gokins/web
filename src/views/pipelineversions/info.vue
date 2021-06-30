@@ -29,34 +29,59 @@
             <div class="tit">构建阶段</div>
             <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
               <div class="tits clickitem" @click="toggleStage(stageid)">
-                <div class="iconstage">
-                  <CIcon :content="$options.coreics[stages[stageid].collapse==true?'cilCaretBottom':'cilCaretLeft']" />
+                <div class="kktit">
+                  <div class="iconstage">
+                    <CIcon
+                      :content="$options.coreics[stages[stageid].collapse==true?'cilCaretBottom':'cilCaretLeft']" />
+                  </div>
+                  <div class="icons rotateDiv">
+                    <i class="iconfont icon-success color-success" style="font-size:20px"
+                      v-if="stages[stageid].status=='ok'" />
+                    <i class="iconfont icon-chacha color-error" style="font-size:20px"
+                      v-else-if="stages[stageid].status=='error'" />
+                    <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
+                      v-else-if="stages[stageid].status=='cancel'" />
+                    <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
+                  </div>
+                  <div class="titcont">
+                    {{stages[stageid].name}}
+                  </div>
+                  <div class="times">{{$dateCha(stages[stageid].started,stages[stageid].finished)}}</div>
                 </div>
-                <div class="icons rotateDiv">
-                  <i class="iconfont icon-success color-success" style="font-size:20px"
-                    v-if="stages[stageid].status=='ok'" />
-                  <i class="iconfont icon-chacha color-error" style="font-size:20px"
-                    v-else-if="stages[stageid].status=='error'" />
-                  <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
-                    v-else-if="stages[stageid].status=='cancel'" />
-                  <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
+                <div class="infos" style="margin-left:60px">
+                  <!-- <div style="flex:1"></div> -->
+                  <div>{{stages[stageid].displayName}}</div>
                 </div>
-                <div class="titcont">{{stages[stageid].name}}<small>{{stages[stageid].displayName}}</small></div>
+                <div class="errs" style="margin-left:60px">
+                  {{stages[stageid].error}}
+                </div>
               </div>
               <CCollapse :show="stages[stageid].collapse" :duration="400">
                 <ul>
                   <li class="clickitem" v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid"
                     @click="showStep(stepid)">
-                    <div class="icons rotateDiv">
-                      <i class="iconfont icon-success color-success" style="font-size:20px"
-                        v-if="steps[stepid].status=='ok'" />
-                      <i class="iconfont icon-chacha color-error" style="font-size:20px"
-                        v-else-if="steps[stepid].status=='error'" />
-                      <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
-                        v-else-if="steps[stepid].status=='cancel'" />
-                      <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
+                    <div class="kktit">
+                      <div class="icons rotateDiv">
+                        <i class="iconfont icon-success color-success" style="font-size:20px"
+                          v-if="steps[stepid].status=='ok'" />
+                        <i class="iconfont icon-chacha color-error" style="font-size:20px"
+                          v-else-if="steps[stepid].status=='error'" />
+                        <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
+                          v-else-if="steps[stepid].status=='cancel'" />
+                        <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
+                      </div>
+                      <div class="titcont">
+                        {{steps[stepid].name}}
+                      </div>
+                      <div class="times">{{$dateCha(steps[stepid].started,steps[stepid].finished)}}</div>
                     </div>
-                    <div class="titcont">{{steps[stepid].name}}<small>{{steps[stepid].displayName}}</small></div>
+                    <div class="infos">
+                      <!-- <div style="flex:1"></div> -->
+                      <div>{{steps[stepid].displayName}}</div>
+                    </div>
+                    <div class="errs">
+                      {{steps[stepid].error}}
+                    </div>
                   </li>
                 </ul>
               </CCollapse>
@@ -301,19 +326,31 @@ export default {
       font-weight: bold
       line-height: 50px
       text-align: center
+    .kktit
+      display: flex
+      line-height: 40px
+    .infos
+      color: #acacac
+      font-size: 14px
+      display: flex
+      line-height: 30px
+      margin-left: 35px
+    .errs
+      color: red
+      margin-left: 35px
     .titcont
+      flex: 1
       font-size: 16px
-      small
-        color: #aaa
-        margin-left: 10px
+    .times
+      color: #aaa
+      margin-left: 10px
     .stage
-      padding: 10px 10px 0 0
+      padding: 10px 10px 10px 0
+      border-bottom: 1px dashed #acacac
       .iconstage
         margin-right: 5px
         line-height: 35px
       .tits
-        display: flex
-        line-height: 40px
         padding: 0 10px
       ul
         margin: 0
@@ -321,8 +358,7 @@ export default {
         list-style: none
         li
           padding-left: 30px
-          display: flex
-          line-height: 40px
+          padding-right: 10px
   .logdiv
     flex: 1
     min-height: 400px

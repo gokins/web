@@ -175,7 +175,6 @@ export default {
         this.pipe = res.data.pipe;
         this.build = res.data.build;
         this.builded = this.$isEndStatus(this.build.status);
-        if (!this.builded) this.upBuild();
         this.getStages(first);
       }).catch((err) =>
         UtilCatch(this, err, _ => {
@@ -196,6 +195,7 @@ export default {
           if (stage && stage.stepids && stage.stepids.length > 0)
             this.showStep(this.steps[stage.stepids[0]].id)
         }
+        if (!this.builded) this.upBuild();
       }).catch(err => UtilCatch(this, err))
     }, toggleStage (id) {
       this.stages[id].collapse = !this.stages[id].collapse;
@@ -206,16 +206,19 @@ export default {
         this.getCmds(stepid);
       if (this.builded)
         this.getLogs();
-    }, getCmds (stepid) {
-      RuntimeCmds(stepid).then(res => {
+    }, getCmds () {
+      if (!this.showStepid || this.showStepid == '') return;
+      if (this.stepcmdids[this.showStepid] && this.stepcmdids[this.showStepid].length > 0) return
+      RuntimeCmds(this.showStepid).then(res => {
+        if (!res.data.stepId || res.data.stepId == '') return;
         let ids = [];
-        for (let i in res.data) {
-          let cmd = res.data[i];
+        for (let i in res.data.cmds) {
+          let cmd = res.data.cmds[i];
           cmd.logs = [];
           ids.push(cmd.id);
           this.stepcmds[cmd.id] = cmd;
         }
-        this.stepcmdids[stepid] = ids;
+        this.stepcmdids[res.data.stepId] = ids;
         this.$forceUpdate()
       }).catch(err => UtilCatch(this, err));
     }, getLogs () {
@@ -249,6 +252,7 @@ export default {
       const reExecFn = () => {
         if (this.isrun && !this.builded) this.upBuild();
       }
+      this.getCmds();
       this.getLogs();
       RuntimeBuild(this.build.id).then(res => {
         setTimeout(reExecFn, 1000);

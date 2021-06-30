@@ -2,7 +2,8 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid" /> 构建历史
+        <CIcon name="cil-grid"/>
+        构建历史
         <div class="card-header-actions">
           <!-- <CButton size="sm" color="info" variant="outline" @click="goNew"
             >新建流水线</CButton
@@ -11,13 +12,13 @@
       </CCardHeader>
       <CCardBody>
         <CDataTable
-          :hover="true"
-          :striped="true"
-          :border="false"
-          :small="true"
-          :fixed="true"
-          :fields="fields"
-          :items="items"
+            :hover="true"
+            :striped="true"
+            :border="false"
+            :small="true"
+            :fixed="true"
+            :fields="fields"
+            :items="items"
         >
           <template #number="{ item }">
             <td>
@@ -27,20 +28,20 @@
           <template #edit="{ item }">
             <td class="py-2">
               <CButton
-                color="primary"
-                variant="outline"
-                square
-                size="sm"
-                @click="goEdit(item.id)"
+                  color="primary"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="goEdit(item.id)"
               >
                 查看
               </CButton>
               <CButton
-                color="primary"
-                variant="outline"
-                square
-                size="sm"
-                @click="run(item.id)"
+                  color="primary"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="run(item.id)"
               >
                 运行
               </CButton>
@@ -48,18 +49,19 @@
           </template>
         </CDataTable>
         <CPagination
-          :activePage.sync="page"
-          :pages="pages"
-          size="sm"
-          align="center"
-          @update:activePage="getList"
+            :activePage.sync="page"
+            :pages="pages"
+            size="sm"
+            align="center"
+            @update:activePage="getList"
         />
       </CCardBody>
     </CCard>
   </div>
 </template>
 <script>
-import { UtilCatch, PipelineVersions } from "@/assets/js/apis";
+import {PipelineVersions, UtilCatch} from "@/assets/js/apis";
+
 export default {
   data() {
     return {
@@ -90,9 +92,9 @@ export default {
   },
   mounted() {
     if (
-      this.$route.params != null &&
-      this.$route.params.pipelineId != null &&
-      this.$route.params.pipelineId != ""
+        this.$route.params != null &&
+        this.$route.params.pipelineId != null &&
+        this.$route.params.pipelineId != ""
     ) {
       this.pipelineId = this.$route.params.pipelineId;
     }
@@ -100,34 +102,25 @@ export default {
   },
   methods: {
     getList(pg) {
-      // if (this.orgId != "") {
       PipelineVersions({
         page: pg,
         orgId: this.orgId,
         pipelineId: this.pipelineId,
-      })
-        .then((res) => {
+      }).then((res) => {
+        if (res.data != null) {
           this.page = res.data.page;
           this.pages = res.data.pages;
           this.items = res.data.data;
-        })
-        .catch((err) => UtilCatch(this, err));
-      return;
-      // }
-      // PipelineList({ page: pg, orgId: this.orgId })
-      //   .then((res) => {
-      //     this.page = res.data.page;
-      //     this.pages = res.data.pages;
-      //     this.items = res.data.data;
-      //   })
-      //   .catch((err) => UtilCatch(this, err));
+        }
+      })
+          .catch((err) => UtilCatch(this, err));
     },
     run(id) {
-      RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => UtilCatch(this, err));
+      RunPipeline({pipelineId: id, orgId: this.orgId, repoId: "1"})
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => UtilCatch(this, err));
     },
     goEdit(id) {
       this.$router.push("/pipeline/info/" + id);

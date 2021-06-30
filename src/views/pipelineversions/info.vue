@@ -125,20 +125,18 @@ export default {
     this.getInfo(this.$route.params.id, true);
   }, methods: {
     getInfo (id, first) {
-      PipelineVersion(id)
-        .then((res) => {
-          this.pv = res.data.pv;
-          this.pipe = res.data.pipe;
-          this.build = res.data.build;
-          this.builded = this.$isEndStatus(this.build.status);
-          if (!this.builded) this.upBuild();
-          this.getStages(first);
+      PipelineVersion(id).then((res) => {
+        this.pv = res.data.pv;
+        this.pipe = res.data.pipe;
+        this.build = res.data.build;
+        this.builded = this.$isEndStatus(this.build.status);
+        if (!this.builded) this.upBuild();
+        this.getStages(first);
+      }).catch((err) =>
+        UtilCatch(this, err, _ => {
+          this.$router.push("/500");
         })
-        .catch((err) =>
-          UtilCatch(this, err, _ => {
-            this.$router.push("/500");
-          })
-        );
+      );
     }, getStages (first) {
       RuntimeStages(this.pv.id).then(res => {
         for (let i in res.data.ids) {
@@ -161,7 +159,8 @@ export default {
       this.showStepid = stepid;
       if (!this.stepcmdids[stepid])
         this.getCmds(stepid);
-      this.getLogs(stepid);
+      if (this.builded)
+        this.getLogs();
     }, getCmds (stepid) {
       RuntimeCmds(stepid).then(res => {
         let ids = [];
@@ -174,35 +173,38 @@ export default {
         this.stepcmdids[stepid] = ids;
         this.$forceUpdate()
       }).catch(err => UtilCatch(this, err));
-    }, getLogs (stepid) {
-      let off = this.steplogs[stepid]?.offset;
-      RuntimeLogs(stepid, off).then(res => {
-        let logs = this.steplogs[stepid]?.logs;
+    }, getLogs () {
+      if (!this.showStepid || this.showStepid == '') return;
+      let off = this.steplogs[this.showStepid]?.offset;
+      RuntimeLogs(this.showStepid, off).then(res => {
+        if (!res.data.stepId || res.data.stepId == '') return;
+        let logs = this.steplogs[res.data.stepId]?.logs;
         if (!logs || (off && off <= 0)) {
           logs = {}
-          this.steplogs[stepid] = {};
-          this.steplogs[stepid].logs = logs
+          this.steplogs[res.data.stepId] = {};
+          this.steplogs[res.data.stepId].logs = logs
         }
-        for (let i in res.data) {
-          let log = res.data[i];
+        this.steplogs[res.data.stepId].offset = res.data.lastoff;
+        for (let i in res.data.logs) {
+          let log = res.data.logs[i];
           let loge = logs[log.id];
-          if (loge)
+          if (loge) {
             loge.push(log)
-          else {
+          } else {
             loge = [];
             loge.push(log)
             logs[log.id] = loge
           }
-          this.steplogs[stepid].offset = log.offset;
         }
         this.$forceUpdate()
       }).catch(err => {
-
+        console.log('RuntimeLogs err:', err)
       });
     }, upBuild () {
       const reExecFn = () => {
         if (!this.builded) this.upBuild();
       }
+      this.getLogs();
       RuntimeBuild(this.build.id).then(res => {
         setTimeout(reExecFn, 1000);
         this.build.status = res.data.status;
@@ -249,9 +251,14 @@ export default {
             }
           }
         this.$forceUpdate()
+        if (this.builded) {
+          this.getLogs();
+          this.getInfo(this.pv.id);
+        }
       }).catch(err => {
         const stat = err.response ? err.response.status : 0;
         if (stat == 404) {
+          this.getLogs();
           this.getInfo(this.pv.id);
         }
         setTimeout(reExecFn, 1000);

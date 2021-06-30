@@ -245,9 +245,7 @@ export default {
           this.getPipeList();
         })
         .catch((err) =>
-          UtilCatch(this, err, _ => {
-            this.$router.push("/500");
-          })
+          UtilCatch(this, err)
         );
     },
     run (id) {
@@ -265,7 +263,7 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    goVersion(id) {
+    goVersion (id) {
       this.$router.push("/pipeline/build/" + id);
     },
     getPipeList () {

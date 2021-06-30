@@ -17,7 +17,7 @@
               重新构建
             </CButton>
             &nbsp;
-            <CButton size="sm" color="warning" variant="outline" @click="$router.push('/pipeline/new/' + info.aid)">
+            <CButton size="sm" color="warning" variant="outline" @click="pluginShow=true">
               查看配置
             </CButton>
           </div>
@@ -137,6 +137,7 @@
         </div>
       </CCardBody>
     </CCard>
+    <pluginView title="流水线YAML" :shown.sync="pluginShow" :pluginyml="pipe.ymlContent" />
   </div>
 </template>
 <script>
@@ -149,8 +150,10 @@ import {
   RuntimeLogs,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
+import pluginView from "@/components/modals/pluginView";
 export default {
   coreics: freeSet,
+  components: { pluginView },
   data () {
     return {
       pv: {},
@@ -165,6 +168,8 @@ export default {
       steplogs: {},
       builded: false,
       isrun: false,
+
+      pluginShow: false,
     }
   }, destroyed () {
     this.isrun = false;
@@ -187,11 +192,7 @@ export default {
         this.build = res.data.build;
         this.builded = this.$isEndStatus(this.build.status);
         this.getStages(first);
-      }).catch((err) =>
-        UtilCatch(this, err, _ => {
-          this.$router.push("/500");
-        })
-      );
+      }).catch((err) => UtilCatch(this, err));
     }, getStages (first) {
       RuntimeStages(this.pv.id).then(res => {
         for (let i in res.data.ids) {

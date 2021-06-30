@@ -14,6 +14,9 @@ export const UtilCatch = (that, err, fn) => {
     if (fn && typeof fn === 'function') {
         fn(err, that);
         return true;
+    } else if (stat == 404) {
+        that.$msgErr('未找到内容');
+        return true;
     } else if (stat == 405) {
         that.$msgErr('无权限');
         return true;

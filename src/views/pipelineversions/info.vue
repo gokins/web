@@ -49,7 +49,7 @@
                   工作目录文件准备
                 </div>
                 <div class="pgss">
-                  <CProgress :value="workpgss" class="w-75" />
+                  <CProgress :value="workpgss" color="info" :striped="true" show-percentage :animated="workpgss<100" />
                 </div>
               </div>
             </div>
@@ -266,7 +266,7 @@ export default {
           return;
         }
         let off = this.steplogs[this.showStepid]?.offset;
-        RuntimeLogs(this.build.id,this.showStepid, off).then(res => {
+        RuntimeLogs(this.build.id, this.showStepid, off).then(res => {
           if (!res.data.stepId || res.data.stepId == '') {
             reject('no');
             return;
@@ -411,7 +411,7 @@ export default {
     // border-right: 1px solid #ccc
     // border-left: 1px solid #ccc
     .pgss
-      width: 50px
+      width: 80px
       margin: 12px 0 0 0
     .clickitem
       cursor: pointer

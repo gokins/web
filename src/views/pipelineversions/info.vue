@@ -226,12 +226,12 @@ export default {
     }, showStep (stepid) {
       this.showStepid = stepid;
       if (!this.stepcmdids[stepid])
-        this.getCmds(stepid);
+        this.getCmds();
       if (this.builded)
         this.getLogs().catch(err => console.log('getLogs err', err));
-    }, getCmds () {
+    }, getCmds (ck) {
       if (!this.showStepid || this.showStepid == '') return;
-      if (this.stepcmdids[this.showStepid] && this.stepcmdids[this.showStepid].length > 0) return
+      if (ck == true && this.stepcmdids[this.showStepid] && this.stepcmdids[this.showStepid].length > 0) return
       RuntimeCmds(this.showStepid).then(res => {
         if (!res.data.stepId || res.data.stepId == '') return;
         let ids = [];
@@ -283,14 +283,15 @@ export default {
       })
     }, upBuild () {
       let okLogs = false;
-      this.getCmds();
+      this.getCmds(true);
+      let startm = new Date().getTime();
       this.getLogs().then(() => {
         okLogs = true;
       }).catch(() => {
         okLogs = true;
       });
       const reExecFn = () => {
-        while (!okLogs);
+        while (!okLogs && new Date().getTime() - startm < 3);
         console.log('getLogs contine?')
         if (this.isrun && !this.builded)
           this.upBuild();
@@ -342,6 +343,8 @@ export default {
         this.$forceUpdate()
         if (this.builded) {
           this.getInfo(this.pv.id);
+          this.getCmds();
+          this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
         setTimeout(reExecFn, 1000);
@@ -349,6 +352,8 @@ export default {
         const stat = err.response ? err.response.status : 0;
         if (stat == 404) {
           this.getInfo(this.pv.id);
+          this.getCmds();
+          this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
         setTimeout(reExecFn, 1000);

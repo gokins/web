@@ -164,7 +164,7 @@ export default {
       this.$router.push("/pipeline/info/" + id);
     },
     copy() {
-      this.$confirm("确定要删除流水线?", null, () => {
+      this.$confirm("确定复制流水线?", null, () => {
         CopyPipeline(this.pipelineId)
             .then((res) => {
               this.$router.push("/pipeline/info/" + res.data.id);
@@ -173,7 +173,7 @@ export default {
       })
     },
     deletedPipe() {
-      this.$confirm("确定要删除流水线?", null, () => {
+      this.$confirm("确定删除流水线?", null, () => {
         DeletedPipeline(this.pipelineId)
             .then((res) => {
               this.$router.back(-1)

@@ -105,8 +105,17 @@
               <div class="logs">
                 <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:'+cmdid">
                   <div class="cmdline">
-                    <div style="float:right">{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
-                    {{stepcmds[cmdid].content}}
+                    <div class="rotateDiv">
+                      <i class="iconfont icon-success color-success" style="font-size:10px"
+                        v-if="stepcmds[cmdid].status=='ok'" />
+                      <i class="iconfont icon-chacha color-error" style="font-size:10px"
+                        v-else-if="stepcmds[cmdid].status=='error'" />
+                      <i class="iconfont icon-jinzhide color-cancel" style="font-size:10px"
+                        v-else-if="stepcmds[cmdid].status=='cancel'" />
+                      <i class="iconfont icon-jiazaizhong color-runing" style="font-size:8px" v-else />
+                    </div>
+                    <div style="flex:1">{{stepcmds[cmdid].content}}</div>
+                    <div>{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
                   </div>
                   <ul v-if="steplogs[showStepid]&&steplogs[showStepid].logs">
                     <li v-for="(log,$i) in steplogs[showStepid].logs[cmdid]" :key="'log:'+log.id+'-'+$i">
@@ -416,9 +425,12 @@ export default {
     .cmdcont
       .cmdline
         color: #40bcff
-        padding: 3px 5px
+        padding: 0 5px 5px 15px
+        display: flex
         &:hover
           background: #002b34
+        .rotateDiv
+          width: 20px
       ul
         list-style: none
         margin: 0

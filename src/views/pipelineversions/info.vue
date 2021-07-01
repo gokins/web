@@ -102,8 +102,12 @@
                       <div class="times">{{$dateCha(steps[stepid].started,steps[stepid].finished)}}</div>
                     </div>
                     <div class="infos">
-                      <!-- <div style="flex:1"></div> -->
                       <div>{{steps[stepid].displayName}}</div>
+                      <div style="flex:1"></div>
+                      <div v-if="steps[stepid].dependsOn&&steps[stepid].dependsOn.length>0">
+                        <i class="iconfont icon-shijian" style="font-size:15px;color:#ad34ea" />
+                        {{steps[stepid].dependsOn.join(",")}}
+                      </div>
                     </div>
                     <!-- <div class="errs">
                       {{steps[stepid].error}}

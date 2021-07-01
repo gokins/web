@@ -5,7 +5,17 @@
         <strong>流水线名称:{{ pipelineName }} </strong>
         <div class="card-header-actions">
           <CButton
-              color="primary"
+              color="dark"
+              variant="outline"
+              square
+              size="sm"
+              @click="copy()"
+              style="margin-left:5px"
+          >
+            复制
+          </CButton>
+          <CButton
+              color="info"
               variant="outline"
               square
               size="sm"
@@ -23,26 +33,26 @@
               <CIcon name="cil-calculator"/>
               构建历史
             </template>
-              <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
-                          :fields="versionfields" :items="versionitems">
-                <template #number="{ item }">
-                  <td>
-                    <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
-                  </td>
-                </template>
-                <template #pipelineName="{ item }">
-                  <td>
-                    <CLink :to="'../build/'+item.id">{{ item.pipelineName }}</CLink>
-                  </td>
-                </template>
-                <template #edit="{ item }">
-                  <td class="py-2">
-                    <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
-                      编辑
-                    </CButton>
-                  </td>
-                </template>
-              </CDataTable>
+            <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
+                        :fields="versionfields" :items="versionitems">
+              <template #number="{ item }">
+                <td>
+                  <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
+                </td>
+              </template>
+              <template #pipelineName="{ item }">
+                <td>
+                  <CLink :to="'../build/'+item.id">{{ item.pipelineName }}</CLink>
+                </td>
+              </template>
+              <template #edit="{ item }">
+                <td class="py-2">
+                  <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
+                    编辑
+                  </CButton>
+                </td>
+              </template>
+            </CDataTable>
           </CTab>
           <CTab>
             <template slot="title">
@@ -50,7 +60,7 @@
               设置
             </template>
             <CCard>
-                <PipeNew :pipeId.sync="this.$route.params.id" :editf="true"/>
+              <PipeNew :pipeId.sync="this.$route.params.id" :editf="true"/>
             </CCard>
             <CCard>
               <CCardHeader style="background-color: #ffe8e6">
@@ -61,8 +71,8 @@
                   <h5>删除流水线</h5>
                   <p>流水线删除之后无法恢复.请谨慎操作</p>
                 </div>
-                <div >
-                  <CButton color="danger" variant="outline" square  @click="deletedPipe">
+                <div>
+                  <CButton color="danger" variant="outline" square @click="deletedPipe">
                     删除流水线
                   </CButton>
                 </div>
@@ -75,7 +85,7 @@
   </div>
 </template>
 <script>
-import {PipelineInfo, PipelineVersions, RunPipeline,DeletedPipeline, UtilCatch,} from "@/assets/js/apis";
+import {CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, RunPipeline, UtilCatch,} from "@/assets/js/apis";
 import {freeSet} from "@coreui/icons";
 import PipeNew from "./new";
 
@@ -105,7 +115,7 @@ export default {
         content: "",
         pipelineId: "",
       },
-      pipelineId:"",
+      pipelineId: "",
     };
   },
   mounted() {
@@ -126,7 +136,6 @@ export default {
     getPipeList() {
       PipelineVersions({
         page: 0,
-        orgId: this.orgId,
         pipelineId: this.pipelineId,
       })
           .then((res) => {
@@ -142,7 +151,7 @@ export default {
       }).catch((err) => UtilCatch(this, err));
     },
     run() {
-      RunPipeline({pipelineId: this.$route.params.id, repoId: "1"})
+      RunPipeline({pipelineId: this.pipelineId})
           .then((res) => {
             this.goVersion(res.data.id);
           })
@@ -154,9 +163,15 @@ export default {
     goEdit(id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    deletedPipe(){
-      console.log(this.pipelineId)
-      this.$confirm("确定要删除流水线?",null,()=>{
+    copy() {
+      CopyPipeline(this.pipelineId)
+          .then((res) => {
+            this.$router.push("/pipeline/info/" + res.data.id);
+          })
+          .catch((err) => UtilCatch(this, err));
+    },
+    deletedPipe() {
+      this.$confirm("确定要删除流水线?", null, () => {
         DeletedPipeline(this.pipelineId)
             .then((res) => {
               this.$router.back(-1)

@@ -110,6 +110,8 @@ export default {
 </script>
 <style lang="sass" scoped>
 .login-dog
-  width: 250px
-  margin-left: 35px
+  display: inline-block
+  height: auto
+  max-width: 100%
+  margin-left: 15px
 </style>

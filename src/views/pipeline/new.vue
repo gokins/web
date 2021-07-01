@@ -212,7 +212,7 @@ export default {
             this.saveBtu = false
             this.$msgOk("保存成功");
             setTimeout(() => {
-              this.$router.push("info/" + res.data.id)
+              this.$router.push("/pipeline/info/" + res.data.id)
             }, 500);
           })
           .catch((err) => {

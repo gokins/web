@@ -262,7 +262,8 @@ export default {
             this.steplogs[res.data.stepId] = {};
             this.steplogs[res.data.stepId].logs = logs
           }
-          this.steplogs[res.data.stepId].offset = res.data.lastoff;
+          if (res.data.lastoff > 0 || !this.steplogs[res.data.stepId].offset)
+            this.steplogs[res.data.stepId].offset = res.data.lastoff;
           for (let i in res.data.logs) {
             let log = res.data.logs[i];
             let loge = logs[log.id];

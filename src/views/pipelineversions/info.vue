@@ -290,7 +290,8 @@ export default {
         } catch (e) {
           console.log('getLogs err', e)
         }
-        if (this.isrun && !this.builded) this.upBuild();
+        if (this.isrun && !this.builded)
+          this.upBuild();
       }
       RuntimeBuild(this.build.id).then(res => {
         setTimeout(reExecFn, 1000);

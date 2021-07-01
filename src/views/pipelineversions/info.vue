@@ -40,6 +40,19 @@
         <div class="buildcont">
           <div class="stages">
             <div class="tit">流水线阶段</div>
+            <div class="stage">
+              <div class="kktit">
+                <div class="iconstage" style="margin:2px 5px 0 8px">
+                  <i class="iconfont icon-git" style="font-size:25px;" />
+                </div>
+                <div class="titcont">
+                  工作目录文件准备
+                </div>
+                <div class="pgss">
+                  <CProgress :value="workpgss" class="w-75" />
+                </div>
+              </div>
+            </div>
             <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
               <div class="tits clickitem" @click="toggleStage(stageid)">
                 <div class="kktit">
@@ -180,6 +193,7 @@ export default {
       builded: false,
       isrun: false,
 
+      workpgss: 0,
       pluginShow: false,
     }
   }, destroyed () {
@@ -202,6 +216,7 @@ export default {
         this.pipe = res.data.pipe;
         this.build = res.data.build;
         this.builded = this.$isEndStatus(this.build.status);
+        if (this.builded) this.workpgss = 100;
         this.getStages(first);
       }).catch((err) => UtilCatch(this, err));
     }, getStages (first) {
@@ -291,22 +306,25 @@ export default {
         okLogs = true;
       });
       const reExecFn = () => {
-        while (!okLogs && new Date().getTime() - startm < 3);
+        let endtm = new Date().getTime();
+        while (!okLogs && endtm - startm < 3);
         console.log('getLogs contine?')
         if (this.isrun && !this.builded)
           this.upBuild();
       }
       RuntimeBuild(this.build.id).then(res => {
-        this.build.status = res.data.status;
-        this.build.error = res.data.error;
-        this.build.event = res.data.event;
-        this.build.started = res.data.started;
-        this.build.finished = res.data.finished;
-        this.build.updated = res.data.updated;
+        let show = res.data.show;
+        this.workpgss = res.data.workpgss;
+        this.build.status = show.status;
+        this.build.error = show.error;
+        this.build.event = show.event;
+        this.build.started = show.started;
+        this.build.finished = show.finished;
+        this.build.updated = show.updated;
         this.builded = this.$isEndStatus(this.build.status);
-        if (res.data.stages)
-          for (let i in res.data.stages) {
-            let stg = res.data.stages[i];
+        if (show.stages)
+          for (let i in show.stages) {
+            let stg = show.stages[i];
             let stge = this.stages[stg.id];
             if (stge) {
               stge.status = stg.status;
@@ -392,6 +410,9 @@ export default {
     width: 350px
     // border-right: 1px solid #ccc
     // border-left: 1px solid #ccc
+    .pgss
+      width: 50px
+      margin: 12px 0 0 0
     .clickitem
       cursor: pointer
       border-radius: 10px

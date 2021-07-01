@@ -245,38 +245,53 @@ export default {
         this.$forceUpdate()
       }).catch(err => UtilCatch(this, err));
     }, getLogs () {
-      if (!this.showStepid || this.showStepid == '') return;
-      let off = this.steplogs[this.showStepid]?.offset;
-      RuntimeLogs(this.showStepid, off).then(res => {
-        if (!res.data.stepId || res.data.stepId == '') return;
-        let logs = this.steplogs[res.data.stepId]?.logs;
-        if (!logs || (off && off <= 0)) {
-          logs = {}
-          this.steplogs[res.data.stepId] = {};
-          this.steplogs[res.data.stepId].logs = logs
+      return new Promise((resolve, reject) => {
+        if (!this.showStepid || this.showStepid == '') {
+          reject();
+          return;
         }
-        this.steplogs[res.data.stepId].offset = res.data.lastoff;
-        for (let i in res.data.logs) {
-          let log = res.data.logs[i];
-          let loge = logs[log.id];
-          if (loge) {
-            loge.push(log)
-          } else {
-            loge = [];
-            loge.push(log)
-            logs[log.id] = loge
+        let off = this.steplogs[this.showStepid]?.offset;
+        RuntimeLogs(this.showStepid, off).then(res => {
+          if (!res.data.stepId || res.data.stepId == '') {
+            reject();
+            return;
           }
-        }
-        this.$forceUpdate()
-      }).catch(err => {
-        console.log('RuntimeLogs err:', err)
-      });
+          let logs = this.steplogs[res.data.stepId]?.logs;
+          if (!logs || (off && off <= 0)) {
+            logs = {}
+            this.steplogs[res.data.stepId] = {};
+            this.steplogs[res.data.stepId].logs = logs
+          }
+          this.steplogs[res.data.stepId].offset = res.data.lastoff;
+          for (let i in res.data.logs) {
+            let log = res.data.logs[i];
+            let loge = logs[log.id];
+            if (loge) {
+              loge.push(log)
+            } else {
+              loge = [];
+              loge.push(log)
+              logs[log.id] = loge
+            }
+          }
+          this.$forceUpdate()
+          resolve(res.data);
+        }).catch(err => {
+          reject(err);
+          console.log('RuntimeLogs err:', err)
+        });
+      })
     }, upBuild () {
-      const reExecFn = () => {
+      this.getCmds();
+      let wtlog = this.getLogs();
+      const reExecFn = async () => {
+        try {
+          await wtlog;
+        } catch (e) {
+          console.log('getLogs err', e)
+        }
         if (this.isrun && !this.builded) this.upBuild();
       }
-      this.getCmds();
-      this.getLogs();
       RuntimeBuild(this.build.id).then(res => {
         setTimeout(reExecFn, 1000);
         this.build.status = res.data.status;

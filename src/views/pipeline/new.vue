@@ -101,12 +101,10 @@ import "codemirror/mode/yaml/yaml";
 import "codemirror/addon/lint/lint";
 import "codemirror/addon/lint/yaml-lint";
 import "codemirror/addon/display/autorefresh";
-import jsyaml from "js-yaml";
-
+import jsyaml from 'js-yaml'
+window.jsyaml = jsyaml; // 引入js-yaml为codemirror提高语法检查核心支持
 import pluginView from "@/components/modals/pluginView";
 import { NewPipeline, PipelineInfo, SavePipeline, UtilCatch } from "@/assets/js/apis";
-
-window.jsyaml = jsyaml;
 export default {
   name: "PipeNew",
   components: { pluginView, codemirror },
@@ -170,7 +168,8 @@ export default {
         mode: "text/x-yaml",
         gutters: ["CodeMirror-lint-markers"],
         theme: "eclipse",
-        autoRefresh: true
+        autoRefresh: true,
+        lint: true
       },
     };
   },

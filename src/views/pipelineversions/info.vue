@@ -284,9 +284,9 @@ export default {
     }, upBuild () {
       let okLogs = false;
       this.getCmds();
-      this.getLogs().then(_ => {
+      this.getLogs().then(() => {
         okLogs = true;
-      }).catch(_ => {
+      }).catch(() => {
         okLogs = true;
       });
       const reExecFn = () => {

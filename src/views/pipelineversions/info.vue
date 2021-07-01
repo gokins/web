@@ -228,7 +228,7 @@ export default {
       if (!this.stepcmdids[stepid])
         this.getCmds(stepid);
       if (this.builded)
-        this.getLogs();
+        this.getLogs().catch(err => console.log('getLogs err', err));
     }, getCmds () {
       if (!this.showStepid || this.showStepid == '') return;
       if (this.stepcmdids[this.showStepid] && this.stepcmdids[this.showStepid].length > 0) return
@@ -247,13 +247,13 @@ export default {
     }, getLogs () {
       return new Promise((resolve, reject) => {
         if (!this.showStepid || this.showStepid == '') {
-          reject();
+          reject('no');
           return;
         }
         let off = this.steplogs[this.showStepid]?.offset;
         RuntimeLogs(this.showStepid, off).then(res => {
           if (!res.data.stepId || res.data.stepId == '') {
-            reject();
+            reject('no');
             return;
           }
           let logs = this.steplogs[res.data.stepId]?.logs;
@@ -278,23 +278,23 @@ export default {
           resolve(res.data);
         }).catch(err => {
           reject(err);
-          console.log('RuntimeLogs err:', err)
         });
       })
     }, upBuild () {
       this.getCmds();
       let wtlog = this.getLogs();
       const reExecFn = async () => {
+        debugger
         try {
           await wtlog;
         } catch (e) {
           console.log('getLogs err', e)
         }
+        console.log('getLogs contine?')
         if (this.isrun && !this.builded)
           this.upBuild();
       }
       RuntimeBuild(this.build.id).then(res => {
-        setTimeout(reExecFn, 1000);
         this.build.status = res.data.status;
         this.build.error = res.data.error;
         this.build.event = res.data.event;
@@ -340,15 +340,16 @@ export default {
           }
         this.$forceUpdate()
         if (this.builded) {
-          this.getLogs();
           this.getInfo(this.pv.id);
+          this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
+        setTimeout(reExecFn, 1000);
       }).catch(err => {
         const stat = err.response ? err.response.status : 0;
         if (stat == 404) {
-          this.getLogs();
           this.getInfo(this.pv.id);
+          this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
         setTimeout(reExecFn, 1000);

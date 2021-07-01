@@ -342,12 +342,14 @@ export default {
         if (this.builded) {
           this.getLogs();
           this.getInfo(this.pv.id);
+          return;
         }
       }).catch(err => {
         const stat = err.response ? err.response.status : 0;
         if (stat == 404) {
           this.getLogs();
           this.getInfo(this.pv.id);
+          return;
         }
         setTimeout(reExecFn, 1000);
       });

@@ -281,15 +281,15 @@ export default {
         });
       })
     }, upBuild () {
+      let okLogs = false;
       this.getCmds();
-      let wtlog = this.getLogs();
-      const reExecFn = async () => {
-        debugger
-        try {
-          await wtlog;
-        } catch (e) {
-          console.log('getLogs err', e)
-        }
+      this.getLogs().then(_ => {
+        okLogs = true;
+      }).catch(_ => {
+        okLogs = true;
+      });
+      const reExecFn = () => {
+        while (!okLogs);
         console.log('getLogs contine?')
         if (this.isrun && !this.builded)
           this.upBuild();

@@ -53,11 +53,11 @@ export const SavePipeline = pars => Post('/pipeline/save', pars);
 export const RunPipeline = pars => Post('/pipeline/run', pars);
 export const PipelineVersions = pars => Post('/pipeline/pipelineVersions', pars);
 export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id });
-export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id:id });
-export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId:id });
+export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id: id });
+export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
 
 //Runtime
 export const RuntimeStages = (pvId) => Post('/runtime/stages', { pvId });
 export const RuntimeCmds = (stepId) => Post('/runtime/cmds', { stepId });
 export const RuntimeBuild = (buildId) => Post('/runtime/build', { buildId });
-export const RuntimeLogs = (stepId, offset) => Post('/runtime/logs', { stepId, offset });
+export const RuntimeLogs = (buildId, stepId, offset) => Post('/runtime/logs', { buildId, stepId, offset });

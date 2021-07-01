@@ -266,7 +266,7 @@ export default {
           return;
         }
         let off = this.steplogs[this.showStepid]?.offset;
-        RuntimeLogs(this.showStepid, off).then(res => {
+        RuntimeLogs(this.build.id,this.showStepid, off).then(res => {
           if (!res.data.stepId || res.data.stepId == '') {
             reject('no');
             return;

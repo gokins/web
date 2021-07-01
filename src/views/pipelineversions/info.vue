@@ -13,7 +13,7 @@
             <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
           </div>
           <div>
-            <CButton size="sm" color="info" variant="outline" @click="selPip = true">
+            <CButton size="sm" color="info" variant="outline" @click="rebuild">
               重新构建
             </CButton>
             &nbsp;
@@ -177,6 +177,7 @@ import {
   RuntimeCmds,
   RuntimeBuild,
   RuntimeLogs,
+  RebuildVersion,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 import pluginView from "@/components/modals/pluginView";
@@ -381,6 +382,12 @@ export default {
         }
         setTimeout(reExecFn, 1000);
       });
+    },rebuild(){
+      this.$confirm("确定重新构建?", null, () => {
+        RebuildVersion(this.pv.id).then((res) => {
+          this.$router.push("/pipeline/build/"+res.data.id)
+        }).catch((err) => UtilCatch(this, err));
+      })
     }
   }
 }

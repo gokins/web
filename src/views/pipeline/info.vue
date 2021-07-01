@@ -164,11 +164,13 @@ export default {
       this.$router.push("/pipeline/info/" + id);
     },
     copy() {
-      CopyPipeline(this.pipelineId)
-          .then((res) => {
-            this.$router.push("/pipeline/info/" + res.data.id);
-          })
-          .catch((err) => UtilCatch(this, err));
+      this.$confirm("确定要删除流水线?", null, () => {
+        CopyPipeline(this.pipelineId)
+            .then((res) => {
+              this.$router.push("/pipeline/info/" + res.data.id);
+            })
+            .catch((err) => UtilCatch(this, err));
+      })
     },
     deletedPipe() {
       this.$confirm("确定要删除流水线?", null, () => {

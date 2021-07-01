@@ -25,6 +25,16 @@
               <CLink># {{ item.number }}</CLink>
             </td>
           </template>
+          <template #number="{ item }">
+            <td>
+              <CLink :to="'/pipeline/build/'+item.id"># {{ item.number }}</CLink>
+            </td>
+          </template>
+          <template #pipelineName="{ item }">
+            <td>
+              <CLink :to="'/pipeline/build/'+item.id">{{ item.pipelineName }}</CLink>
+            </td>
+          </template>
           <template #edit="{ item }">
             <td class="py-2">
               <CButton
@@ -78,10 +88,6 @@ export default {
           key: "pipelineDisplayName",
           label: "流水线描述",
         },
-        {
-          key: "repoName",
-          label: "仓库名称",
-        },
       ],
       items: [],
       page: 0,
@@ -112,8 +118,7 @@ export default {
           this.pages = res.data.pages;
           this.items = res.data.data;
         }
-      })
-          .catch((err) => UtilCatch(this, err));
+      }).catch((err) => UtilCatch(this, err));
     },
     run(id) {
       RunPipeline({pipelineId: id, orgId: this.orgId, repoId: "1"})

@@ -55,6 +55,13 @@ export const PipelineVersions = pars => Post('/pipeline/pipelineVersions', pars)
 export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id });
 export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id: id });
 export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
+export const RebuildVersion = (pipelineVersionId) => Post('/pipeline/rebuild', { pipelineVersionId: pipelineVersionId });
+
+//Dashboard
+export const AllPipelines = () => Post('/dashboard/pipelines');
+export const AllBuilds = () => Post('/dashboard/builds');
+export const AllSuccess = () => Post('/dashboard/build/success');
+export const AllFailed = () => Post('/dashboard/build/failed');
 
 //Runtime
 export const RuntimeStages = (pvId) => Post('/runtime/stages', { pvId });

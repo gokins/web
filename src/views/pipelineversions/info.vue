@@ -341,7 +341,6 @@ export default {
         this.$forceUpdate()
         if (this.builded) {
           this.getInfo(this.pv.id);
-          this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
         setTimeout(reExecFn, 1000);
@@ -349,7 +348,6 @@ export default {
         const stat = err.response ? err.response.status : 0;
         if (stat == 404) {
           this.getInfo(this.pv.id);
-          this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
         setTimeout(reExecFn, 1000);

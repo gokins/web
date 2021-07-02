@@ -481,7 +481,7 @@ export default {
     .cmdcont
       .cmdline
         color: #40bcff
-        padding: 0 5px 5px 15px
+        padding: 0 5px 5px 20px
         display: flex
         &:hover
           background: #002b34
@@ -495,7 +495,7 @@ export default {
         border-left: 1px dashed #aaa
         li
           display: flex
-          padding: 3px 5px 3px 10px
+          padding: 3px 5px 3px 12px
           &:hover
             background: #002b34
           .num

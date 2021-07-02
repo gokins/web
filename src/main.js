@@ -13,6 +13,7 @@ import 'codemirror/lib/codemirror.css';
 
 import '@/assets/css/comm.css'
 import '@/assets/css/icon.sass'
+import '@/assets/css/comm.sass'
 
 Vue.config.performance = true;
 Vue.use(VueCodemirror);

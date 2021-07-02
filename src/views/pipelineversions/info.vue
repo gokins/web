@@ -89,8 +89,8 @@
               </div>
               <CCollapse :show="stages[stageid].collapse" :duration="400">
                 <ul>
-                  <li class="clickitem" v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid"
-                    @click="showStep(stepid)">
+                  <li class="clickitem" :class="[stepid==showStepid?'clickitems':'']"
+                    v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid" @click="showStep(stepid)">
                     <div class="kktit">
                       <div class="icons rotateDiv">
                         <i class="iconfont icon-success color-success" style="font-size:20px"
@@ -442,6 +442,8 @@ export default {
       border-radius: 10px
       &:hover
         background: #eee
+    .clickitems
+      background: #e7f3ff
     .tit
       border-top: 2px solid #ccc
       border-bottom: 2px solid #ccc

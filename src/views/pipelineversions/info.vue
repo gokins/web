@@ -382,10 +382,10 @@ export default {
         }
         setTimeout(reExecFn, 1000);
       });
-    },rebuild(){
+    }, rebuild () {
       this.$confirm("确定重新构建?", null, () => {
         RebuildVersion(this.pv.id).then((res) => {
-          this.$router.push("/pipeline/build/"+res.data.id)
+          this.$router.push("/pipeline/build/" + res.data.id)
         }).catch((err) => UtilCatch(this, err));
       })
     }
@@ -499,7 +499,7 @@ export default {
           &:hover
             background: #002b34
           .num
-            width: 50px
+            width: 40px
             height: 100%
           .cont
             flex: 1

@@ -104,6 +104,7 @@ export default {
     .tit
       display: flex
       .tits
+        color: #537898
         font-size: 20px
         font-weight: bold
         line-height: 35px

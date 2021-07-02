@@ -67,4 +67,5 @@ export const AllFailed = () => Post('/dashboard/build/failed');
 export const RuntimeStages = (pvId) => Post('/runtime/stages', { pvId });
 export const RuntimeCmds = (stepId) => Post('/runtime/cmds', { stepId });
 export const RuntimeBuild = (buildId) => Post('/runtime/build', { buildId });
+export const RuntimeCancel = (buildId) => Post('/runtime/cancel', { buildId });
 export const RuntimeLogs = (buildId, stepId, offset) => Post('/runtime/logs', { buildId, stepId, offset });

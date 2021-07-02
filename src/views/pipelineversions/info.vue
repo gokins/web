@@ -13,11 +13,16 @@
             <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
           </div>
           <div>
-            <CButton size="sm" color="info" variant="outline" @click="rebuild">
+            &nbsp;
+            <CButton size="sm" color="warning" variant="outline" @click="cancelFun" v-if="!this.builded">
+              停止构建
+            </CButton>
+            &nbsp;
+            <CButton size="sm" color="info" variant="outline" @click="rebuildFun">
               重新构建
             </CButton>
             &nbsp;
-            <CButton size="sm" color="warning" variant="outline" @click="pluginShow=true">
+            <CButton size="sm" color="dark" variant="outline" @click="pluginShow=true">
               查看配置
             </CButton>
           </div>
@@ -176,6 +181,7 @@ import {
   RuntimeStages,
   RuntimeCmds,
   RuntimeBuild,
+  RuntimeCancel,
   RuntimeLogs,
   RebuildVersion,
 } from "@/assets/js/apis";
@@ -382,7 +388,13 @@ export default {
         }
         setTimeout(reExecFn, 1000);
       });
-    }, rebuild () {
+    }, cancelFun () {
+      this.$confirm("确定停止构建?", null, () => {
+        RuntimeCancel(this.build.id).then(() => {
+          this.$msgOk('操作成功');
+        }).catch((err) => UtilCatch(this, err));
+      })
+    }, rebuildFun () {
       this.$confirm("确定重新构建?", null, () => {
         RebuildVersion(this.pv.id).then((res) => {
           this.$router.push("/pipeline/build/" + res.data.id)

@@ -109,10 +109,10 @@
                     <div class="infos">
                       <div>{{steps[stepid].displayName}}</div>
                       <div style="flex:1"></div>
-                      <div v-if="steps[stepid].dependsOn&&steps[stepid].dependsOn.length>0"
+                      <div v-if="steps[stepid].waits&&steps[stepid].waits.length>0"
                         v-c-tooltip.hover.click="{content:'依赖的步骤',placement:'bottom'}">
                         <i class="iconfont icon-shijian" style="font-size:15px;color:#ad34ea" />
-                        {{steps[stepid].dependsOn.join(",")}}
+                        {{steps[stepid].waits.join(",")}}
                       </div>
                     </div>
                     <!-- <div class="errs">

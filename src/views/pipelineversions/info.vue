@@ -202,7 +202,7 @@ export default {
       stepcmdids: {},
       stepcmds: {},
       steplogs: {},
-      builded: false,
+      builded: true,
       isrun: false,
 
       workpgss: 0,

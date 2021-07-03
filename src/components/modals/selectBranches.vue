@@ -1,7 +1,6 @@
 <template>
   <CModal
-      title="选择流水线"
-      size="sm"
+      title="请输入仓库分支或者commitSha"
       :show="shown"
       @update:show="(val) => $emit('update:shown', val)"
       :centered="true"

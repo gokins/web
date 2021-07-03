@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>流水线名称:{{ pipelineName }} </strong>
+        <strong>流水线:{{ pipelineName }} </strong>
         <div class="card-header-actions">
           <CButton
               color="dark"

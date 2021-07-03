@@ -32,22 +32,22 @@
                   </CRow>
                   <CRow>
                     <CCol>
-                      <CTabs variant="tabs">
-                        <CTab active>
-                          <template slot="title">
-                            yaml
-                          </template>
-                          <codemirror ref="myCm" v-model="formData.content" :options="cmOptions" class="json-editor">
-                          </codemirror>
-                        </CTab>
-                        <CTab v-for="(tmp, index) in tmps">
-                          <template slot="title">
-                            {{tmp.name}}模板
-                          </template>
-                          <codemirror :options="rOptions" v-model="tmp.ymlcontent" class="json-editor">
-                          </codemirror>
-                        </CTab>
-                      </CTabs>
+                      <template slot="title">
+                        yaml
+                      </template>
+                      <CRow class="align-items-center" style="margin-bottom: 5px">
+                        <CCol col="4" sm="2" md="2" lg class="mb-1 mb-lg-0"  >
+                          <CButton  @click="defaultTmp" block color="dark" >还原
+                          </CButton>
+                        </CCol>
+                        <CCol col="4" sm="2" md="2" lg class="mb-1 mb-lg-0" v-for="(tmpsItme, index) in tmps">
+                          <CButton  @click="chooseTmp(tmpsItme.ymlContent)" block
+                                    color="dark" >{{ tmpsItme.name }}模板
+                          </CButton>
+                        </CCol>
+                      </CRow>
+                      <codemirror ref="myCm" v-model="formData.content" :options="cmOptions" class="json-editor">
+                      </codemirror>
                     </CCol>
                   </CRow>
                   <CRow class="subRow" sm="16">
@@ -90,7 +90,7 @@
                       </template>
                       <CRow @click="showPlugin(itme)" v-for="(itme, index) in pluginInfos">
                         <CCol>
-                          <CWidgetIcon :header="itme.name" :text="itme.content" color="gradient-warning">
+                          <CWidgetIcon :header="itme.name +'插件'" :text="itme.name" color="gradient-warning">
                             <CIcon name="cil-moon" width="24"/>
                           </CWidgetIcon>
                         </CCol>
@@ -219,7 +219,9 @@ import {
   PipelineVars,
   SavePipeline,
   SavePipelineVars,
-  UtilCatch
+  UtilCatch,
+  YmlPlugins,
+  YmlTemplates,
 } from "@/assets/js/apis";
 
 window.jsyaml = jsyaml; // 引入js-yaml为codemirror提高语法检查核心支持
@@ -274,111 +276,8 @@ export default {
           filter: false,
         },
       ],
-      pluginInfos: [
-        {
-          name: "bash 插件", "content": "bash 插件",
-          ymlcontent: "step: shell@bash\n" +
-              "        displayName: npm-build-1\n" +
-              "        name: build\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - echo hello world \n"
-        },
-        {
-          name: "sh 插件", "content": "sh 插件",
-          ymlcontent: "step: shell@sh\n" +
-              "        displayName: npm-build-1\n" +
-              "        name: build\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - echo hello world \n"
-        },
-        {
-          name: "powershell 插件", "content": "powershell 插件",
-          ymlcontent: "step: shell@powershell\n" +
-              "        displayName: npm-build-1\n" +
-              "        name: build\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - echo hello world \n"
-        }
-      ],
-      tmps:[
-        {
-          name:"Golang",
-          ymlcontent:"version: 1.0\n" +
-              "name: go-build\n" +
-              "displayName: golang-build\n" +
-              "variables:\n" +
-              "stages:\n" +
-              "  - stage:\n" +
-              "    displayName: build\n" +
-              "    name: build\n" +
-              "    steps:\n" +
-              "      - step: shell@sh\n" +
-              "        displayName: go-build-1\n" +
-              "        name: build\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - go build -v\n" +
-              "      - step: shell@sh\n" +
-              "        displayName: go-build-2\n" +
-              "        name: test\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - go test -v"
-        },
-        {
-          name:"Java",
-          ymlcontent:"version: 1.0\n" +
-              "name: java-build\n" +
-              "displayName: java-build\n" +
-              "variables:\n" +
-              "stages:\n" +
-              "  - stage:\n" +
-              "    displayName: build\n" +
-              "    name: build\n" +
-              "    steps:\n" +
-              "      - step: shell@sh\n" +
-              "        displayName: java-build-1\n" +
-              "        name: build\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - mvn clean\n" +
-              "          - mvn install\n" +
-              "      - step: shell@sh\n" +
-              "        displayName: java-build-2\n" +
-              "        name: test\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - mvn test"
-        },
-        {
-          name:"Npm",
-          ymlcontent:"version: 1.0\n" +
-              "name: npm-build\n" +
-              "displayName: npm-build\n" +
-              "variables:\n" +
-              "stages:\n" +
-              "  - stage:\n" +
-              "    displayName: build\n" +
-              "    name: build\n" +
-              "    steps:\n" +
-              "      - step: shell@sh\n" +
-              "        displayName: npm-build-1\n" +
-              "        name: build\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - npm build\n" +
-              "          - mvn install\n" +
-              "      - step: shell@sh\n" +
-              "        displayName: npm-build-2\n" +
-              "        name: publish\n" +
-              "        environments:\n" +
-              "        commands:\n" +
-              "          - npm publish "
-        }
-      ],
+      pluginInfos: [],
+      tmps: [],
       pluginShow: false,
       pluginyml: "",
       varsShow: false,
@@ -407,11 +306,13 @@ export default {
       this.pipeInfo()
       this.pipelineVars()
     }
+    this.getYmlTemplates()
+    this.getYmlPlugins()
   },
   methods: {
     showPlugin(e) {
       this.pluginShow = true
-      this.pluginyml = e.ymlcontent
+      this.pluginyml = e.ymlContent
     },
     subFun() {
       this.saveBtu = true
@@ -598,6 +499,34 @@ export default {
               UtilCatch(this, err)
             });
       })
+    },
+    getYmlTemplates() {
+      YmlTemplates()
+          .then((res) => {
+            this.tmps = res.data
+          })
+          .catch((err) => {
+            UtilCatch(this, err)
+          });
+    },
+    getYmlPlugins() {
+      YmlPlugins()
+          .then((res) => {
+            this.pluginInfos = res.data
+          })
+          .catch((err) => {
+            UtilCatch(this, err)
+          });
+    },
+    chooseTmp(ymlContent) {
+      this.formData.content = ymlContent
+    },
+    defaultTmp() {
+      if (this.pipeId && this.pipeId != "") {
+        this.pipeInfo()
+        return
+      }
+      this.formData.content = ""
     }
   },
 };
@@ -605,6 +534,11 @@ export default {
 <style lang="sass" scoped>
 .card
   border: 0px
+
+
+.tmpBut
+  width: 50px
+  font-size: 5px
 
 .pmainbox
   display: flex

@@ -67,6 +67,9 @@ export const SearchSha = pars => Post('/pipeline/search/sha', pars);
 export const PipelineVars = pars => Post('/pipeline/vars', pars);
 export const SavePipelineVars = pars => Post('pipeline/var/save', pars);
 export const DeletedPipelineVars = pars => Post('/pipeline/var/del', pars);
+//yml
+export const YmlTemplates = () => Post('/yml/templates');
+export const YmlPlugins = () => Post('/yml/plugins');
 
 //Dashboard
 export const AllPipelines = () => Post('/dashboard/pipelines');

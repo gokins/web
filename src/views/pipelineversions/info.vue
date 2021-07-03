@@ -110,7 +110,7 @@
                       <div>{{steps[stepid].displayName}}</div>
                       <div style="flex:1"></div>
                       <div v-if="steps[stepid].waits&&steps[stepid].waits.length>0"
-                        v-c-tooltip.hover.click="{content:'依赖的步骤',placement:'bottom'}">
+                        v-c-tooltip.hover.click="{content:'等待的步骤',placement:'bottom'}">
                         <i class="iconfont icon-shijian" style="font-size:15px;color:#ad34ea" />
                         {{steps[stepid].waits.join(",")}}
                       </div>

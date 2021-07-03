@@ -153,6 +153,22 @@
                 </CRow>
               </CCardBody>
             </CCard>
+            <CCard>
+              <CCardHeader style="background-color: #ffe8e6">
+                <strong>危险操作区</strong>
+              </CCardHeader>
+              <CCardBody style="display: flex">
+                <div style="flex: 1">
+                  <h5>删除组织</h5>
+                  <p>组织删除之后无法恢复.请谨慎操作</p>
+                </div>
+                <div>
+                  <CButton color="danger" variant="outline" square @click="rmOrgFun">
+                    删除组织
+                  </CButton>
+                </div>
+              </CCardBody>
+            </CCard>
           </CTab>
         </CTabs>
       </CCardBody>
@@ -171,6 +187,7 @@ import {
   OrgUserRm,
   OrgPipelineList,
   OrgSave,
+  OrgRm,
   OrgUserEdit,
   OrgPipeAdd,
   OrgPipeRm,
@@ -285,7 +302,7 @@ export default {
         return;
       }
       OrgSave(this.formData)
-        .then((res) => {
+        .then(() => {
           this.$msgOk("保存成功");
           // this.$router.push('info/'+res.data.id)
         })
@@ -293,7 +310,7 @@ export default {
     },
     addPipFun (pipeid, fn) {
       OrgPipeAdd(this.info.id, pipeid)
-        .then((res) => {
+        .then(() => {
           fn(true);
           this.getPipeList();
           this.$msgOk("添加成功");
@@ -316,22 +333,21 @@ export default {
         );
     },
     rmPipeFun (pipeid) {
-      OrgPipeRm(this.info.id, pipeid)
-        .then((res) => {
+      this.$confirm('确定从组织移除此流水线吗?<p style="color:#aaa">流水线不会被删除</p>', null, () => {
+        OrgPipeRm(this.info.id, pipeid).then(() => {
           this.getPipeList();
           this.$msgOk("操作成功");
-        })
-        .catch((err) => UtilCatch(this, err));
+        }).catch((err) => UtilCatch(this, err));
+      })
     },
     addAdmFun (uid, fn) {
       console.log("addAdmFun", uid);
       OrgUserEdit({ add: true, id: this.info.id, uid: uid, adm: true })
-        .then((res) => {
+        .then(() => {
           fn(true);
           this.getUserList();
           this.$msgOk("添加成功");
-        })
-        .catch((err) =>
+        }).catch((err) =>
           UtilCatch(this, err, (err) => {
             fn(false);
             const stat = err.response ? err.response.status : 0;
@@ -348,12 +364,11 @@ export default {
     addUsrFun (uid, fn) {
       console.log("addUserFun", uid);
       OrgUserEdit({ add: true, id: this.info.id, uid: uid, adm: false })
-        .then((res) => {
+        .then(() => {
           fn(true);
           this.getUserList();
           this.$msgOk("添加成功,请稍后给予权限");
-        })
-        .catch((err) =>
+        }).catch((err) =>
           UtilCatch(this, err, (err) => {
             fn(false);
             const stat = err.response ? err.response.status : 0;
@@ -368,22 +383,23 @@ export default {
         );
     },
     rmUserFun (uid) {
-      OrgUserRm(this.info.id, uid)
-        .then((res) => {
-          this.getUserList();
-        })
-        .catch((err) =>
-          UtilCatch(this, err, (err) => {
-            const stat = err.response ? err.response.status : 0;
-            if (stat == 405) {
-              this.$msgErr("无权限");
-            } else {
-              this.$msgErr(
-                err.response ? err.response.data || "服务器错误" : "网络错误"
-              );
-            }
-          })
-        );
+      this.$confirm("确定从组织移除此成员吗?", null, () => {
+        OrgUserRm(this.info.id, uid)
+          .then(() => {
+            this.getUserList();
+          }).catch((err) =>
+            UtilCatch(this, err, (err) => {
+              const stat = err.response ? err.response.status : 0;
+              if (stat == 405) {
+                this.$msgErr("无权限");
+              } else {
+                this.$msgErr(
+                  err.response ? err.response.data || "服务器错误" : "网络错误"
+                );
+              }
+            })
+          );
+      })
     },
     upPermFun (it) {
       this.curPerm = {
@@ -401,14 +417,19 @@ export default {
         adm: false,
         rw: data.rw,
         ex: data.exec,
+      }).then((res) => {
+        this.selPerm = false;
+        this.getUserList();
+        this.$msgOk("修改成功");
       })
-        .then((res) => {
-          this.selPerm = false;
-          this.getUserList();
-          this.$msgOk("修改成功");
-        })
         .catch((err) => UtilCatch(this, err));
-    },
+    }, rmOrgFun () {
+      this.$confirm("确定删除组织吗?", null, () => {
+        OrgRm(this.info.id).then(() => {
+          this.$router.push('/org/');
+        }).catch((err) => UtilCatch(this, err));
+      })
+    }
   },
 };
 </script>

@@ -1,15 +1,9 @@
 <template>
-  <CModal
-      :show.sync="modalShow"
-      :no-close-on-backdrop="true"
-      :centered="true"
-      :size="conf.size"
-      :color="conf.colors"
-  >
-    {{ content }}
+  <CModal :show.sync="modalShow" :no-close-on-backdrop="true" :centered="true" :size="conf.size" :color="conf.colors">
+    <div v-html="content"></div>
     <template #header>
       <h6 class="modal-title">{{ conf.title }}</h6>
-      <CButtonClose @click="modalShow = false" class="text-white"/>
+      <CButtonClose @click="modalShow = false" class="text-white" />
     </template>
     <template #footer>
       <CButton @click="Discard" color="light">取消</CButton>
@@ -21,9 +15,9 @@
 <script>
 export default {
   name: "Confirm",
-  mounted() {
+  mounted () {
   },
-  data() {
+  data () {
     return {
       conf: {
         content: "",
@@ -38,13 +32,13 @@ export default {
     };
   },
   methods: {
-    Accept() {
+    Accept () {
       if (this.yes != null) {
         this.yes()
       }
       this.modalShow = false
     },
-    Discard() {
+    Discard () {
       if (this.no != null) {
         this.no()
       }

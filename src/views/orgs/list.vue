@@ -14,10 +14,14 @@
           <li v-for="item in items" :key="'org:'+item.id" @click="$router.push('info/' + item.aid)">
             <div class="tit">
               <div class="tits">{{ item.name }}</div>
-              <div class="tips" v-show="item.public=='1'">公开</div>
+              <div class="tips" v-show="item.public=='1'" v-c-tooltip.hover.click="'所有人可查看相关流水线'">
+                公开
+              </div>
               <div style="flex:1"></div>
-              <div class="tipln"><i class="iconfont icon-liushuixian" />&nbsp;{{item.pipeln}}</div>
-              <div class="tipln"><i class="iconfont icon-chengyuan" />&nbsp;{{item.userln}}</div>
+              <div class="tipln"><i class="iconfont icon-liushuixian"
+                  v-c-tooltip.hover.click="'流水线数量'" />&nbsp;{{item.pipeln}}</div>
+              <div class="tipln"><i class="iconfont icon-chengyuan"
+                  v-c-tooltip.hover.click="'成员数量'" />&nbsp;{{item.userln}}</div>
             </div>
             <div class="infos">
               <div class="fg">{{item.desc}}</div>
@@ -27,6 +31,7 @@
             </div>
           </li>
         </ul>
+        <div class="emptyCont" v-if="!items||items.length<=0"><i class="iconfont icon-jinzhide" />没有内容</div>
         <CPagination :activePage="page" :pages="pages" @update:activePage="getList" style="float: right" />
       </CCardBody>
     </CCard>
@@ -99,12 +104,14 @@ export default {
     border-bottom: 1px solid #eee
     cursor: pointer
     border-radius: 8px
+    // background: #fefefe
+    // margin-bottom: 8px
     &:hover
       background: #eee
     .tit
       display: flex
       .tits
-        color: #3577b1
+        color: #24292e
         font-size: 20px
         font-weight: bold
         line-height: 35px

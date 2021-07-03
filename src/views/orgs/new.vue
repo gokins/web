@@ -21,7 +21,7 @@
             </CRow>
             <CRow>
               <CCol sm="6">
-                <CInputCheckbox label="公开  (登录可见)" :checked.sync="formData.public" />
+                <CInputCheckbox label="公开  (所有人可查看相关流水线)" :checked.sync="formData.public" />
               </CCol>
             </CRow>
             <CRow class="subRow">

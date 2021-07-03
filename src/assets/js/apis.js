@@ -32,18 +32,19 @@ export const UtilCatch = (that, err, fn) => {
 //User
 export const UserPage = pars => Post('/user/page', pars);
 export const UserNew = pars => Post('/user/new', pars);
-export const UserInfo = id => Post('/user/info', { id: id });
+export const UserInfo = id => Post('/user/info', { id });
 export const UserUpinfo = pars => Post('/user/upinfo', pars);
 export const UserUpss = pars => Post('/user/upass', pars);
+export const UserActive = (id, act) => Post('/user/active', { id, act });
 
 
 //Org
 export const OrgList = pars => Post('/org/list', pars);
 export const OrgNew = pars => Post('/org/new', pars);
-export const OrgInfo = id => Post('/org/info', { id: id });
-export const OrgUsers = id => Post('/org/users', { id: id });
+export const OrgInfo = id => Post('/org/info', { id });
+export const OrgUsers = id => Post('/org/users', { id });
 export const OrgSave = pars => Post('/org/save', pars);
-export const OrgRm = id => Post('/org/rm', { id: id });
+export const OrgRm = id => Post('/org/rm', { id });
 export const OrgUserEdit = pars => Post('/org/user/edit', pars);
 export const OrgUserRm = (id, uid) => Post('/org/user/rm', { id, uid });
 export const OrgPipeAdd = (id, pipeId) => Post('/org/pipe/add', { id, pipeId });
@@ -58,7 +59,7 @@ export const SavePipeline = pars => Post('/pipeline/save', pars);
 export const RunPipeline = pars => Post('/pipeline/run', pars);
 export const PipelineVersions = pars => Post('/pipeline/pipelineVersions', pars);
 export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id });
-export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id: id });
+export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id });
 export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
 export const RebuildVersion = (pipelineVersionId) => Post('/pipeline/rebuild', { pipelineVersionId: pipelineVersionId });
 export const SearchSha = pars => Post('/pipeline/search/sha', pars);

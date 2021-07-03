@@ -89,11 +89,12 @@
               <CCardBody style="display: flex">
                 <div style="flex: 1">
                   <h5>激活/禁止 用户</h5>
-                  <p>请谨慎操作</p>
+                  <p>只能管理员操作,请谨慎操作</p>
                 </div>
                 <div>
-                  <CButton color="danger" variant="outline" square @click="rmOrgFun">
-                    删除组织
+                  <CButton color="danger" variant="outline" square @click="actFun(user.active==1?'0':'1')"
+                    :disabled="subact">
+                    {{user.active==1?'禁止':'激活'}}用户
                   </CButton>
                 </div>
               </CCardBody>
@@ -137,7 +138,7 @@
 
 <script>
 import myavatar from "@/components/avatar";
-import { UserInfo, UserUpinfo, UserUpss, UtilCatch } from "@/assets/js/apis";
+import { UserInfo, UserUpinfo, UserUpss, UserActive, UtilCatch } from "@/assets/js/apis";
 export default {
   components: { myavatar },
   data () {
@@ -145,6 +146,7 @@ export default {
       user: {},
       uinfo: {},
       subinfo: false,
+      subact: false,
       formData: {},
       passData: {},
     }
@@ -163,6 +165,7 @@ export default {
     getInfo (id) {
       UserInfo(id).then(res => {
         this.subinfo = false;
+        this.subact = false;
         this.user = res.data.user;
         this.uinfo = res.data.info;
         this.formData = {
@@ -209,6 +212,13 @@ export default {
           return true;
         }
       }))
+    }, actFun (act) {
+      this.$confirm("确定禁止/激活用户吗?", null, () => {
+        this.subact = true;
+        UserActive(this.user.id, act).then(() => {
+          this.getInfo(this.user.id);
+        }).catch(err => UtilCatch(this, err))
+      })
     }
   }
 }

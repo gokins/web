@@ -89,12 +89,6 @@ const Login = () =>
 const Register = () =>
     import ('@/views/pages/Register')
 
-// Users
-const Users = () =>
-    import ('@/views/users/Users')
-const User = () =>
-    import ('@/views/users/User')
-
 Vue.use(Router)
 
 export default new Router({
@@ -143,31 +137,6 @@ function configRoutes() {
                     path: 'widgets',
                     name: 'Widgets',
                     component: Widgets
-                },
-                {
-                    path: 'users',
-                    meta: {
-                        label: 'Users'
-                    },
-                    component: {
-                        render(c) {
-                            return c('router-view')
-                        }
-                    },
-                    children: [{
-                            path: '',
-                            name: 'Users',
-                            component: Users
-                        },
-                        {
-                            path: ':id',
-                            meta: {
-                                label: 'User Details'
-                            },
-                            name: 'User',
-                            component: User
-                        }
-                    ]
                 },
                 {
                     path: 'base',

@@ -109,17 +109,17 @@
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <CInput label="旧密码" v-model="passData.olds" placeholder="请输入旧密码" />
+                    <CInput label="旧密码" type="password" v-model="passData.olds" placeholder="请输入旧密码" />
                   </CCol>
                 </CRow>
                 <CRow>
                   <CCol sm="12">
-                    <CInput label="新密码" v-model="passData.pass" placeholder="请输入新密码" />
+                    <CInput label="新密码" type="password" v-model="passData.pass" placeholder="请输入新密码" />
                   </CCol>
                 </CRow>
                 <CRow>
                   <CCol sm="12">
-                    <CInput label="重复密码" v-model="passData.repass" placeholder="请重复密码" />
+                    <CInput label="重复密码" type="password" v-model="passData.repass" placeholder="请重复密码" />
                   </CCol>
                 </CRow>
                 <CRow class="subRow">

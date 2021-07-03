@@ -63,7 +63,7 @@ import VersionlistView from "@/components/list/versionlist";
 
 export default {
   coreics: freeSet,
-  components: { PipeNew, VersionlistView },
+  components: { PipeNew, VersionlistView,SelectBranches },
   data () {
     return {
       loading: true,
@@ -71,7 +71,6 @@ export default {
       versionpages: 0,
       versionitems: [],
       pipelineName: "",
-      versionitems: [],
       formData: {
         name: "",
         content: "",

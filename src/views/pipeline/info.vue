@@ -82,16 +82,18 @@
         </CTabs>
       </CCardBody>
     </CCard>
+    <SelectBranches :shown.sync="selectShow" :id="this.$route.params.id"/>
   </div>
 </template>
 <script>
-import {CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, RunPipeline, UtilCatch,} from "@/assets/js/apis";
+import {CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, UtilCatch,} from "@/assets/js/apis";
 import {freeSet} from "@coreui/icons";
 import PipeNew from "./new";
+import SelectBranches from "@/components/modals/selectBranches";
 
 export default {
   coreics: freeSet,
-  components: {PipeNew},
+  components: {PipeNew,SelectBranches},
   data() {
     return {
       versionfields: [
@@ -116,6 +118,7 @@ export default {
         pipelineId: "",
       },
       pipelineId: "",
+      selectShow: false,
     };
   },
   mounted() {
@@ -151,11 +154,7 @@ export default {
       }).catch((err) => UtilCatch(this, err));
     },
     run() {
-      RunPipeline({pipelineId: this.pipelineId})
-          .then((res) => {
-            this.goVersion(res.data.id);
-          })
-          .catch((err) => UtilCatch(this, err));
+      this.selectShow = true
     },
     goVersion(id) {
       this.$router.push("/pipeline/build/" + id);

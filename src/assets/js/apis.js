@@ -57,6 +57,7 @@ export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id })
 export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id: id });
 export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
 export const RebuildVersion = (pipelineVersionId) => Post('/pipeline/rebuild', { pipelineVersionId: pipelineVersionId });
+export const SearchSha = pars => Post('/pipeline/search/sha', pars);
 
 //Dashboard
 export const AllPipelines = () => Post('/dashboard/pipelines');

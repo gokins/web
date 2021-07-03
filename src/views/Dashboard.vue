@@ -365,7 +365,7 @@ export default {
           activity: 'Last week'
         },
         {
-          avatar: { url: 'img/avatars/6.jpg', status: 'danger' },
+          avatar: { url: 'img/avatars/def.png', status: 'danger' },
           user: { name: 'Friderik Dávid', new: true, registered: 'Jan 1, 2015' },
           country: { name: 'Poland', flag: 'cif-pl' },
           usage: { value: 43, period: 'Jun 11, 2015 - Jul 10, 2015' },

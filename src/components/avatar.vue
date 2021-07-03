@@ -1,7 +1,7 @@
 <template>
   <div class="users">
     <div class="c-avatar avat" :style="{'width':imgw&&imgw!=''?imgw:'auto'}">
-      <img :src="src&&src!=''?src:'img/avatars/6.jpg'" class="c-avatar-img " />
+      <img :src="src&&src!=''?src:'img/avatars/def.png'" class="c-avatar-img " />
     </div>
     <div class="nicks">{{nick}}</div>
   </div>

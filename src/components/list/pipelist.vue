@@ -83,7 +83,7 @@ export default {
         line-height: 30px
       .tits
         color: #24292e
-        font-size: 20px
+        font-size: 18px
         font-weight: bold
         line-height: 35px
         span

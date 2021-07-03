@@ -40,9 +40,7 @@
   </div>
 </template>
 <script>
-import myavatar from "@/components/avatar";
 export default {
-  components: { myavatar },
   props: {
     items: Array,
     loading: Boolean,

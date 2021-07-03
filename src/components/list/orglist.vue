@@ -8,10 +8,10 @@
             公开
           </div>
           <div style="flex:1"></div>
-          <div class="tipln" v-if="item.pipeln">
+          <div class="tipln" v-if="item.pipeln!=null">
             <i class="iconfont icon-liushuixian" v-c-tooltip.hover.click="'流水线数量'" />&nbsp;{{item.pipeln}}
           </div>
-          <div class="tipln" v-if="item.userln">
+          <div class="tipln" v-if="item.userln!=null">
             <i class="iconfont icon-chengyuan" v-c-tooltip.hover.click="'成员数量'" />&nbsp;{{item.userln}}
           </div>
         </div>

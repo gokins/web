@@ -17,7 +17,7 @@
         <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
           <CTab active>
             <template slot="title">
-              <CIcon name="cil-calculator"/>
+              <CIcon name="cil-calculator" />
               流水线
             </template>
             <CCard>
@@ -37,7 +37,7 @@
           </CTab>
           <CTab>
             <template slot="title">
-              <CIcon name="cil-basket"/>
+              <CIcon name="cil-basket" />
               成员
             </template>
             <CCard>
@@ -48,7 +48,7 @@
               <CCardBody>
                 <div>
                   <div class="c-avatar">
-                    <img src="img/avatars/def.png" class="c-avatar-img"/>
+                    <img src="img/avatars/def.png" class="c-avatar-img" />
                   </div>
                   {{ user.nick }}
                 </div>
@@ -172,11 +172,11 @@
         </CTabs>
       </CCardBody>
     </CCard>
-    <SelectPipe :shown.sync="selPip" @addFun="addPipFun"/>
-    <SelectUser :shown.sync="selAdm" @addFun="addAdmFun"/>
-    <SelectUser :shown.sync="selUsr" @addFun="addUsrFun"/>
-    <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun"/>
-    <SelectBranches :shown.sync="selectShow" :id="pipelineId"/>
+    <SelectPipe :shown.sync="selPip" @addFun="addPipFun" />
+    <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" />
+    <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" />
+    <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
   </div>
 </template>
 <script>
@@ -192,7 +192,7 @@ import {
   OrgUsers,
   UtilCatch,
 } from "@/assets/js/apis";
-import {freeSet} from "@coreui/icons";
+import { freeSet } from "@coreui/icons";
 import PipelistView from "@/components/list/pipelist";
 import SelectBranches from "@/components/modals/selectBranches";
 import SelectPipe from "@/components/modals/selectPipe";
@@ -201,8 +201,8 @@ import OrgUserPerm from "@/components/modals/orgUserPerm";
 
 export default {
   coreics: freeSet,
-  components: {PipelistView, SelectPipe, SelectUser, OrgUserPerm, SelectBranches},
-  data() {
+  components: { PipelistView, SelectPipe, SelectUser, OrgUserPerm, SelectBranches },
+  data () {
     return {
       info: {},
       user: {},
@@ -224,14 +224,14 @@ export default {
       selUsr: false,
       selPerm: false,
       selectShow: false,
-      curPerm: {rw: false, exec: false},
+      curPerm: { rw: false, exec: false },
     };
   },
-  mounted() {
+  mounted () {
     if (
-        this.$route.params == null ||
-        this.$route.params.id == null ||
-        this.$route.params.id == ""
+      this.$route.params == null ||
+      this.$route.params.id == null ||
+      this.$route.params.id == ""
     ) {
       this.$router.push("/404");
       return;
@@ -256,7 +256,7 @@ export default {
           UtilCatch(this, err)
         );
     },
-    run(id) {
+    run (id) {
       this.pipelineId = id
       this.selectShow = true
     },
@@ -272,8 +272,10 @@ export default {
       this.$router.push("/pipeline/build/" + id);
     },
     getPipeList (pg) {
+      this.loading = true;
       OrgPipelineList({ page: pg, orgId: this.info.id })
         .then((res) => {
+          this.loading = false;
           this.pipepage = res.data.page;
           this.pipepages = res.data.pages;
           this.pipeitems = res.data.data;

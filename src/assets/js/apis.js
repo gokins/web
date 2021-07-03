@@ -62,6 +62,10 @@ export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id: id });
 export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
 export const RebuildVersion = (pipelineVersionId) => Post('/pipeline/rebuild', { pipelineVersionId: pipelineVersionId });
 export const SearchSha = pars => Post('/pipeline/search/sha', pars);
+//piepline Vars
+export const PipelineVars = pars => Post('/pipeline/vars', pars);
+export const SavePipelineVars = pars => Post('pipeline/var/save', pars);
+export const DeletedPipelineVars = pars => Post('/pipeline/var/del', pars);
 
 //Dashboard
 export const AllPipelines = () => Post('/dashboard/pipelines');

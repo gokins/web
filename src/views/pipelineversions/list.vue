@@ -11,68 +11,18 @@
         </div>
       </CCardHeader>
       <CCardBody>
-        <CDataTable
-            :hover="true"
-            :striped="true"
-            :border="false"
-            :small="true"
-            :fixed="true"
-            :fields="fields"
-            :items="items"
-        >
-          <template #number="{ item }">
-            <td>
-              <CLink># {{ item.number }}</CLink>
-            </td>
-          </template>
-          <template #number="{ item }">
-            <td>
-              <CLink :to="'/pipeline/build/'+item.id"># {{ item.number }}</CLink>
-            </td>
-          </template>
-          <template #pipelineName="{ item }">
-            <td>
-              <CLink :to="'/pipeline/build/'+item.id">{{ item.pipelineName }}</CLink>
-            </td>
-          </template>
-          <template #edit="{ item }">
-            <td class="py-2">
-              <CButton
-                  color="primary"
-                  variant="outline"
-                  square
-                  size="sm"
-                  @click="goEdit(item.id)"
-              >
-                查看
-              </CButton>
-              <CButton
-                  color="primary"
-                  variant="outline"
-                  square
-                  size="sm"
-                  @click="run(item.id)"
-              >
-                运行
-              </CButton>
-            </td>
-          </template>
-        </CDataTable>
-        <CPagination
-            :activePage.sync="page"
-            :pages="pages"
-            size="sm"
-            align="center"
-            @update:activePage="getList"
-        />
+        <VersionlistView :items="items" :loading="loading" :hidepipe="true" />
+        <CPagination :activePage="page" :pages="pages" @update:activePage="getList"
+                     style="float: right;margin-top:20px" />
       </CCardBody>
     </CCard>
   </div>
 </template>
 <script>
 import {PipelineVersions, UtilCatch} from "@/assets/js/apis";
-
+import VersionlistView from "@/components/list/versionlist";
 export default {
+  components:{VersionlistView},
   data() {
     return {
       fields: [
@@ -89,6 +39,7 @@ export default {
           label: "流水线描述",
         },
       ],
+      loading: true,
       items: [],
       page: 0,
       pages: 0,
@@ -113,6 +64,7 @@ export default {
         orgId: this.orgId,
         pipelineId: this.pipelineId,
       }).then((res) => {
+        this.loading = false;
         if (res.data != null) {
           this.page = res.data.page;
           this.pages = res.data.pages;

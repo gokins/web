@@ -19,12 +19,12 @@
             </td>
           </template>
           <template #name="{ item }">
-            <td class="pthands" style="color:blue" @click="$router.push(`/user/info/${item.id}`)">
+            <td class="pthands" style="color:blue" @click="$router.push(`/user/info/${item.aid}`)">
               {{item.name}}
             </td>
           </template>
           <template #nick="{ item }">
-            <td class="pthands" style="color:blue" @click="$router.push(`/user/info/${item.id}`)">
+            <td class="pthands" style="color:blue" @click="$router.push(`/user/info/${item.aid}`)">
               <myavatar :src="item.avat" :nick="item.nick" imgw="18px" />
             </td>
           </template>
@@ -33,15 +33,15 @@
               {{$dateFmt(item.created)}}
             </td>
           </template>
-          <template #loginTime="{ item }">
+          <template #active="{ item }">
             <td>
-              {{$dateFmt(item.loginTime)}}
+              {{item.active==1?'已激活':'未激活'}}
             </td>
           </template>
           <template #btns="{ item }">
             <td class="py-2">
-              <CButton color="info" square size="sm" @click="addFun(item)" :disabled="item.added==true">
-                添加
+              <CButton color="info" square size="sm" @click="$router.push(`/user/info/${item.aid}`)">
+                详细
               </CButton>
             </td>
           </template>
@@ -79,8 +79,8 @@ export default {
           label: "创建时间",
         },
         {
-          key: "loginTime",
-          label: "登录时间",
+          key: "active",
+          label: "状态",
         },
         {
           key: "btns",

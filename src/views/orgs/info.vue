@@ -40,7 +40,7 @@
               <CIcon name="cil-basket" />
               成员
             </template>
-            <CCard>
+            <CCard accent-color="primary">
               <CCardHeader>
                 <strong>所有者</strong>
                 <!-- <div class="card-header-actions"></div> -->
@@ -54,7 +54,7 @@
                 </div>
               </CCardBody>
             </CCard>
-            <CCard>
+            <CCard accent-color="primary">
               <CCardHeader>
                 <strong>管理员</strong> <small style="color:#aaa">可管理组织和操作流水线</small>
                 <div class="card-header-actions">
@@ -81,7 +81,7 @@
                 </div>
               </CCardBody>
             </CCard>
-            <CCard>
+            <CCard accent-color="primary">
               <CCardHeader>
                 <strong>普通用户</strong> <small style="color:#aaa">只能操作流水线</small>
                 <div class="card-header-actions">
@@ -124,7 +124,7 @@
             <template slot="title">
               <CIcon name="cil-chart-pie" /> 设置
             </template>
-            <CCard style="width:80%">
+            <CCard accent-color="primary">
               <CCardHeader>
                 <strong>信息 </strong>
                 <!-- <div class="card-header-actions"></div> -->
@@ -132,7 +132,7 @@
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <CInput label="名称" v-model="formData.name" placeholder="请输入组织名称" Max="10" />
+                    <CInput label="名称" v-model="formData.name" placeholder="请输入组织名称" />
                   </CCol>
                 </CRow>
                 <CRow>
@@ -152,7 +152,7 @@
                 </CRow>
               </CCardBody>
             </CCard>
-            <CCard>
+            <CCard accent-color="danger">
               <CCardHeader style="background-color: #ffe8e6">
                 <strong>危险操作区</strong>
               </CCardHeader>

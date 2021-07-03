@@ -9,22 +9,22 @@ export const UtilCatch = (that, err, fn) => {
     if (stat == 403) {
         that.$store.commit('clearUserInfo');
         that.$router.push('/login')
-        return true;
+        return;
     }
+    let isnotshow = false;
     if (fn && typeof fn === 'function') {
-        fn(err, that);
-        return true;
-    } else if (stat == 404) {
-        that.$msgErr('未找到内容');
-        return true;
-    } else if (stat == 405) {
-        that.$msgErr('无权限');
-        return true;
-    } else {
-        that.$msgErr(
-            err.response ? err.response.data || "服务器错误" : "网络错误"
-        );
-        return false;
+        isnotshow = fn(err, that);
+    }
+    if (isnotshow != true) {
+        if (stat == 404) {
+            that.$msgErr('未找到内容');
+        } else if (stat == 405) {
+            that.$msgErr('无权限');
+        } else {
+            that.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+            );
+        }
     }
 }
 
@@ -32,6 +32,9 @@ export const UtilCatch = (that, err, fn) => {
 //User
 export const UserPage = pars => Post('/user/page', pars);
 export const UserNew = pars => Post('/user/new', pars);
+export const UserInfo = id => Post('/user/info', { id: id });
+export const UserUpinfo = pars => Post('/user/upinfo', pars);
+export const UserUpss = pars => Post('/user/upass', pars);
 
 
 //Org

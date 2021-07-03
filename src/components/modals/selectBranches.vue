@@ -1,7 +1,7 @@
 <template>
   <CModal
       title="选择流水线"
-      size="lg"
+      size="sm"
       :show="shown"
       @update:show="(val) => $emit('update:shown', val)"
       :centered="true"
@@ -36,6 +36,16 @@ export default {
     id: String,
     shown: Boolean,
   },
+  watch: {
+    id(nv) {
+      if (nv != "") {
+        this.searchSha()
+      }
+    },
+    shown(nv){
+      this.value = {}
+    }
+  },
   mounted() {
     this.searchSha();
   },
@@ -47,6 +57,9 @@ export default {
   },
   methods: {
     searchSha(q) {
+      if (this.id === "") {
+        return
+      }
       SearchSha({
         q: q,
         id: this.id,
@@ -65,6 +78,7 @@ export default {
       }
       RunPipeline(par)
           .then((res) => {
+            this.value = {}
             this.$router.push("/pipeline/build/" + res.data.id);
           })
           .catch((err) => UtilCatch(this, err));

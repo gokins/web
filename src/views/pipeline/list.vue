@@ -2,66 +2,39 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid" /> 流水线
+        <CIcon name="cil-grid"/>
+        流水线
         <div class="card-header-actions">
           <CButton size="sm" color="info" variant="outline" @click="goNew"
-            >新建流水线</CButton
+          >新建流水线
+          </CButton
           >
         </div>
       </CCardHeader>
       <CCardBody>
-        <CDataTable
-          :hover="true"
-          :striped="true"
-          :border="false"
-          :small="true"
-          :fixed="true"
-          :fields="fields"
-          :items="items"
-        >
-          <template #edit="{ item }">
-            <td class="py-2">
-              <CButton
-                color="primary"
-                variant="outline"
-                square
-                size="sm"
-                @click="goEdit(item.id)"
-              >
-                查看
-              </CButton>
-              <CButton
-                color="primary"
-                variant="outline"
-                square
-                size="sm"
-                @click="run(item.id)"
-                style="margin-left:5px"
-              >
-                运行
-              </CButton>
-            </td>
-          </template>
-        </CDataTable>
+        <PipelistView :items="items" #default="{item}">
+          <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn">
+            运行
+          </CButton>
+        </PipelistView>
         <CPagination
-          :activePage.sync="page"
-          :pages="pages"
-          size="sm"
-          align="center"
-          @update:activePage="getList"
+            :activePage.sync="page"
+            :pages="pages"
+            size="sm"
+            align="center"
+            @update:activePage="getList"
         />
       </CCardBody>
     </CCard>
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId"/>
   </div>
 </template>
 <script>
-import {
-  UtilCatch,
-  PipelineList,
-  OrgPipelineList,
-  RunPipeline,
-} from "@/assets/js/apis";
+import {OrgPipelineList, PipelineList, UtilCatch,} from "@/assets/js/apis";
+import PipelistView from "@/components/list/pipelist";
+import SelectBranches from "@/components/modals/selectBranches";
 export default {
+  components: {PipelistView,SelectBranches},
   data() {
     return {
       fields: [
@@ -88,13 +61,15 @@ export default {
       page: 0,
       pages: 0,
       orgId: "",
+      pipelineId :"",
+      selectShow:false
     };
   },
   mounted() {
     if (
-      this.$route.params != null &&
-      this.$route.params.orgId != null &&
-      this.$route.params.orgId != ""
+        this.$route.params != null &&
+        this.$route.params.orgId != null &&
+        this.$route.params.orgId != ""
     ) {
       this.orgId = this.$route.params.orgId;
     }
@@ -103,29 +78,26 @@ export default {
   methods: {
     getList(pg) {
       if (this.orgId != "") {
-        OrgPipelineList({ page: pg, orgId: this.orgId })
+        OrgPipelineList({page: pg, orgId: this.orgId})
+            .then((res) => {
+              this.page = res.data.page;
+              this.pages = res.data.pages;
+              this.items = res.data.data;
+            })
+            .catch((err) => UtilCatch(this, err));
+        return;
+      }
+      PipelineList({page: pg, orgId: this.orgId})
           .then((res) => {
             this.page = res.data.page;
             this.pages = res.data.pages;
             this.items = res.data.data;
           })
           .catch((err) => UtilCatch(this, err));
-        return;
-      }
-      PipelineList({ page: pg, orgId: this.orgId })
-        .then((res) => {
-          this.page = res.data.page;
-          this.pages = res.data.pages;
-          this.items = res.data.data;
-        })
-        .catch((err) => UtilCatch(this, err));
     },
     run(id) {
-      RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
-        .then((res) => {
-          this.goVersion(res.data.id);
-        })
-        .catch((err) => UtilCatch(this, err));
+      this.pipelineId = id
+      this.selectShow = true
     },
     goVersion(id) {
       this.$router.push("/pipeline/build/" + id);

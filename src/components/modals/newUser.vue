@@ -44,22 +44,10 @@ export default {
         this.$emit('update:shown', false)
       }).catch(err => UtilCatch(this, err, err => {
         this.subing = false;
-        switch (err.response ? err.response.status : 0) {
-          case 405:
-            this.$msgErr('无权限');
-            break;
-          case 511:
-            this.$msgErr("用户名已存在");
-            break;
-          case 500:
-            this.$msgErr(
-              err.response ? err.response.data || "服务器错误" : "网络错误"
-            );
-            break;
-          default:
-            console.log("Login err:", err);
-            this.$msgErr("新建失败");
-            break;
+        const stat = err.response ? err.response.status : 0;
+        if (stat == 511) {
+          fn(true);
+          this.$msgErr("用户名已存在");
         }
       }));
     }

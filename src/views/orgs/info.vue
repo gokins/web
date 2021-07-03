@@ -309,15 +309,9 @@ export default {
           UtilCatch(this, err, (err) => {
             fn(false);
             const stat = err.response ? err.response.status : 0;
-            if (stat == 405) {
-              this.$msgErr("此操作只有创建者拥有权限");
-            } else if (stat == 511) {
+            if (stat == 511) {
               fn(true);
               this.$msgErr("流水线已存在");
-            } else {
-              this.$msgErr(
-                err.response ? err.response.data || "服务器错误" : "网络错误"
-              );
             }
           })
         );
@@ -338,16 +332,8 @@ export default {
           this.getUserList();
           this.$msgOk("添加成功");
         }).catch((err) =>
-          UtilCatch(this, err, (err) => {
+          UtilCatch(this, err, () => {
             fn(false);
-            const stat = err.response ? err.response.status : 0;
-            if (stat == 405) {
-              this.$msgErr("此操作只有创建者拥有权限");
-            } else {
-              this.$msgErr(
-                err.response ? err.response.data || "服务器错误" : "网络错误"
-              );
-            }
           })
         );
     },
@@ -359,16 +345,8 @@ export default {
           this.getUserList();
           this.$msgOk("添加成功,请稍后给予权限");
         }).catch((err) =>
-          UtilCatch(this, err, (err) => {
+          UtilCatch(this, err, () => {
             fn(false);
-            const stat = err.response ? err.response.status : 0;
-            if (stat == 405) {
-              this.$msgErr("无权限");
-            } else {
-              this.$msgErr(
-                err.response ? err.response.data || "服务器错误" : "网络错误"
-              );
-            }
           })
         );
     },
@@ -378,16 +356,7 @@ export default {
           .then(() => {
             this.getUserList();
           }).catch((err) =>
-            UtilCatch(this, err, (err) => {
-              const stat = err.response ? err.response.status : 0;
-              if (stat == 405) {
-                this.$msgErr("无权限");
-              } else {
-                this.$msgErr(
-                  err.response ? err.response.data || "服务器错误" : "网络错误"
-                );
-              }
-            })
+            UtilCatch(this, err)
           );
       })
     },

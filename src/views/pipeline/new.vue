@@ -276,40 +276,31 @@ export default {
       ],
       pluginInfos: [
         {
-          name: "git", "content": "git 插件", ymlcontent: "" +
-              "Clone1:\n" +
-              "" +
-              "    git: github\n" +
-              "" +
-              "    repo: https://github.com/koderover/sample\n" +
-              "" +
-              "    revision: master\n" +
-              "" +
-              "    title: git clone\n" +
-              "" +
-              "    type: git-clone\n" +
-              "" +
-              "    working_directory: ${{KR_VOLUME_PATH}}\n" +
-              "" +
-              ""
+          name: "bash 插件", "content": "bash 插件",
+          ymlcontent: "step: shell@bash\n" +
+              "        displayName: npm-build-1\n" +
+              "        name: build\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - echo hello world \n"
         },
         {
-          name: "git2", "content": "git2 插件", ymlcontent: "" +
-              "Clone2:\n" +
-              "" +
-              "    git: github\n" +
-              "" +
-              "    repo: https://github.com/koderover/sample\n" +
-              "" +
-              "    revision: master\n" +
-              "" +
-              "    title: git clone\n" +
-              "" +
-              "    type: git-clone\n" +
-              "" +
-              "    working_directory: ${{KR_VOLUME_PATH}}\n" +
-              "" +
-              ""
+          name: "sh 插件", "content": "sh 插件",
+          ymlcontent: "step: shell@sh\n" +
+              "        displayName: npm-build-1\n" +
+              "        name: build\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - echo hello world \n"
+        },
+        {
+          name: "powershell 插件", "content": "powershell 插件",
+          ymlcontent: "step: shell@powershell\n" +
+              "        displayName: npm-build-1\n" +
+              "        name: build\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - echo hello world \n"
         }
       ],
       tmps:[

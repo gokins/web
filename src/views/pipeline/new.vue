@@ -32,9 +32,22 @@
                   </CRow>
                   <CRow>
                     <CCol>
-                      <label>yaml:</label>
-                      <codemirror ref="myCm" v-model="formData.content" :options="cmOptions" class="json-editor">
-                      </codemirror>
+                      <CTabs variant="tabs">
+                        <CTab active>
+                          <template slot="title">
+                            yaml
+                          </template>
+                          <codemirror ref="myCm" v-model="formData.content" :options="cmOptions" class="json-editor">
+                          </codemirror>
+                        </CTab>
+                        <CTab v-for="(tmp, index) in tmps">
+                          <template slot="title">
+                            {{tmp.name}}模板
+                          </template>
+                          <codemirror :options="rOptions" v-model="tmp.ymlcontent" class="json-editor">
+                          </codemirror>
+                        </CTab>
+                      </CTabs>
                     </CCol>
                   </CRow>
                   <CRow class="subRow" sm="16">
@@ -299,6 +312,82 @@ export default {
               ""
         }
       ],
+      tmps:[
+        {
+          name:"Golang",
+          ymlcontent:"version: 1.0\n" +
+              "name: go-build\n" +
+              "displayName: golang-build\n" +
+              "variables:\n" +
+              "stages:\n" +
+              "  - stage:\n" +
+              "    displayName: build\n" +
+              "    name: build\n" +
+              "    steps:\n" +
+              "      - step: shell@sh\n" +
+              "        displayName: go-build-1\n" +
+              "        name: build\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - go build -v\n" +
+              "      - step: shell@sh\n" +
+              "        displayName: go-build-2\n" +
+              "        name: test\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - go test -v"
+        },
+        {
+          name:"Java",
+          ymlcontent:"version: 1.0\n" +
+              "name: java-build\n" +
+              "displayName: java-build\n" +
+              "variables:\n" +
+              "stages:\n" +
+              "  - stage:\n" +
+              "    displayName: build\n" +
+              "    name: build\n" +
+              "    steps:\n" +
+              "      - step: shell@sh\n" +
+              "        displayName: java-build-1\n" +
+              "        name: build\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - mvn clean\n" +
+              "          - mvn install\n" +
+              "      - step: shell@sh\n" +
+              "        displayName: java-build-2\n" +
+              "        name: test\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - mvn test"
+        },
+        {
+          name:"Npm",
+          ymlcontent:"version: 1.0\n" +
+              "name: npm-build\n" +
+              "displayName: npm-build\n" +
+              "variables:\n" +
+              "stages:\n" +
+              "  - stage:\n" +
+              "    displayName: build\n" +
+              "    name: build\n" +
+              "    steps:\n" +
+              "      - step: shell@sh\n" +
+              "        displayName: npm-build-1\n" +
+              "        name: build\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - npm build\n" +
+              "          - mvn install\n" +
+              "      - step: shell@sh\n" +
+              "        displayName: npm-build-2\n" +
+              "        name: publish\n" +
+              "        environments:\n" +
+              "        commands:\n" +
+              "          - npm publish "
+        }
+      ],
       pluginShow: false,
       pluginyml: "",
       varsShow: false,
@@ -310,6 +399,15 @@ export default {
         theme: "eclipse",
         autoRefresh: true,
         lint: true
+      },
+      rOptions: {
+        lineNumbers: true,
+        mode: "text/x-yaml",
+        gutters: ["CodeMirror-lint-markers"],
+        theme: "eclipse",
+        autoRefresh: true,
+        lint: true,
+        readOnly: true,
       },
     };
   },

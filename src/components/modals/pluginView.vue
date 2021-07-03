@@ -28,7 +28,7 @@ export default {
         mode: "text/x-yaml",
         gutters: ["CodeMirror-lint-markers"],
         theme: "eclipse",
-        readOnly: 'nocursor',
+        readOnly: true,
         autoRefresh: true
       },
     };

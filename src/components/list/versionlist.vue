@@ -14,8 +14,9 @@
             #{{ item.number }}
             <span v-if="item.pipelineName&&item.pipelineName!=''">{{item.pipelineName}}</span>
           </div>
-          <div class="tips" v-show="item.public=='1'" v-c-tooltip.hover.click="'所有人可查看相关流水线'">
-            公开
+          <div class="tips">
+            <i class="iconfont icon-branches" style="font-size:14px" />
+            {{item.sha||'默认分支'}}
           </div>
           <slot :item="item"></slot>
         </div>
@@ -85,8 +86,8 @@ export default {
       .tips
         color: #aaa
         font-size: 10px
+        padding: 0 5px
         margin: 10px 0 0 10px
-        width: 30px
         height: 20px
         border: 1px solid #ddd
         text-align: center

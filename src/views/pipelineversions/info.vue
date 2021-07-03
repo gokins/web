@@ -9,9 +9,15 @@
             <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px" v-else-if="build.status=='cancel'" />
             <i class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" v-else />
           </div>
-          <div style="flex:1">
-            <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink> &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
+          <div>
+            <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink>
+            &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
           </div>
+          <div class="sha">
+            <i class="iconfont icon-branches" style="font-size:14px" />
+            {{pv.sha||'默认分支'}}
+          </div>
+          <div style="flex:1"></div>
           <div>
             &nbsp;
             <CButton size="sm" color="warning" variant="outline" @click="cancelFun" v-if="!this.builded">
@@ -408,6 +414,15 @@ export default {
 .hd-tit
   line-height: 30px
   display: flex
+  .sha
+    color: #aaa
+    font-size: 10px
+    padding: 0 5px
+    margin: 5px 0 0 10px
+    height: 20px
+    line-height: 20px
+    border: 1px solid #ddd
+    text-align: center
 .hd-infos
   color: #acacac
   font-size: 14px

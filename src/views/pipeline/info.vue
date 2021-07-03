@@ -51,12 +51,14 @@
         </CTabs>
       </CCardBody>
     </CCard>
+    <SelectBranches :shown.sync="selectShow" :id="this.$route.params.id"/>
   </div>
 </template>
 <script>
-import { CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, RunPipeline, UtilCatch, } from "@/assets/js/apis";
-import { freeSet } from "@coreui/icons";
+import {CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, UtilCatch,} from "@/assets/js/apis";
+import {freeSet} from "@coreui/icons";
 import PipeNew from "./new";
+import SelectBranches from "@/components/modals/selectBranches";
 import VersionlistView from "@/components/list/versionlist";
 
 export default {
@@ -69,12 +71,14 @@ export default {
       versionpages: 0,
       versionitems: [],
       pipelineName: "",
+      versionitems: [],
       formData: {
         name: "",
         content: "",
         pipelineId: "",
       },
       pipelineId: "",
+      selectShow: false,
     };
   },
   mounted () {
@@ -109,35 +113,31 @@ export default {
         this.pipelineName = res.data.name
       }).catch((err) => UtilCatch(this, err));
     },
-    run () {
-      RunPipeline({ pipelineId: this.pipelineId })
-        .then((res) => {
-          this.goVersion(res.data.id);
-        })
-        .catch((err) => UtilCatch(this, err));
+    run() {
+      this.selectShow = true
     },
-    goVersion (id) {
+    goVersion(id) {
       this.$router.push("/pipeline/build/" + id);
     },
-    goEdit (id) {
+    goEdit(id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    copy () {
+    copy() {
       this.$confirm("确定复制流水线?", null, () => {
         CopyPipeline(this.pipelineId)
-          .then((res) => {
-            this.$router.push("/pipeline/info/" + res.data.id);
-          })
-          .catch((err) => UtilCatch(this, err));
+            .then((res) => {
+              this.$router.push("/pipeline/info/" + res.data.id);
+            })
+            .catch((err) => UtilCatch(this, err));
       })
     },
-    deletedPipe () {
+    deletedPipe() {
       this.$confirm("确定删除流水线?", null, () => {
         DeletedPipeline(this.pipelineId)
-          .then((res) => {
-            this.$router.back(-1)
-          })
-          .catch((err) => UtilCatch(this, err));
+            .then((res) => {
+              this.$router.back(-1)
+            })
+            .catch((err) => UtilCatch(this, err));
       })
 
     }

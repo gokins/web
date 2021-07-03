@@ -33,8 +33,9 @@
 import {OrgPipelineList, PipelineList, UtilCatch,} from "@/assets/js/apis";
 import PipelistView from "@/components/list/pipelist";
 import SelectBranches from "@/components/modals/selectBranches";
+
 export default {
-  components: {PipelistView,SelectBranches},
+  components: {PipelistView, SelectBranches},
   data() {
     return {
       fields: [
@@ -61,8 +62,8 @@ export default {
       page: 0,
       pages: 0,
       orgId: "",
-      pipelineId :"",
-      selectShow:false
+      pipelineId: "",
+      selectShow: false
     };
   },
   mounted() {
@@ -111,3 +112,10 @@ export default {
   },
 };
 </script>
+<style lang="sass" scoped>
+.pipeBtn
+  margin: 5px 0 0 5px
+  line-height: 20px
+  height: 20px
+  padding-top: 0
+</style>

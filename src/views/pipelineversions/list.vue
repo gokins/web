@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid"/>
+        <CIcon name="cil-grid" />
         构建历史
         <div class="card-header-actions">
           <!-- <CButton size="sm" color="info" variant="outline" @click="goNew"
@@ -11,19 +11,19 @@
         </div>
       </CCardHeader>
       <CCardBody>
-        <VersionlistView :items="items" :loading="loading" :hidepipe="true" />
+        <VersionlistView :items="items" :loading="loading" />
         <CPagination :activePage="page" :pages="pages" @update:activePage="getList"
-                     style="float: right;margin-top:20px" />
+          style="float: right;margin-top:20px" />
       </CCardBody>
     </CCard>
   </div>
 </template>
 <script>
-import {PipelineVersions, UtilCatch} from "@/assets/js/apis";
+import { PipelineVersions, UtilCatch } from "@/assets/js/apis";
 import VersionlistView from "@/components/list/versionlist";
 export default {
-  components:{VersionlistView},
-  data() {
+  components: { VersionlistView },
+  data () {
     return {
       fields: [
         {
@@ -47,18 +47,18 @@ export default {
       pipelineId: "",
     };
   },
-  mounted() {
+  mounted () {
     if (
-        this.$route.params != null &&
-        this.$route.params.pipelineId != null &&
-        this.$route.params.pipelineId != ""
+      this.$route.params != null &&
+      this.$route.params.pipelineId != null &&
+      this.$route.params.pipelineId != ""
     ) {
       this.pipelineId = this.$route.params.pipelineId;
     }
     this.getList(0);
   },
   methods: {
-    getList(pg) {
+    getList (pg) {
       PipelineVersions({
         page: pg,
         orgId: this.orgId,
@@ -72,17 +72,17 @@ export default {
         }
       }).catch((err) => UtilCatch(this, err));
     },
-    run(id) {
-      RunPipeline({pipelineId: id, orgId: this.orgId, repoId: "1"})
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => UtilCatch(this, err));
+    run (id) {
+      RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    goEdit(id) {
+    goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    goNew() {
+    goNew () {
       this.$router.push("/pipeline/new/" + this.orgId);
     },
   },

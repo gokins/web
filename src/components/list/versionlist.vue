@@ -11,8 +11,8 @@
             <i class="iconfont icon-jiazaizhong color-runing" style="font-size:18px" v-else />
           </div>
           <div class="tits">
+            <span v-if="!hidepipe&&item.pipelineName&&item.pipelineName!=''">{{item.pipelineName}} :</span>
             #{{ item.number }}
-            <span v-if="!hidepipe&&item.pipelineName&&item.pipelineName!=''">{{item.pipelineName}}</span>
           </div>
           <div class="tips" v-if="item.build&&item.build.id!=''">
             <i class="iconfont icon-zonghaoshishichang" style="font-size:14px" />
@@ -81,9 +81,9 @@ export default {
         font-weight: bold
         line-height: 35px
         span
-          font-size: 14px
-          color: #888
-          margin-left: 10px
+          font-size: 16px
+          color: #5674c7
+          margin-right: 5px
       .tips
         color: #aaa
         font-size: 10px

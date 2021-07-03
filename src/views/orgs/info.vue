@@ -21,7 +21,7 @@
             </template>
             <CCard>
               <CCardBody>
-                <PipelistView :items="pipeitems" #default="{item}">
+                <PipelistView :items="pipeitems" :loading="loading" #default="{item}">
                   <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn">
                     运行
                   </CButton>
@@ -29,10 +29,10 @@
                     移除
                   </CButton>
                 </PipelistView>
+                <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
+                  style="float: right;margin-top:20px" />
               </CCardBody>
             </CCard>
-            <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
-              style="float: right;margin-top:20px" />
           </CTab>
           <CTab>
             <template slot="title">
@@ -204,6 +204,7 @@ export default {
       user: {},
       adms: [],
       usrs: [],
+      loading: true,
       pipepage: 0,
       pipepages: 0,
       pipeitems: [],
@@ -234,6 +235,7 @@ export default {
   },
   methods: {
     getInfo (id) {
+      this.loading = true;
       OrgInfo(id)
         .then((res) => {
           this.info = res.data.org;
@@ -268,8 +270,10 @@ export default {
       this.$router.push("/pipeline/build/" + id);
     },
     getPipeList (pg) {
+      this.loading = true;
       OrgPipelineList({ page: pg, orgId: this.info.id })
         .then((res) => {
+          this.loading = false;
           this.pipepage = res.data.page;
           this.pipepages = res.data.pages;
           this.pipeitems = res.data.data;

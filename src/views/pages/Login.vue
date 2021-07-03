@@ -76,6 +76,9 @@ export default {
           case 512:
             this.$msgErr("登录失败:安装错误");
             break;
+          case 513:
+            this.$msgErr("登录失败:用户未激活");
+            break;
           case 500:
             this.$msgErr(
               err.response ? err.response.data || "服务器错误" : "网络错误"

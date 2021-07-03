@@ -31,6 +31,7 @@ export const UtilCatch = (that, err, fn) => {
 
 //User
 export const UserPage = pars => Post('/user/page', pars);
+export const UserNew = pars => Post('/user/new', pars);
 
 
 //Org

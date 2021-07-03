@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="tlist">
-      <li v-for="item in items" :key="'org:'+item.id" @click="$router.push('/org/info/' + item.aid)">
+      <li v-for="item in items" :key="'org:'+item.id" @click="$router.push(`/org/info/${item.aid}`)">
         <div class="tit">
           <div class="tits">{{ item.name }}</div>
           <div class="tips" v-show="item.public=='1'" v-c-tooltip.hover.click="'所有人可查看相关流水线'">

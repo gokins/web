@@ -336,6 +336,25 @@ function configRoutes() {
                     ]
                 },
                 {
+                    path: '/user',
+                    redirect: '/user/list',
+                    name: 'User',
+                    component: {
+                        render(c) { return c('router-view') }
+                    },
+                    children: [{
+                        path: 'list',
+                        name: 'List',
+                        component: () =>
+                            import ('@/views/user/list')
+                    }, {
+                        path: 'info/:id',
+                        name: 'Info',
+                        component: () =>
+                            import ('@/views/user/info')
+                    }, ]
+                },
+                {
                     path: '/org',
                     redirect: '/org/list',
                     name: 'Org',

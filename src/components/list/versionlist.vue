@@ -1,26 +1,33 @@
 <template>
   <div>
     <ul class="tlist">
-      <li v-for="item in items" :key="'org:'+item.id" @click="$router.push('/org/info/' + item.aid)">
+      <li v-for="item in items" :key="'version:'+item.id" @click="$router.push('/pipeline/build/' + item.id)">
         <div class="tit">
-          <div class="tits">{{ item.name }}</div>
+          <div class="icons rotateDiv" v-if="item.build&&item.build.id!=''">
+            <i class="iconfont icon-success color-success" style="font-size:20px" v-if="item.build.status=='ok'" />
+            <i class="iconfont icon-chacha color-error" style="font-size:20px" v-else-if="item.build.status=='error'" />
+            <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
+              v-else-if="item.build.status=='cancel'" />
+            <i class="iconfont icon-jiazaizhong color-runing" style="font-size:18px" v-else />
+          </div>
+          <div class="tits">
+            #{{ item.number }}
+            <span v-if="item.pipelineName&&item.pipelineName!=''">{{item.pipelineName}}</span>
+          </div>
           <div class="tips" v-show="item.public=='1'" v-c-tooltip.hover.click="'所有人可查看相关流水线'">
             公开
           </div>
-          <div style="flex:1"></div>
-          <div class="tipln" v-if="item.pipeln">
-            <i class="iconfont icon-liushuixian" v-c-tooltip.hover.click="'流水线数量'" />&nbsp;{{item.pipeln}}
-          </div>
-          <div class="tipln" v-if="item.userln">
-            <i class="iconfont icon-chengyuan" v-c-tooltip.hover.click="'成员数量'" />&nbsp;{{item.userln}}
-          </div>
+          <slot :item="item"></slot>
         </div>
         <div class="infos">
-          <div class="fg" v-if="item.desc&&item.desc!=''">{{item.desc}}</div>
           <div class="fg">{{$dateFmt(item.created)}}</div>
           <div style="flex:1"></div>
-          <myavatar :src="item.avat" :nick="item.nick" imgw="18px" class="avat" />
+          <div class="fg" v-if="item.build&&item.build.id!=''">
+            构建时间:&nbsp;{{$dateCha(item.build.started,item.build.finished)}}</div>
         </div>
+        <!-- <div class="tools">
+
+        </div> -->
       </li>
     </ul>
     <div class="loadingCont" v-if="loading">
@@ -63,11 +70,20 @@ export default {
       background: #eee
     .tit
       display: flex
+      .icons
+        width: 25px
+        margin-top: 5px
+        margin-right: 5px
+        line-height: 30px
       .tits
         color: #24292e
         font-size: 20px
         font-weight: bold
         line-height: 35px
+        span
+          font-size: 14px
+          color: #888
+          margin-left: 10px
       .tips
         color: #aaa
         font-size: 10px
@@ -91,4 +107,6 @@ export default {
         margin-right: 10px
       .avat
         line-height: 30px
+    .tools
+      display: flex
 </style>

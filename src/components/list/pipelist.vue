@@ -3,11 +3,11 @@
     <ul class="tlist">
       <li v-for="item in items" :key="'pipe:'+item.id" @click="$router.push('/pipeline/info/' + item.id)">
         <div class="tit">
-          <div class="icons rotateDiv" v-if="item.lastId&&item.lastId!=''">
-            <i class="iconfont icon-success color-success" style="font-size:20px" v-if="item.lastStatus=='ok'" />
-            <i class="iconfont icon-chacha color-error" style="font-size:20px" v-else-if="item.lastStatus=='error'" />
+          <div class="icons rotateDiv" v-if="item.build&&item.build.id!=''">
+            <i class="iconfont icon-success color-success" style="font-size:20px" v-if="item.build.status=='ok'" />
+            <i class="iconfont icon-chacha color-error" style="font-size:20px" v-else-if="item.build.status=='error'" />
             <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
-              v-else-if="item.lastStatus=='cancel'" />
+              v-else-if="item.build.status=='cancel'" />
             <i class="iconfont icon-jiazaizhong color-runing" style="font-size:18px" v-else />
           </div>
           <div class="tits">
@@ -19,14 +19,14 @@
           </div>
           <div style="flex:1"></div>
           <div class="tipln">
-            <i class="iconfont icon-liushuixian" v-c-tooltip.hover.click="'构建次数'" />
+            <i class="iconfont icon-build" v-c-tooltip.hover.click="'构建次数'" />
             &nbsp;{{item.buildln}}
           </div>
           <slot :item="item"></slot>
         </div>
         <div class="infos">
           <div class="fg">{{$dateFmt(item.created)}}</div>
-          <div class="fg" v-if="item.lastId&&item.lastId!=''">上一次构建:&nbsp;{{$dateFmt(item.lastCreated)}}</div>
+          <div class="fg" v-if="item.build&&item.build.id!=''">上一次构建:&nbsp;{{$dateFmt(item.build.created)}}</div>
           <div style="flex:1"></div>
           创建者:&nbsp;
           <myavatar :src="item.avat" :nick="item.nick" imgw="18px" class="avat" />
@@ -36,7 +36,13 @@
         </div> -->
       </li>
     </ul>
-    <div class="emptyCont" v-if="!items||items.length<=0"><i class="iconfont icon-jinzhide" />没有内容</div>
+    <div class="loadingCont" v-if="loading">
+      <div style="flex:1"></div>
+      <div class="rotateDiv"><i class="iconfont icon-Loadingalt2" /></div>
+      <div>加载中</div>
+      <div style="flex:1"></div>
+    </div>
+    <div class="emptyCont" v-else-if="!items||items.length<=0"><i class="iconfont icon-jinzhide" />没有内容</div>
   </div>
 </template>
 <script>
@@ -44,7 +50,8 @@ import myavatar from "@/components/avatar";
 export default {
   components: { myavatar },
   props: {
-    items: Array
+    items: Array,
+    loading: Boolean,
   },
   /* watch: {
     param (nv) {

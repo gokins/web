@@ -22,7 +22,7 @@
             </template>
             <CCard>
               <CCardBody>
-                <PipelistView :items="pipeitems" #default="{item}">
+                <PipelistView :items="pipeitems" :loading="loading" #default="{item}">
                   <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn">
                     运行
                   </CButton>
@@ -30,10 +30,10 @@
                     移除
                   </CButton>
                 </PipelistView>
+                <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
+                  style="float: right;margin-top:20px" />
               </CCardBody>
             </CCard>
-            <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
-                         style="float: right;margin-top:20px"/>
           </CTab>
           <CTab>
             <template slot="title">
@@ -68,14 +68,13 @@
                   <div class="item" v-for="it in this.adms" :key="'adm:' + it.id">
                     <div class="tools">
                       <div class="c-avatar">
-                        <img src="img/avatars/def.png" class="c-avatar-img"/>
+                        <img src="img/avatars/def.png" class="c-avatar-img" />
                       </div>
                     </div>
                     <div class="tools">{{ it.nick }}</div>
                     <div class="tools">
                       <CButton color="danger" size="sm" @click="rmUserFun(it.id)">
-                        <CIcon :content="$options.coreics['cilXCircle']"/>
-                        移除
+                        <CIcon :content="$options.coreics['cilXCircle']" />移除
                       </CButton>
                     </div>
                   </div>
@@ -96,26 +95,24 @@
                   <div class="item" v-for="it in this.usrs" :key="'adm:' + it.id">
                     <div class="tools">
                       <div class="c-avatar">
-                        <img src="img/avatars/def.png" class="c-avatar-img"/>
+                        <img src="img/avatars/def.png" class="c-avatar-img" />
                       </div>
                     </div>
                     <div class="tools">{{ it.nick }}</div>
                     <div class="tools">
                       <CBadge color="info">{{
-                          it.permRw == 1 ? "可编辑" : "不可编辑"
-                        }}
-                      </CBadge>
+                        it.permRw == 1 ? "可编辑" : "不可编辑"
+                      }}</CBadge>
                       <CBadge color="info">{{
-                          it.permExec == 1 ? "可执行" : "不可执行"
-                        }}
-                      </CBadge>
+                        it.permExec == 1 ? "可执行" : "不可执行"
+                      }}</CBadge>
                     </div>
                     <div class="tools">
                       <CButton color="warning" size="sm" @click="upPermFun(it)">
-                        <CIcon :content="$options.coreics['cilPenAlt']"/>
+                        <CIcon :content="$options.coreics['cilPenAlt']" />
                       </CButton>
                       <CButton color="danger" size="sm" @click="rmUserFun(it.id)">
-                        <CIcon :content="$options.coreics['cilXCircle']"/>
+                        <CIcon :content="$options.coreics['cilXCircle']" />
                       </CButton>
                     </div>
                   </div>
@@ -125,8 +122,7 @@
           </CTab>
           <CTab>
             <template slot="title">
-              <CIcon name="cil-chart-pie"/>
-              设置
+              <CIcon name="cil-chart-pie" /> 设置
             </template>
             <CCard style="width:80%">
               <CCardHeader>
@@ -136,17 +132,17 @@
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <CInput label="名称" v-model="formData.name" placeholder="请输入组织名称" Max="10"/>
+                    <CInput label="名称" v-model="formData.name" placeholder="请输入组织名称" Max="10" />
                   </CCol>
                 </CRow>
                 <CRow>
                   <CCol sm="12">
-                    <CTextarea label="描述" v-model="formData.desc" placeholder="请输入组织描述" rows="10"/>
+                    <CTextarea label="描述" v-model="formData.desc" placeholder="请输入组织描述" rows="10" />
                   </CCol>
                 </CRow>
                 <CRow>
                   <CCol sm="6">
-                    <CInputCheckbox label="公开" :checked.sync="formData.public"/>
+                    <CInputCheckbox label="公开" :checked.sync="formData.public" />
                   </CCol>
                 </CRow>
                 <CRow class="subRow">
@@ -212,6 +208,7 @@ export default {
       user: {},
       adms: [],
       usrs: [],
+      loading: true,
       pipepage: 0,
       pipepages: 0,
       pipeitems: [],
@@ -242,87 +239,88 @@ export default {
     this.getInfo(this.$route.params.id);
   },
   methods: {
-    getInfo(id) {
+    getInfo (id) {
+      this.loading = true;
       OrgInfo(id)
-          .then((res) => {
-            this.info = res.data.org;
-            this.user = res.data.user;
-            this.formData.id = this.info.id;
-            this.formData.name = this.info.name;
-            this.formData.desc = this.info.desc;
-            this.formData.public = this.info.public == 1;
-            this.getUserList();
-            this.getPipeList();
-          })
-          .catch((err) =>
-              UtilCatch(this, err)
-          );
+        .then((res) => {
+          this.info = res.data.org;
+          this.user = res.data.user;
+          this.formData.id = this.info.id;
+          this.formData.name = this.info.name;
+          this.formData.desc = this.info.desc;
+          this.formData.public = this.info.public == 1;
+          this.getUserList();
+          this.getPipeList();
+        })
+        .catch((err) =>
+          UtilCatch(this, err)
+        );
     },
     run(id) {
       this.pipelineId = id
       this.selectShow = true
     },
-    getUserList() {
+    getUserList () {
       OrgUsers(this.info.id)
-          .then((res) => {
-            this.adms = res.data.adms || [];
-            this.usrs = res.data.usrs || [];
-          })
-          .catch((err) => UtilCatch(this, err));
+        .then((res) => {
+          this.adms = res.data.adms || [];
+          this.usrs = res.data.usrs || [];
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    goVersion(id) {
+    goVersion (id) {
       this.$router.push("/pipeline/build/" + id);
     },
-    getPipeList(pg) {
-      OrgPipelineList({page: pg, orgId: this.info.id})
-          .then((res) => {
-            this.pipepage = res.data.page;
-            this.pipepages = res.data.pages;
-            this.pipeitems = res.data.data;
-          })
-          .catch((err) => UtilCatch(this, err));
+    getPipeList (pg) {
+      OrgPipelineList({ page: pg, orgId: this.info.id })
+        .then((res) => {
+          this.pipepage = res.data.page;
+          this.pipepages = res.data.pages;
+          this.pipeitems = res.data.data;
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    goEdit(id) {
+    goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    subFun() {
+    subFun () {
       if (this.formData.name == "") {
         console.log("name");
         this.$msgErr("请输入名称");
         return;
       }
       OrgSave(this.formData)
-          .then(() => {
-            this.$msgOk("保存成功");
-            // this.$router.push('info/'+res.data.id)
-          })
-          .catch((err) => UtilCatch(this, err));
+        .then(() => {
+          this.$msgOk("保存成功");
+          // this.$router.push('info/'+res.data.id)
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    addPipFun(pipeid, fn) {
+    addPipFun (pipeid, fn) {
       OrgPipeAdd(this.info.id, pipeid)
-          .then(() => {
-            fn(true);
-            this.getPipeList();
-            this.$msgOk("添加成功");
+        .then(() => {
+          fn(true);
+          this.getPipeList();
+          this.$msgOk("添加成功");
+        })
+        .catch((err) =>
+          UtilCatch(this, err, (err) => {
+            fn(false);
+            const stat = err.response ? err.response.status : 0;
+            if (stat == 405) {
+              this.$msgErr("此操作只有创建者拥有权限");
+            } else if (stat == 511) {
+              fn(true);
+              this.$msgErr("流水线已存在");
+            } else {
+              this.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+              );
+            }
           })
-          .catch((err) =>
-              UtilCatch(this, err, (err) => {
-                fn(false);
-                const stat = err.response ? err.response.status : 0;
-                if (stat == 405) {
-                  this.$msgErr("此操作只有创建者拥有权限");
-                } else if (stat == 511) {
-                  fn(true);
-                  this.$msgErr("流水线已存在");
-                } else {
-                  this.$msgErr(
-                      err.response ? err.response.data || "服务器错误" : "网络错误"
-                  );
-                }
-              })
-          );
+        );
     },
-    rmPipeFun(pipeid) {
+    rmPipeFun (pipeid) {
       this.$confirm('确定从组织移除此流水线吗?<p style="color:#aaa">流水线不会被删除</p>', null, () => {
         OrgPipeRm(this.info.id, pipeid).then(() => {
           this.getPipeList();
@@ -330,14 +328,14 @@ export default {
         }).catch((err) => UtilCatch(this, err));
       })
     },
-    addAdmFun(uid, fn) {
+    addAdmFun (uid, fn) {
       console.log("addAdmFun", uid);
-      OrgUserEdit({add: true, id: this.info.id, uid: uid, adm: true})
-          .then(() => {
-            fn(true);
-            this.getUserList();
-            this.$msgOk("添加成功");
-          }).catch((err) =>
+      OrgUserEdit({ add: true, id: this.info.id, uid: uid, adm: true })
+        .then(() => {
+          fn(true);
+          this.getUserList();
+          this.$msgOk("添加成功");
+        }).catch((err) =>
           UtilCatch(this, err, (err) => {
             fn(false);
             const stat = err.response ? err.response.status : 0;
@@ -345,20 +343,20 @@ export default {
               this.$msgErr("此操作只有创建者拥有权限");
             } else {
               this.$msgErr(
-                  err.response ? err.response.data || "服务器错误" : "网络错误"
+                err.response ? err.response.data || "服务器错误" : "网络错误"
               );
             }
           })
-      );
+        );
     },
-    addUsrFun(uid, fn) {
+    addUsrFun (uid, fn) {
       console.log("addUserFun", uid);
-      OrgUserEdit({add: true, id: this.info.id, uid: uid, adm: false})
-          .then(() => {
-            fn(true);
-            this.getUserList();
-            this.$msgOk("添加成功,请稍后给予权限");
-          }).catch((err) =>
+      OrgUserEdit({ add: true, id: this.info.id, uid: uid, adm: false })
+        .then(() => {
+          fn(true);
+          this.getUserList();
+          this.$msgOk("添加成功,请稍后给予权限");
+        }).catch((err) =>
           UtilCatch(this, err, (err) => {
             fn(false);
             const stat = err.response ? err.response.status : 0;
@@ -366,32 +364,32 @@ export default {
               this.$msgErr("无权限");
             } else {
               this.$msgErr(
-                  err.response ? err.response.data || "服务器错误" : "网络错误"
+                err.response ? err.response.data || "服务器错误" : "网络错误"
               );
             }
           })
-      );
+        );
     },
-    rmUserFun(uid) {
+    rmUserFun (uid) {
       this.$confirm("确定从组织移除此成员吗?", null, () => {
         OrgUserRm(this.info.id, uid)
-            .then(() => {
-              this.getUserList();
-            }).catch((err) =>
+          .then(() => {
+            this.getUserList();
+          }).catch((err) =>
             UtilCatch(this, err, (err) => {
               const stat = err.response ? err.response.status : 0;
               if (stat == 405) {
                 this.$msgErr("无权限");
               } else {
                 this.$msgErr(
-                    err.response ? err.response.data || "服务器错误" : "网络错误"
+                  err.response ? err.response.data || "服务器错误" : "网络错误"
                 );
               }
             })
-        );
+          );
       })
     },
-    upPermFun(it) {
+    upPermFun (it) {
       this.curPerm = {
         id: it.id,
         rw: it.permRw == 1,
@@ -399,7 +397,7 @@ export default {
       };
       this.selPerm = true;
     },
-    upUsrPermFun(data) {
+    upUsrPermFun (data) {
       console.log("upUsrPermFun", data);
       OrgUserEdit({
         id: this.info.id,
@@ -412,8 +410,8 @@ export default {
         this.getUserList();
         this.$msgOk("修改成功");
       })
-          .catch((err) => UtilCatch(this, err));
-    }, rmOrgFun() {
+        .catch((err) => UtilCatch(this, err));
+    }, rmOrgFun () {
       this.$confirm("确定删除组织吗?", null, () => {
         OrgRm(this.info.id).then(() => {
           this.$router.push('/org/');
@@ -426,16 +424,12 @@ export default {
 <style lang="sass" scoped>
 .subRow
   margin-top: 10px
-
 .org-users
   display: flex
-
   .item
     width: 100px
-
   .tools
     text-align: center
-
 .pipeBtn
   margin: 5px 0 0 5px
   line-height: 20px

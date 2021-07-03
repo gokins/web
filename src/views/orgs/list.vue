@@ -10,7 +10,7 @@
         </div>
       </CCardHeader>
       <CCardBody>
-        <OrglistView :items="items" />
+        <OrglistView :items="items" :loading="loading" />
         <CPagination :activePage="page" :pages="pages" @update:activePage="getList"
           style="float: right;margin-top:20px" />
       </CCardBody>
@@ -27,6 +27,7 @@ export default {
       items: [],
       page: 0,
       pages: 0,
+      loading: true,
     };
   },
   mounted () {
@@ -34,13 +35,13 @@ export default {
   },
   methods: {
     getList (pg) {
-      OrgList({ page: pg })
-        .then((res) => {
-          this.page = res.data.page;
-          this.pages = res.data.pages;
-          this.items = res.data.data;
-        })
-        .catch((err) => UtilCatch(this, err));
+      this.loading = true;
+      OrgList({ page: pg }).then((res) => {
+        this.loading = false;
+        this.page = res.data.page;
+        this.pages = res.data.pages;
+        this.items = res.data.data;
+      }).catch((err) => UtilCatch(this, err));
     },
     goOrgPipelines (orgId) {
       this.$router.push("/org/info/" + orgId);

@@ -4,24 +4,10 @@
       <CCardHeader>
         <strong>流水线:{{ pipelineName }} </strong>
         <div class="card-header-actions">
-          <CButton
-              color="dark"
-              variant="outline"
-              square
-              size="sm"
-              @click="copy()"
-              style="margin-left:5px"
-          >
+          <CButton color="dark" variant="outline" square size="sm" @click="copy()" style="margin-left:5px">
             复制
           </CButton>
-          <CButton
-              color="info"
-              variant="outline"
-              square
-              size="sm"
-              @click="run()"
-              style="margin-left:5px"
-          >
+          <CButton color="info" variant="outline" square size="sm" @click="run()" style="margin-left:5px">
             运行
           </CButton>
         </div>
@@ -30,37 +16,20 @@
         <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
           <CTab active>
             <template slot="title">
-              <CIcon name="cil-calculator"/>
+              <CIcon name="cil-calculator" />
               构建历史
             </template>
-            <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true"
-                        :fields="versionfields" :items="versionitems">
-              <template #number="{ item }">
-                <td>
-                  <CLink :to="'../build/'+item.id"># {{ item.number }}</CLink>
-                </td>
-              </template>
-              <template #pipelineName="{ item }">
-                <td>
-                  <CLink :to="'../build/'+item.id">{{ item.pipelineName }}</CLink>
-                </td>
-              </template>
-              <template #edit="{ item }">
-                <td class="py-2">
-                  <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
-                    编辑
-                  </CButton>
-                </td>
-              </template>
-            </CDataTable>
+            <VersionlistView :items="versionitems" :loading="loading" />
+            <CPagination :activePage="versionpage" :pages="versionpages" @update:activePage="getVersionList"
+              style="float: right;margin-top:20px" />
           </CTab>
           <CTab>
             <template slot="title">
-              <CIcon name="cil-chart-pie"/>
+              <CIcon name="cil-chart-pie" />
               设置
             </template>
             <CCard>
-              <PipeNew :pipeId.sync="this.$route.params.id" :editf="true"/>
+              <PipeNew :pipeId.sync="this.$route.params.id" :editf="true" />
             </CCard>
             <CCard>
               <CCardHeader style="background-color: #ffe8e6">
@@ -90,26 +59,17 @@ import {CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, UtilCatch
 import {freeSet} from "@coreui/icons";
 import PipeNew from "./new";
 import SelectBranches from "@/components/modals/selectBranches";
+import VersionlistView from "@/components/list/versionlist";
 
 export default {
   coreics: freeSet,
-  components: {PipeNew,SelectBranches},
-  data() {
+  components: { PipeNew, VersionlistView },
+  data () {
     return {
-      versionfields: [
-        {
-          key: "number",
-          label: "number",
-        },
-        {
-          key: "pipelineName",
-          label: "流水线名称",
-        },
-        {
-          key: "pipelineDisplayName",
-          label: "流水线描述",
-        },
-      ],
+      loading: true,
+      versionpage: 0,
+      versionpages: 0,
+      versionitems: [],
       pipelineName: "",
       versionitems: [],
       formData: {
@@ -121,35 +81,35 @@ export default {
       selectShow: false,
     };
   },
-  mounted() {
+  mounted () {
     console.log("$options.coreics", this.$options.coreics["cliXcircle"]);
     if (
-        this.$route.params == null ||
-        this.$route.params.id == null ||
-        this.$route.params.id == ""
+      this.$route.params == null ||
+      this.$route.params.id == null ||
+      this.$route.params.id == ""
     ) {
       this.$router.push("/404");
       return;
     }
     this.pipelineId = this.$route.params.id
-    this.getPipeList();
+    this.getVersionList();
     this.pipeInfo()
   },
   methods: {
-    getPipeList() {
+    getVersionList (pg) {
+      this.loading = true;
       PipelineVersions({
-        page: 0,
+        page: pg,
         pipelineId: this.pipelineId,
-      })
-          .then((res) => {
-            this.page = res.data.page;
-            this.pages = res.data.pages;
-            this.versionitems = res.data.data;
-          })
-          .catch((err) => UtilCatch(this, err));
+      }).then((res) => {
+        this.loading = false;
+        this.versionpage = res.data.page;
+        this.versionpages = res.data.pages;
+        this.versionitems = res.data.data;
+      }).catch((err) => UtilCatch(this, err));
     },
-    pipeInfo() {
-      PipelineInfo({id: this.pipelineId}).then((res) => {
+    pipeInfo () {
+      PipelineInfo({ id: this.pipelineId }).then((res) => {
         this.pipelineName = res.data.name
       }).catch((err) => UtilCatch(this, err));
     },

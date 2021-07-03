@@ -422,6 +422,7 @@ export default {
       }
       if (this.editf) {
         this.savePipelineVars()
+        this.pipelineVars()
         return
       }
       this.addLocalVar()
@@ -469,6 +470,7 @@ export default {
     pipelineVars() {
       PipelineVars({pipelineId: this.pipeId, page: this.varPage})
           .then((res) => {
+            this.varItems = []
             let ls = []
             for (const resKey in res.data.data) {
               let v = res.data.data[resKey]

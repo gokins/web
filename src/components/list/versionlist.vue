@@ -12,19 +12,19 @@
           </div>
           <div class="tits">
             #{{ item.number }}
-            <span v-if="item.pipelineName&&item.pipelineName!=''">{{item.pipelineName}}</span>
+            <span v-if="!hidepipe&&item.pipelineName&&item.pipelineName!=''">{{item.pipelineName}}</span>
+          </div>
+          <div class="tips" v-if="item.build&&item.build.id!=''">
+            <i class="iconfont icon-zonghaoshishichang" style="font-size:14px" />
+            {{$dateCha(item.build.started,item.build.finished)}}
           </div>
           <div class="tips">
             <i class="iconfont icon-branches" style="font-size:14px" />
             {{item.sha||'默认分支'}}
           </div>
-          <slot :item="item"></slot>
-        </div>
-        <div class="infos">
-          <div class="fg">{{$dateFmt(item.created)}}</div>
           <div style="flex:1"></div>
-          <div class="fg" v-if="item.build&&item.build.id!=''">
-            构建时间:&nbsp;{{$dateCha(item.build.started,item.build.finished)}}</div>
+          <div class="fg">{{$dateFmt(item.created)}}</div>
+          <slot :item="item"></slot>
         </div>
         <!-- <div class="tools">
 
@@ -45,6 +45,7 @@ export default {
   props: {
     items: Array,
     loading: Boolean,
+    hidepipe: Boolean,
   },
   /* watch: {
     param (nv) {
@@ -96,16 +97,10 @@ export default {
         font-size: 10px
         margin: 5px 0 0 10px
         line-height: 20px
-
-    .infos
-      display: flex
-      color: #aaa
-      font-size: 12px
-      line-height: 30px
       .fg
         margin-right: 10px
-      .avat
-        line-height: 30px
+        color: #aaa
+
     .tools
       display: flex
 </style>

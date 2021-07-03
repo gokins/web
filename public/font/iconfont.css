@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2638356 */
-  src: url('iconfont.woff2?t=1625295731401') format('woff2'),
-       url('iconfont.woff?t=1625295731401') format('woff'),
-       url('iconfont.ttf?t=1625295731401') format('truetype');
+  src: url('iconfont.woff2?t=1625314788920') format('woff2'),
+       url('iconfont.woff?t=1625314788920') format('woff'),
+       url('iconfont.ttf?t=1625314788920') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-zonghaoshishichang:before {
+  content: "\e61b";
 }
 
 .icon-Loadingalt2:before {

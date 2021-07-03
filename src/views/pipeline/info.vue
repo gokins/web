@@ -19,7 +19,7 @@
               <CIcon name="cil-calculator" />
               构建历史
             </template>
-            <VersionlistView :items="versionitems" :loading="loading" />
+            <VersionlistView :items="versionitems" :loading="loading" :hidepipe="true" />
             <CPagination :activePage="versionpage" :pages="versionpages" @update:activePage="getVersionList"
               style="float: right;margin-top:20px" />
           </CTab>
@@ -51,19 +51,19 @@
         </CTabs>
       </CCardBody>
     </CCard>
-    <SelectBranches :shown.sync="selectShow" :id="this.$route.params.id"/>
+    <SelectBranches :shown.sync="selectShow" :id="this.$route.params.id" />
   </div>
 </template>
 <script>
-import {CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, UtilCatch,} from "@/assets/js/apis";
-import {freeSet} from "@coreui/icons";
+import { CopyPipeline, DeletedPipeline, PipelineInfo, PipelineVersions, UtilCatch, } from "@/assets/js/apis";
+import { freeSet } from "@coreui/icons";
 import PipeNew from "./new";
 import SelectBranches from "@/components/modals/selectBranches";
 import VersionlistView from "@/components/list/versionlist";
 
 export default {
   coreics: freeSet,
-  components: { PipeNew, VersionlistView,SelectBranches },
+  components: { PipeNew, VersionlistView, SelectBranches },
   data () {
     return {
       loading: true,
@@ -112,31 +112,31 @@ export default {
         this.pipelineName = res.data.name
       }).catch((err) => UtilCatch(this, err));
     },
-    run() {
+    run () {
       this.selectShow = true
     },
-    goVersion(id) {
+    goVersion (id) {
       this.$router.push("/pipeline/build/" + id);
     },
-    goEdit(id) {
+    goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    copy() {
+    copy () {
       this.$confirm("确定复制流水线?", null, () => {
         CopyPipeline(this.pipelineId)
-            .then((res) => {
-              this.$router.push("/pipeline/info/" + res.data.id);
-            })
-            .catch((err) => UtilCatch(this, err));
+          .then((res) => {
+            this.$router.push("/pipeline/info/" + res.data.id);
+          })
+          .catch((err) => UtilCatch(this, err));
       })
     },
-    deletedPipe() {
+    deletedPipe () {
       this.$confirm("确定删除流水线?", null, () => {
         DeletedPipeline(this.pipelineId)
-            .then((res) => {
-              this.$router.back(-1)
-            })
-            .catch((err) => UtilCatch(this, err));
+          .then((res) => {
+            this.$router.back(-1)
+          })
+          .catch((err) => UtilCatch(this, err));
       })
 
     }

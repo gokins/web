@@ -19,23 +19,20 @@
             <template slot="title">
               <CIcon name="cil-calculator" /> 流水线
             </template>
-            <CDataTable :hover="true" :striped="true" :border="false" :small="true" :fixed="true" :fields="pipefields"
-              :items="pipeitems">
-              <template #edit="{ item }">
-                <td class="py-2">
-                  <CButton color="primary" variant="outline" square size="sm" @click="goEdit(item.id)">
-                    查看
-                  </CButton>
-                  <CButton color="primary" variant="outline" square size="sm" @click="run(item.id)"
-                    style="margin-left: 5px">
+            <CCard>
+              <CCardBody>
+                <PipelistView :items="pipeitems" #default="{item}">
+                  <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn">
                     运行
                   </CButton>
-                  <CButton color="danger" size="sm" @click="rmPipeFun(item.id)" style="margin-left: 5px">
-                    <CIcon :content="$options.coreics['cilXCircle']" size="sm" />移除
+                  <CButton color="danger" size="sm" @click.stop="rmPipeFun(item.id)" class="pipeBtn">
+                    移除
                   </CButton>
-                </td>
-              </template>
-            </CDataTable>
+                </PipelistView>
+              </CCardBody>
+            </CCard>
+            <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
+              style="float: right;margin-top:20px" />
           </CTab>
           <CTab>
             <template slot="title">
@@ -194,34 +191,21 @@ import {
   RunPipeline,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
+import PipelistView from "@/components/list/pipelist";
 import SelectPipe from "@/components/modals/selectPipe";
 import SelectUser from "@/components/modals/selectUser";
 import OrgUserPerm from "@/components/modals/orgUserPerm";
 export default {
   coreics: freeSet,
-  components: { SelectPipe, SelectUser, OrgUserPerm },
+  components: { PipelistView, SelectPipe, SelectUser, OrgUserPerm },
   data () {
     return {
       info: {},
       user: {},
       adms: [],
       usrs: [],
-      pipefields: [
-        {
-          key: "name",
-          label: "名称",
-        },
-        {
-          key: "displayName",
-          label: "描述",
-        },
-        {
-          key: "edit",
-          label: "操作",
-          sorter: false,
-          filter: false,
-        },
-      ],
+      pipepage: 0,
+      pipepages: 0,
       pipeitems: [],
       formData: {
         id: "",
@@ -283,11 +267,11 @@ export default {
     goVersion (id) {
       this.$router.push("/pipeline/build/" + id);
     },
-    getPipeList () {
-      OrgPipelineList({ page: 0, orgId: this.info.id })
+    getPipeList (pg) {
+      OrgPipelineList({ page: pg, orgId: this.info.id })
         .then((res) => {
-          // this.page = res.data.page;
-          // this.pages = res.data.pages;
+          this.pipepage = res.data.page;
+          this.pipepages = res.data.pages;
           this.pipeitems = res.data.data;
         })
         .catch((err) => UtilCatch(this, err));
@@ -442,4 +426,9 @@ export default {
     width: 100px
   .tools
     text-align: center
+.pipeBtn
+  margin: 5px 0 0 5px
+  line-height: 20px
+  height: 20px
+  padding-top: 0
 </style>

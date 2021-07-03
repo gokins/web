@@ -10,65 +10,20 @@
         </div>
       </CCardHeader>
       <CCardBody>
-        <ul class="orgList">
-          <li v-for="item in items" :key="'org:'+item.id" @click="$router.push('info/' + item.aid)">
-            <div class="tit">
-              <div class="tits">{{ item.name }}</div>
-              <div class="tips" v-show="item.public=='1'" v-c-tooltip.hover.click="'所有人可查看相关流水线'">
-                公开
-              </div>
-              <div style="flex:1"></div>
-              <div class="tipln"><i class="iconfont icon-liushuixian"
-                  v-c-tooltip.hover.click="'流水线数量'" />&nbsp;{{item.pipeln}}</div>
-              <div class="tipln"><i class="iconfont icon-chengyuan"
-                  v-c-tooltip.hover.click="'成员数量'" />&nbsp;{{item.userln}}</div>
-            </div>
-            <div class="infos">
-              <div class="fg">{{item.desc}}</div>
-              <div class="fg">{{$dateFmt(item.created)}}</div>
-              <div style="flex:1"></div>
-              <myavatar :src="item.avat" :nick="item.nick" imgw="18px" class="avat" />
-            </div>
-          </li>
-        </ul>
-        <div class="emptyCont" v-if="!items||items.length<=0"><i class="iconfont icon-jinzhide" />没有内容</div>
-        <CPagination :activePage="page" :pages="pages" @update:activePage="getList" style="float: right" />
+        <OrglistView :items="items" />
+        <CPagination :activePage="page" :pages="pages" @update:activePage="getList"
+          style="float: right;margin-top:20px" />
       </CCardBody>
     </CCard>
   </div>
 </template>
 <script>
-import myavatar from "@/components/avatar";
+import OrglistView from "@/components/list/orglist";
 import { UtilCatch, OrgList } from "@/assets/js/apis";
 export default {
-  components: { myavatar },
+  components: { OrglistView },
   data () {
     return {
-      fields: [
-        {
-          key: "aid",
-          label: "编号",
-          _style: "width:80px;text-align:center",
-        },
-        {
-          key: "name",
-          label: "名称",
-        },
-        {
-          key: "desc",
-          label: "描述",
-        },
-        {
-          key: "created",
-          label: "创建时间",
-        },
-        {
-          key: "pipelines",
-          label: "操作",
-          sorter: false,
-          filter: false,
-        },
-      ],
       items: [],
       page: 0,
       pages: 0,
@@ -96,45 +51,3 @@ export default {
   },
 };
 </script>
-<style lang="sass" scoped>
-.orgList
-  margin-bottom: 20px
-  li
-    padding: 10px
-    border-bottom: 1px solid #eee
-    cursor: pointer
-    border-radius: 8px
-    // background: #fefefe
-    // margin-bottom: 8px
-    &:hover
-      background: #eee
-    .tit
-      display: flex
-      .tits
-        color: #24292e
-        font-size: 20px
-        font-weight: bold
-        line-height: 35px
-      .tips
-        color: #aaa
-        font-size: 10px
-        margin: 10px 0 0 10px
-        width: 30px
-        height: 20px
-        border: 1px solid #ddd
-        text-align: center
-      .tipln
-        color: #537898
-        font-size: 10px
-        margin-left: 10px
-
-    .infos
-      display: flex
-      color: #aaa
-      font-size: 12px
-      line-height: 30px
-      .fg
-        margin-right: 10px
-      .avat
-        line-height: 30px
-</style>

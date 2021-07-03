@@ -28,10 +28,10 @@
               <CIcon name="cil-chart-pie" />
               设置
             </template>
-            <CCard>
+            <CCard accent-color="primary">
               <PipeNew :pipeId.sync="this.$route.params.id" :editf="true" />
             </CCard>
-            <CCard>
+            <CCard accent-color="danger">
               <CCardHeader style="background-color: #ffe8e6">
                 <strong>危险操作区</strong>
               </CCardHeader>

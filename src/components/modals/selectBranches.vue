@@ -19,6 +19,7 @@
                    :clearOnSelect="false"
                    :preserveSearch="true"
                    @search-change="change"
+                   @open="open"
                    :showNoResults="false"
       ></Multiselect>
     </div>

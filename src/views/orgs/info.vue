@@ -8,7 +8,7 @@
             添加流水线
           </CButton>
           &nbsp;
-          <CButton size="sm" color="primary" variant="outline" @click="$router.push('/pipeline/new/' + info.aid)">
+          <CButton size="sm" color="primary" variant="outline" @click="$router.push(`/pipeline/new/${info.aid}`)">
             新建流水线
           </CButton>
         </div>

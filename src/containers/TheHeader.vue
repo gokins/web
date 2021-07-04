@@ -7,18 +7,18 @@
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none mr-auto">
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/dashboard">
-          Dashboard
+        <CHeaderNavLink to="/org">
+          组织
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/users" exact>
-          Users
+        <CHeaderNavLink to="/user" exact>
+          用户
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
         <CHeaderNavLink>
-          Settings
+          个人信息
         </CHeaderNavLink>
       </CHeaderNavItem>
     </CHeaderNav>

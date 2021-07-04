@@ -8,7 +8,7 @@
         {{uname}}
       </CHeaderNavLink>
     </template>
-    <CDropdownHeader tag="div" class="text-center" color="light">
+    <!-- <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Account</strong>
     </CDropdownHeader>
     <CDropdownItem>
@@ -26,14 +26,14 @@
     <CDropdownItem>
       <CIcon name="cil-comment-square" /> Comments
       <CBadge color="warning" class="mfs-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
+    </CDropdownItem> -->
     <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Settings</strong>
     </CDropdownHeader>
-    <CDropdownItem>
+    <CDropdownItem @click="$router.push(`/user/info/${user.id}`)">
       <CIcon name="cil-user" /> Profile
     </CDropdownItem>
-    <CDropdownItem>
+    <!-- <CDropdownItem>
       <CIcon name="cil-settings" /> Settings
     </CDropdownItem>
     <CDropdownItem>
@@ -47,7 +47,7 @@
     <CDropdownDivider />
     <CDropdownItem>
       <CIcon name="cil-shield-alt" /> Lock Account
-    </CDropdownItem>
+    </CDropdownItem> -->
     <CDropdownItem @click="logoutFun">
       <CIcon name="cil-lock-locked" /> Logout
     </CDropdownItem>
@@ -61,6 +61,7 @@ export default {
   data () {
     return {
       uname: '1',
+      user: {},
       itemsCount: 42,
     }
   }, destroyed () {
@@ -70,6 +71,7 @@ export default {
   }, methods: {
     uinfo (info) {
       console.log('header drop uinfo:', info.nick);
+      this.user = info;
       this.uname = info.nick;
       if (this.uname == '')
         this.uname = info.name;

@@ -57,7 +57,7 @@
               <CCardBody>
                 <CRow>
                   <CCol sm="12">
-                    <CInput label="名称" v-model="formData.nick" placeholder="请输入昵称" />
+                    <CInput label="昵称" v-model="formData.nick" placeholder="请输入昵称" />
                   </CCol>
                 </CRow>
                 <CRow>

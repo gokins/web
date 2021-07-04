@@ -377,12 +377,14 @@ export default {
             }
           }
         this.$forceUpdate()
-        if (this.builded) {
-          this.getInfo(this.pv.id);
-          this.getCmds();
-          this.getLogs().catch(err => console.log('getLogs err', err));
+        /* if (this.builded) {
+          setTimeout(() => {
+            this.getInfo(this.pv.id);
+            this.getCmds();
+            this.getLogs().catch(err => console.log('getLogs err', err));
+          }, 500);
           return;
-        }
+        } */
         setTimeout(reExecFn, 1000);
       }).catch(err => {
         const stat = err.response ? err.response.status : 0;

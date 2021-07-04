@@ -23,7 +23,7 @@ const mutations = {
     set(state, [variable, value]) {
         state[variable] = value
     },
-    setUserInfo(state, user, info) {
+    setUserInfo(state, { user, info }) {
         state.userStat = true;
         state.user = user;
         state.uinfo = info;

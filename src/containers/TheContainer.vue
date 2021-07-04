@@ -35,7 +35,7 @@ export default {
     getUInfo () {
       UInfo().then(res => {
         if (res.data.login == true) {
-          this.$store.commit('setUserInfo', res.data.user, res.data.info);
+          this.$store.commit('setUserInfo', res.data);
         } else {
           this.$router.push('/login');
         }

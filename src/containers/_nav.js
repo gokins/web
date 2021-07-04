@@ -17,12 +17,6 @@ export default [{
         },
         {
             _name: 'CSidebarNavItem',
-            name: '用户管理',
-            to: '/user/list',
-            icon: 'cil-user'
-        },
-        {
-            _name: 'CSidebarNavItem',
             name: '组织',
             to: '/org/list',
             icon: 'cil-group'
@@ -38,6 +32,12 @@ export default [{
             name: '构建历史',
             to: '/pipelineVersion/list',
             icon: 'cil-history'
+        },
+        {
+            _name: 'CSidebarNavItem',
+            name: '用户管理',
+            to: '/user/list',
+            icon: 'cil-user'
         },
     ]
 }]

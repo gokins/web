@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid" />
+        <CIcon name="cil-history" />
         构建历史
         <div class="card-header-actions">
           <!-- <CButton size="sm" color="info" variant="outline" @click="goNew"
@@ -71,13 +71,6 @@ export default {
           this.items = res.data.data;
         }
       }).catch((err) => UtilCatch(this, err));
-    },
-    run (id) {
-      RunPipeline({ pipelineId: id, orgId: this.orgId, repoId: "1" })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => UtilCatch(this, err));
     },
     goEdit (id) {
       this.$router.push("/pipeline/info/" + id);

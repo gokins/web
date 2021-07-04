@@ -2,13 +2,11 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid"/>
+        <CIcon name="cil-sitemap" />
         流水线
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="goNew"
-          >新建流水线
-          </CButton
-          >
+          <CButton size="sm" color="info" variant="outline" @click="goNew">新建流水线
+          </CButton>
         </div>
       </CCardHeader>
       <CCardBody>
@@ -17,26 +15,20 @@
             运行
           </CButton>
         </PipelistView>
-        <CPagination
-            :activePage.sync="page"
-            :pages="pages"
-            size="sm"
-            align="center"
-            @update:activePage="getList"
-        />
+        <CPagination :activePage.sync="page" :pages="pages" size="sm" align="center" @update:activePage="getList" />
       </CCardBody>
     </CCard>
-    <SelectBranches :shown.sync="selectShow" :id="pipelineId"/>
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
   </div>
 </template>
 <script>
-import {OrgPipelineList, PipelineList, UtilCatch,} from "@/assets/js/apis";
+import { OrgPipelineList, PipelineList, UtilCatch, } from "@/assets/js/apis";
 import PipelistView from "@/components/list/pipelist";
 import SelectBranches from "@/components/modals/selectBranches";
 
 export default {
-  components: {PipelistView, SelectBranches},
-  data() {
+  components: { PipelistView, SelectBranches },
+  data () {
     return {
       fields: [
         {
@@ -66,47 +58,47 @@ export default {
       selectShow: false
     };
   },
-  mounted() {
+  mounted () {
     if (
-        this.$route.params != null &&
-        this.$route.params.orgId != null &&
-        this.$route.params.orgId != ""
+      this.$route.params != null &&
+      this.$route.params.orgId != null &&
+      this.$route.params.orgId != ""
     ) {
       this.orgId = this.$route.params.orgId;
     }
     this.getList(0);
   },
   methods: {
-    getList(pg) {
+    getList (pg) {
       if (this.orgId != "") {
-        OrgPipelineList({page: pg, orgId: this.orgId})
-            .then((res) => {
-              this.page = res.data.page;
-              this.pages = res.data.pages;
-              this.items = res.data.data;
-            })
-            .catch((err) => UtilCatch(this, err));
-        return;
-      }
-      PipelineList({page: pg, orgId: this.orgId})
+        OrgPipelineList({ page: pg, orgId: this.orgId })
           .then((res) => {
             this.page = res.data.page;
             this.pages = res.data.pages;
             this.items = res.data.data;
           })
           .catch((err) => UtilCatch(this, err));
+        return;
+      }
+      PipelineList({ page: pg, orgId: this.orgId })
+        .then((res) => {
+          this.page = res.data.page;
+          this.pages = res.data.pages;
+          this.items = res.data.data;
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    run(id) {
+    run (id) {
       this.pipelineId = id
       this.selectShow = true
     },
-    goVersion(id) {
+    goVersion (id) {
       this.$router.push("/pipeline/build/" + id);
     },
-    goEdit(id) {
+    goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    goNew() {
+    goNew () {
       this.$router.push("/pipeline/new");
     },
   },

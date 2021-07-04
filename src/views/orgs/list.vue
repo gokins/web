@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid" /> 组织列表
+        <CIcon name="cil-devices" /> 组织列表
         <div class="card-header-actions">
           <CButton size="sm" color="info" variant="outline" @click="$router.push('new')">
             新建组织

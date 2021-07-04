@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <CIcon name="cil-grid" />
+        <CIcon name="cil-user" />
         用户管理
         <div class="card-header-actions">
           <CButton size="sm" color="info" variant="outline" @click="newshow=true">

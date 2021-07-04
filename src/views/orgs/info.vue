@@ -49,7 +49,7 @@
               <CCardBody>
                 <div>
                   <div class="c-avatar">
-                    <img src="img/avatars/def.png" class="c-avatar-img" />
+                    <img src="gokinsui/img/avatars/def.png" class="c-avatar-img" />
                   </div>
                   {{ user.nick }}
                 </div>
@@ -69,7 +69,7 @@
                   <div class="item" v-for="it in this.adms" :key="'adm:' + it.id">
                     <div class="tools">
                       <div class="c-avatar">
-                        <img src="img/avatars/def.png" class="c-avatar-img" />
+                        <img src="gokinsui/img/avatars/def.png" class="c-avatar-img" />
                       </div>
                     </div>
                     <div class="tools">{{ it.nick }}</div>
@@ -96,7 +96,7 @@
                   <div class="item" v-for="it in this.usrs" :key="'adm:' + it.id">
                     <div class="tools">
                       <div class="c-avatar">
-                        <img src="img/avatars/def.png" class="c-avatar-img" />
+                        <img src="gokinsui/img/avatars/def.png" class="c-avatar-img" />
                       </div>
                     </div>
                     <div class="tools">{{ it.nick }}</div>

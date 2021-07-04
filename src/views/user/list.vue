@@ -43,6 +43,9 @@
               <CButton color="info" square size="sm" @click="$router.push(`/user/info/${item.aid}`)">
                 详细
               </CButton>
+              <CButton color="warning" square size="sm" @click="permSel=true;permUid=item.id" style="margin-left:10px">
+                权限
+              </CButton>
             </td>
           </template>
         </CDataTable>
@@ -50,14 +53,16 @@
       </CCardBody>
     </CCard>
     <NewUser :shown.sync="newshow" />
+    <SelUserPerm :shown.sync="permSel" :uid="permUid" />
   </div>
 </template>
 <script>
+import SelUserPerm from "@/components/modals/selUserPerm";
 import NewUser from "@/components/modals/newUser";
 import myavatar from "@/components/avatar";
 import { UserPage, UtilCatch } from "@/assets/js/apis";
 export default {
-  components: { myavatar, NewUser },
+  components: { myavatar, NewUser, SelUserPerm },
   data () {
     return {
       fields: [
@@ -94,6 +99,8 @@ export default {
       pages: 0,
 
       newshow: false,
+      permSel: false,
+      permUid: '',
     }
   }, mounted () {
     this.getList();

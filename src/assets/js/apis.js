@@ -36,6 +36,7 @@ export const UserInfo = id => Post('/user/info', { id });
 export const UserUpinfo = pars => Post('/user/upinfo', pars);
 export const UserUpss = pars => Post('/user/upass', pars);
 export const UserActive = (id, act) => Post('/user/active', { id, act });
+export const UserPerm = pars => Post('/user/perm', pars);
 
 
 //Org

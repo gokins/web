@@ -63,7 +63,7 @@ export default {
         setToken(res.data.token);
         this.$refreshUInfo();
         // this.$msgOk("登录成功");
-        this.$router.push("/dashboard");
+        this.$router.push("/");
       }).catch((err) => {
         this.subing = false;
         switch (err.response ? err.response.status : 0) {

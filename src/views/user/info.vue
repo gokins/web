@@ -148,7 +148,7 @@ export default {
       subinfo: false,
       subact: false,
       formData: {},
-      passData: {},
+      passData: {}
     }
   }, mounted () {
     if (

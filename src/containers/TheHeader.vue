@@ -17,7 +17,7 @@
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink>
+        <CHeaderNavLink :to="`/user/info/${$store.state.userInfo.id}`">
           个人信息
         </CHeaderNavLink>
       </CHeaderNavItem>

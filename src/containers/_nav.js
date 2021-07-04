@@ -19,7 +19,7 @@ export default [{
             _name: 'CSidebarNavItem',
             name: '组织',
             to: '/org/list',
-            icon: 'cil-group'
+            icon: 'cil-devices'
         },
         {
             _name: 'CSidebarNavItem',

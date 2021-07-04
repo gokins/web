@@ -33,7 +33,7 @@
             </CCard>
             <CCard text-color="info" class="moreinfo text-center py-5 d-md-down-none" body-wrapper>
               <CCardBody>
-                <img class="login-dog" src="/img/dog.png" />
+                <img class="login-dog" src="gokinsui/imgs/dog.png" />
                 <h4>Gokins: More Power</h4>
               </CCardBody>
             </CCard>

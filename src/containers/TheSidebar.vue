@@ -3,7 +3,7 @@
     @update:show="(value) => $store.commit('set', ['sidebarShow', value])">
     <CSidebarBrand class="d-md-down-none" to="/">
       <div class="logos">
-        <img src="/img/logo.png" />
+        <img src="gokinsui/imgs/logo.png" />
         <span>Gokins</span>
       </div>
       <!-- <CIcon class="c-sidebar-brand-full" name="logo" size="custom-size" :height="35"

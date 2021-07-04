@@ -131,8 +131,8 @@
                   <CDataTable :items="varItems" :fields="varFields" pagination>
                     <template #public="{item}">
                       <td>
-                        <CIcon v-if="item.public" style="color:#52c41a" name="cil-check-circle" />
-                        <CIcon v-else style="color:#ff0042" name="cil-x-circle" />
+                        <CIcon  v-if="item.public"  style="color:#52c41a" name="cil-check-circle"/>
+                        <CIcon v-else style="color:#ff0042" name="cil-x-circle"/>
                       </td>
                     </template>
                     <template #del="{item}">
@@ -433,7 +433,8 @@ export default {
         }
         ls.push(this.varItems[v])
       }
-      ls.push(this.vars)
+      let v = this.vars
+      ls.push(v)
       this.varItems = ls
       this.closeVars()
     },
@@ -461,7 +462,7 @@ export default {
             let ls = []
             for (const resKey in res.data.data) {
               let v = res.data.data[resKey]
-              v.public = v.public == 0
+              v.public = v.public == 1
               ls.push(v)
             }
             this.varPage = res.data.page
@@ -475,7 +476,7 @@ export default {
     savePipelineVars() {
       let v = this.vars
       v.pipelineId = this.pipeId
-      SavePipelineVars(this.vars)
+      SavePipelineVars(v)
           .then((res) => {
             this.closeVars()
             this.pipelineVars()

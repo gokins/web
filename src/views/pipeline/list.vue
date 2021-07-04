@@ -5,7 +5,8 @@
         <CIcon name="cil-sitemap" />
         流水线
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="goNew">新建流水线
+          <CButton size="sm" color="info" variant="outline" @click="goNew" v-if="uinfo.permPipe==1">
+            新建流水线
           </CButton>
         </div>
       </CCardHeader>
@@ -57,6 +58,11 @@ export default {
       pipelineId: "",
       selectShow: false
     };
+  },
+  computed: {
+    uinfo () {
+      return this.$store.state.uinfo || {}
+    },
   },
   mounted () {
     if (

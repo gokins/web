@@ -17,7 +17,7 @@
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink :to="`/user/info/${$store.state.userInfo.id}`">
+        <CHeaderNavLink :to="`/user/info/${uids}`">
           个人信息
         </CHeaderNavLink>
       </CHeaderNavItem>
@@ -62,6 +62,11 @@ export default {
   data () {
     return {
       showBack: false
+    }
+  },
+  computed: {
+    uids () {
+      return this.$store.state.user?.id
     }
   },
   mounted () {

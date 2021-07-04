@@ -5,7 +5,7 @@
         <div class="c-avatar">
           <img src="img/avatars/def.png" class="c-avatar-img " />
         </div>
-        {{uname}}
+        {{nicks}}
       </CHeaderNavLink>
     </template>
     <!-- <CDropdownHeader tag="div" class="text-center" color="light">
@@ -60,22 +60,17 @@ export default {
   name: 'TheHeaderDropdownAccnt',
   data () {
     return {
-      uname: '1',
-      user: {},
       itemsCount: 42,
     }
-  }, destroyed () {
-    this.$offUInfo(this.uinfo);
-  }, mounted () {
-    this.$mntdUInfo(this.uinfo);
+  }, computed: {
+    user () {
+      return this.$store.state.user || {}
+    },
+    nicks () {
+      return this.$store.state.user?.nick || this.$store.state.user?.name;
+    }
   }, methods: {
-    uinfo (info) {
-      console.log('header drop uinfo:', info.nick);
-      this.user = info;
-      this.uname = info.nick;
-      if (this.uname == '')
-        this.uname = info.name;
-    }, logoutFun () {
+    logoutFun () {
       removeToken();
       this.$store.commit('clearUserInfo');
       this.$router.push('/login');

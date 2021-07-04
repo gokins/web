@@ -1,8 +1,8 @@
 <template>
   <div class="c-app">
-    <TheSidebar/>
+    <TheSidebar />
     <CWrapper>
-      <TheHeader/>
+      <TheHeader />
       <div class="c-body">
         <main class="c-main">
           <CContainer fluid>
@@ -12,13 +12,13 @@
           </CContainer>
         </main>
       </div>
-      <TheFooter/>
+      <TheFooter />
     </CWrapper>
   </div>
 </template>
 
 <script>
-import { UtilCatch, UInfo } from "@/assets/js/apis";
+import { UInfo } from "@/assets/js/apis";
 import TheSidebar from './TheSidebar'
 import TheHeader from './TheHeader'
 import TheFooter from './TheFooter'
@@ -29,26 +29,19 @@ export default {
     TheSidebar,
     TheHeader,
     TheFooter
-  }, destroyed () {
-    this.$EventBus.$off('refreshUserInfo');
-  },mounted(){
+  }, mounted () {
     this.getUInfo();
-    this.$EventBus.$on('refreshUserInfo', () => {
-      console.log('event refreshUserInfo!!!');
-      this.getUInfo();
-    });
-  },methods:{
-    getUInfo(){
-      UInfo().then(res=>{
-        if (res.data.login!=true){
-          this.$router.push('/login')
-          return
+  }, methods: {
+    getUInfo () {
+      UInfo().then(res => {
+        if (res.data.login == true) {
+          this.$store.commit('setUserInfo', res.data.user, res.data.info);
+        } else {
+          this.$router.push('/login');
         }
-        this.$store.commit('setUserInfo',res.data);
-        this.$EventBus.$emit('onGetUserInfo', res.data);
-      }).catch(err=>{
-        console.log('getUInfo err',err);
-          this.$router.push('/login')
+      }).catch(err => {
+        console.log('getUInfo err', err);
+        this.$router.push('/login')
       })
     }
   }

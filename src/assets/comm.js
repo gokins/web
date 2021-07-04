@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import moment, { min } from 'moment';
+// import Vue from 'vue';
+import moment from 'moment';
 import { Post, ApiUrl } from '@/assets/js/api'
 
 function fix(num, length) {
@@ -9,11 +9,11 @@ export default {
     install(Vue) {
         Vue.prototype.$post = Post;
         Vue.prototype.$ApiUrl = ApiUrl;
-        Vue.prototype.$EventBus = new Vue();
+        /* Vue.prototype.$EventBus = new Vue();
         Vue.prototype.$mntdUInfo = function(fn) {
             try {
                 if (this.$store.state.userStat == true)
-                    fn(this.$store.state.userInfo);
+                    fn(this.$store.state.user, this.$store.state.userInfo);
                 else {
                     this.$EventBus.$on('onGetUserInfo', fn);
                 }
@@ -24,7 +24,7 @@ export default {
         }
         Vue.prototype.$refreshUInfo = function() {
             this.$EventBus.$emit('refreshUserInfo');
-        }
+        } */
         Vue.prototype.$isEndStatus = function(stat) {
             switch (stat) {
                 case 'ok':

@@ -4,7 +4,7 @@
       <CCardHeader>
         <CIcon name="cil-devices" /> 组织列表
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="$router.push('new')">
+          <CButton size="sm" color="info" variant="outline" @click="$router.push('new')" v-if="uinfo.permOrg==1">
             新建组织
           </CButton>
         </div>
@@ -29,6 +29,11 @@ export default {
       pages: 0,
       loading: true,
     };
+  },
+  computed: {
+    uinfo () {
+      return this.$store.state.uinfo || {}
+    },
   },
   mounted () {
     this.getList(0);

@@ -5,7 +5,7 @@
         <CIcon name="cil-user" />
         用户管理
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="newshow=true">
+          <CButton size="sm" color="info" variant="outline" @click="newshow=true" v-if="uinfo.permUser==1">
             新建用户
           </CButton>
         </div>
@@ -102,6 +102,10 @@ export default {
       permSel: false,
       permUid: '',
     }
+  }, computed: {
+    uinfo () {
+      return this.$store.state.uinfo || {}
+    },
   }, mounted () {
     this.getList();
   }, methods: {

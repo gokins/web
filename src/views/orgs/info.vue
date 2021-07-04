@@ -8,7 +8,8 @@
             添加流水线
           </CButton>
           &nbsp;
-          <CButton size="sm" color="primary" variant="outline" @click="$router.push(`/pipeline/new/${info.aid}`)">
+          <CButton size="sm" color="primary" variant="outline" @click="$router.push(`/pipeline/new/${info.aid}`)"
+            v-if="uinfo.permPipe==1">
             新建流水线
           </CButton>
         </div>
@@ -226,6 +227,11 @@ export default {
       selectShow: false,
       curPerm: { rw: false, exec: false },
     };
+  },
+  computed: {
+    uinfo () {
+      return this.$store.state.uinfo || {}
+    },
   },
   mounted () {
     if (

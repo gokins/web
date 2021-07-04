@@ -61,7 +61,6 @@ export default {
       Login(this.param.name, this.param.password).then((res) => {
         // this.subing = false;
         setToken(res.data.token);
-        this.$refreshUInfo();
         // this.$msgOk("登录成功");
         this.$router.push("/");
       }).catch((err) => {

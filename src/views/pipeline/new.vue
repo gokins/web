@@ -221,7 +221,7 @@ export default {
   components: {pluginView, codemirror},
   props: {
     editf: Boolean,
-    pipeId: String
+    pipeId: String,
   },
   data() {
     return {
@@ -233,6 +233,7 @@ export default {
         content: "",
         displayName: "",
       },
+      orgId:"",
       vars: {
         public: true,
         remarks: "",
@@ -297,6 +298,13 @@ export default {
       this.pipeInfo()
       this.pipelineVars()
     }
+    if (
+        this.$route.params != null &&
+        this.$route.params.orgId != null &&
+        this.$route.params.orgId != ""
+    ) {
+      this.orgId = this.$route.params.orgId
+    }
     this.getYmlTemplates()
     this.getYmlPlugins()
   },
@@ -331,6 +339,7 @@ export default {
       console.log(this.varItems)
       let formData = this.formData;
       formData.vars = this.varItems
+      formData.orgId = this.orgId
       NewPipeline(formData)
           .then((res) => {
             this.saveBtu = false

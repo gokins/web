@@ -44,7 +44,7 @@
               </CRow>
             </CCard>
           </CTab>
-          <CTab>
+          <CTab v-if="user.id==lginfo.id||lginfo.id=='admin'">
             <template slot="title">
               <CIcon name="cil-calculator" />
               修改信息
@@ -82,7 +82,7 @@
                 </CRow>
               </CCardBody>
             </CCard>
-            <CCard accent-color="danger">
+            <CCard accent-color="danger" v-if="lginfo.id=='admin'&&user.id!='admin'">
               <CCardHeader style="background-color: #ffe8e6">
                 <strong>危险操作区</strong>
               </CCardHeader>
@@ -93,21 +93,21 @@
                 </div>
                 <div>
                   <CButton color="danger" variant="outline" square @click="actFun(user.active==1?'0':'1')"
-                    :disabled="subact" v-if="lguser.id=='admin'">
+                    :disabled="subact">
                     {{user.active==1?'禁止':'激活'}}用户
                   </CButton>
                 </div>
               </CCardBody>
             </CCard>
           </CTab>
-          <CTab>
+          <CTab v-if="user.id==lginfo.id||lginfo.id=='admin'">
             <template slot="title">
               <CIcon name="cil-calculator" />
               修改密码
             </template>
             <CCard accent-color="primary">
               <CCardBody>
-                <CRow v-if="lguser.id!='admin'">
+                <CRow v-if="user.id==lginfo.id||lginfo.id!='admin'">
                   <CCol sm="12">
                     <CInput label="旧密码" type="password" v-model="passData.olds" placeholder="请输入旧密码" />
                   </CCol>
@@ -152,8 +152,8 @@ export default {
     }
   },
   computed: {
-    lguser () {
-      return this.$store.state.user || {}
+    lginfo () {
+      return this.$store.state.uinfo || {}
     },
   },
   mounted () {
@@ -218,9 +218,13 @@ export default {
           repass: ''
         }
       }).catch(err => UtilCatch(this, err, err => {
+        debugger
         const stat = err.response ? err.response.status : 0;
         if (stat == 511) {
-          this.$msgErr('旧密码错误');
+          this.$msgErr('旧密码错误!');
+          return true;
+        } else if (stat == 512) {
+          this.$msgErr('旧密码错误!!');
           return true;
         }
       }))

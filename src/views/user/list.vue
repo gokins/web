@@ -5,7 +5,7 @@
         <CIcon name="cil-user" />
         用户管理
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="newshow=true" v-if="uinfo.permUser==1">
+          <CButton size="sm" color="info" variant="outline" @click="newshow=true" v-if="lginfo.permUser==1">
             新建用户
           </CButton>
         </div>
@@ -43,7 +43,8 @@
               <CButton color="info" square size="sm" @click="$router.push(`/user/info/${item.aid}`)">
                 详细
               </CButton>
-              <CButton color="warning" square size="sm" @click="permSel=true;permUid=item.id" style="margin-left:10px">
+              <CButton color="warning" square size="sm" @click="permSel=true;permUid=item.id" style="margin-left:10px"
+                v-if="lginfo.permUser==1">
                 权限
               </CButton>
             </td>
@@ -103,7 +104,7 @@ export default {
       permUid: '',
     }
   }, computed: {
-    uinfo () {
+    lginfo () {
       return this.$store.state.uinfo || {}
     },
   }, mounted () {

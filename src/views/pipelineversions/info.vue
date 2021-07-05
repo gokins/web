@@ -290,13 +290,13 @@ export default {
             return;
           }
           let logs = this.steplogs[res.data.stepId]?.logs;
-          if (!logs || (off && off <= 0)) {
+          if (!logs || (res.data.lastoff <= 0)) {
             logs = {}
             this.steplogs[res.data.stepId] = {};
             this.steplogs[res.data.stepId].logs = logs
-          }
-          if (res.data.lastoff > 0 || !this.steplogs[res.data.stepId].offset)
-            this.steplogs[res.data.stepId].offset = res.data.lastoff;
+          } else if (off == res.data.lastoff)
+            return;
+          this.steplogs[res.data.stepId].offset = res.data.lastoff;
           for (let i in res.data.logs) {
             let log = res.data.logs[i];
             let loge = logs[log.id];
@@ -339,7 +339,7 @@ export default {
         this.build.started = show.started;
         this.build.finished = show.finished;
         this.build.updated = show.updated;
-        this.builded = this.$isEndStatus(this.build.status);
+        // this.builded = this.$isEndStatus(this.build.status);
         if (show.stages)
           for (let i in show.stages) {
             let stg = show.stages[i];

@@ -107,7 +107,7 @@
             </template>
             <CCard accent-color="primary">
               <CCardBody>
-                <CRow>
+                <CRow v-if="lguser.id!='admin'">
                   <CCol sm="12">
                     <CInput label="旧密码" type="password" v-model="passData.olds" placeholder="请输入旧密码" />
                   </CCol>

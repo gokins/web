@@ -290,13 +290,13 @@ export default {
             return;
           }
           let logs = this.steplogs[res.data.stepId]?.logs;
-          if (!logs || (res.data.lastoff <= 0)) {
+          if (!logs) { //TODO:不处理重置log || (res.data.lastoff <= 0)) {
             logs = {}
             this.steplogs[res.data.stepId] = {};
             this.steplogs[res.data.stepId].logs = logs
-          } else if (off == res.data.lastoff)
-            return;
-          this.steplogs[res.data.stepId].offset = res.data.lastoff;
+          }
+          if (res.data.lastoff > 0)
+            this.steplogs[res.data.stepId].offset = res.data.lastoff;
           for (let i in res.data.logs) {
             let log = res.data.logs[i];
             let loge = logs[log.id];
@@ -389,6 +389,8 @@ export default {
       }).catch(err => {
         const stat = err.response ? err.response.status : 0;
         if (stat == 404) {
+          let endtm = new Date().getTime();
+          while (!okLogs && endtm - startm < 3);
           this.getInfo(this.pv.id);
           this.getCmds();
           this.getLogs().catch(err => console.log('getLogs err', err));

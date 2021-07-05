@@ -47,7 +47,7 @@
           <CTab>
             <template slot="title">
               <CIcon name="cil-calculator" />
-              设置
+              修改信息
             </template>
             <CCard accent-color="primary">
               <CCardHeader>
@@ -93,7 +93,7 @@
                 </div>
                 <div>
                   <CButton color="danger" variant="outline" square @click="actFun(user.active==1?'0':'1')"
-                    :disabled="subact">
+                    :disabled="subact" v-if="lguser.id=='admin'">
                     {{user.active==1?'禁止':'激活'}}用户
                   </CButton>
                 </div>
@@ -150,7 +150,13 @@ export default {
       formData: {},
       passData: {}
     }
-  }, mounted () {
+  },
+  computed: {
+    lguser () {
+      return this.$store.state.user || {}
+    },
+  },
+  mounted () {
     if (
       this.$route.params == null ||
       this.$route.params.id == null ||
@@ -205,6 +211,12 @@ export default {
       }
       UserUpss(this.passData).then(() => {
         this.$msgOk('修改成功');
+        this.passData = {
+          id: this.user.id,
+          olds: '',
+          pass: '',
+          repass: ''
+        }
       }).catch(err => UtilCatch(this, err, err => {
         const stat = err.response ? err.response.status : 0;
         if (stat == 511) {
@@ -213,6 +225,10 @@ export default {
         }
       }))
     }, actFun (act) {
+      if (this.user.id == 'admin') {
+        this.$msgErr('无法禁止管理员');
+        return
+      }
       this.$confirm("确定禁止/激活用户吗?", null, () => {
         this.subact = true;
         UserActive(this.user.id, act).then(() => {

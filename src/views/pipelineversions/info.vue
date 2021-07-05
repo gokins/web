@@ -393,7 +393,7 @@ export default {
           while (!okLogs && endtm - startm < 3);
           this.getInfo(this.pv.id);
           this.getCmds();
-          this.getLogs().catch(err => console.log('getLogs err', err));
+          // this.getLogs().catch(err => console.log('getLogs err', err));
           return;
         }
         setTimeout(reExecFn, 1000);

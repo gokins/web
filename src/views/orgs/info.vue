@@ -40,7 +40,7 @@
           </CTab>
           <CTab>
             <template slot="title">
-              <CIcon name="cil-basket" />
+              <CIcon name="cil-calculator" />
               成员
             </template>
             <CCard accent-color="primary">
@@ -125,7 +125,7 @@
           </CTab>
           <CTab v-if="perm.adm==true">
             <template slot="title">
-              <CIcon name="cil-chart-pie" /> 设置
+              <CIcon name="cil-calculator" /> 设置
             </template>
             <CCard accent-color="primary">
               <CCardHeader>

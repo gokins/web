@@ -2,7 +2,7 @@
   <CTabs variant="tabs">
     <CTab active>
       <template slot="title">
-        <CIcon name="cil-calculator"/>
+        <CIcon name="cil-calculator" />
         基本信息
       </template>
       <div class="pmainbox">
@@ -16,18 +16,18 @@
                 <CCardBody>
                   <CRow>
                     <CCol>
-                      <CInput label="流水线名称: " placeholder="请输入流水线名称" v-model="formData.name"/>
+                      <CInput label="流水线名称: " placeholder="请输入流水线名称" v-model="formData.name" />
                     </CCol>
                   </CRow>
                   <CRow>
                     <CCol>
-                      <CInput label="流水线描述: " placeholder="请输入流水线描述" v-model="formData.displayName"/>
+                      <CInput label="流水线描述: " placeholder="请输入流水线描述" v-model="formData.displayName" />
                     </CCol>
                   </CRow>
                   <CRow>
                     <CCol>
                       <CInput label="仓库地址: " placeholder="仓库URL地址或者仓库目录(例如:https://xxx.com/test.git 或者 ~/dev/test)"
-                              v-model="formData.url"/>
+                        v-model="formData.url" />
                     </CCol>
                   </CRow>
                   <CRow>
@@ -41,7 +41,7 @@
                           还原
                         </CButton> -->
                         <CButton v-for="(tmpsItme,index) in tmps" :key="'tmps:'+index"
-                                 @click="chooseTmp(tmpsItme.ymlContent)" color="dark" size="sm" variant="outline">
+                          @click="chooseTmp(tmpsItme.ymlContent)" color="dark" size="sm" variant="outline">
                           {{ tmpsItme.name }}
                         </CButton>
                       </div>
@@ -71,14 +71,14 @@
                       </template>
                       <CRow style="margin-top: 10px">
                         <CCol>
-                          <CInput label="账号: " placeholder="clone仓库的账号" v-model="formData.username"/>
+                          <CInput label="账号: " placeholder="clone仓库的账号" v-model="formData.username" />
                           <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
                         </CCol>
                       </CRow>
                       <CRow>
                         <CCol>
                           <CInput label="Access Token: " placeholder="clone仓库的用户Access Token"
-                                  v-model="formData.accessToken"/>
+                            v-model="formData.accessToken" />
                           <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
                         </CCol>
                       </CRow>
@@ -90,7 +90,7 @@
                       <CRow @click="showPlugin(itme)" v-for="(itme, index) in pluginInfos">
                         <CCol>
                           <CWidgetIcon :header="itme.name +'插件'" :text="itme.name" color="gradient-warning">
-                            <CIcon name="cil-moon" width="24"/>
+                            <CIcon name="cil-moon" width="24" />
                           </CWidgetIcon>
                         </CCol>
                       </CRow>
@@ -106,12 +106,12 @@
             </CCol>
           </CRow>
         </div>
-        <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml"/>
+        <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml" />
       </div>
     </CTab>
     <CTab>
       <template slot="title">
-        <CIcon name="cil-calculator"/>
+        <CIcon name="cil-calculator" />
         变量设置
       </template>
       <div class="pmainbox">
@@ -131,8 +131,8 @@
                   <CDataTable :items="varItems" :fields="varFields" pagination>
                     <template #public="{item}">
                       <td>
-                        <CIcon  v-if="item.public"  style="color:#52c41a" name="cil-check-circle"/>
-                        <CIcon v-else style="color:#ff0042" name="cil-x-circle"/>
+                        <CIcon v-if="item.public" style="color:#52c41a" name="cil-check-circle" />
+                        <CIcon v-else style="color:#ff0042" name="cil-x-circle" />
                       </td>
                     </template>
                     <template #del="{item}">
@@ -141,14 +141,14 @@
                           编辑
                         </CButton>
                         <CButton color="warning" variant="outline" square size="sm" class="pipeBtn"
-                                 style="margin-left: 5px" @click="delVar(item)">
+                          style="margin-left: 5px" @click="delVar(item)">
                           移除
                         </CButton>
                       </td>
                     </template>
                   </CDataTable>
                   <CPagination :activePage.sync="varPage" :pages="varPages" size="sm" align="center"
-                               @update:activePage="pipelineVars"/>
+                    @update:activePage="pipelineVars" />
                   <CRow class="subRow" sm="16">
                     <CCol sm="8">
                       <CButton color="info" @click="subFun()" :disabled="saveBtu">保存</CButton>
@@ -169,22 +169,22 @@
       <div>
         <CRow>
           <CCol>
-            <CInput label="变量名称: " placeholder="请输入变量名称" v-model="vars.name"/>
+            <CInput label="变量名称: " placeholder="请输入变量名称" v-model="vars.name" />
           </CCol>
           <CCol>
-            <CInput label="值: " placeholder="请输入变量的值" v-model="vars.value"/>
+            <CInput label="值: " placeholder="请输入变量的值" v-model="vars.value" />
           </CCol>
         </CRow>
         <CRow>
           <CCol>
-            <CInput label="备注: " placeholder="请输入备注" v-model="vars.remarks"/>
+            <CInput label="备注: " placeholder="请输入备注" v-model="vars.remarks" />
           </CCol>
         </CRow>
         <CRow>
           <CCol>
             <div style="display: flex">
               私密
-              <CSwitch class="mx-1" color="primary" checked shape="pill" :checked.sync="vars.public"/>
+              <CSwitch class="mx-1" color="primary" checked shape="pill" :checked.sync="vars.public" />
             </div>
           </CCol>
         </CRow>
@@ -193,7 +193,7 @@
   </CTabs>
 </template>
 <script>
-import {codemirror} from 'vue-codemirror'
+import { codemirror } from 'vue-codemirror'
 import "codemirror/addon/lint/lint.css";
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/eclipse.css";
@@ -218,12 +218,12 @@ import {
 window.jsyaml = jsyaml; // 引入js-yaml为codemirror提高语法检查核心支持
 export default {
   name: "PipeNew",
-  components: {pluginView, codemirror},
+  components: { pluginView, codemirror },
   props: {
     editf: Boolean,
     pipeId: String,
   },
-  data() {
+  data () {
     return {
       formData: {
         name: "",
@@ -233,7 +233,7 @@ export default {
         content: "",
         displayName: "",
       },
-      orgId:"",
+      orgId: "",
       vars: {
         public: true,
         remarks: "",
@@ -293,15 +293,15 @@ export default {
       },
     };
   },
-  mounted() {
+  mounted () {
     if (this.pipeId && this.pipeId != "") {
       this.pipeInfo()
       this.pipelineVars()
     }
     if (
-        this.$route.params != null &&
-        this.$route.params.orgId != null &&
-        this.$route.params.orgId != ""
+      this.$route.params != null &&
+      this.$route.params.orgId != null &&
+      this.$route.params.orgId != ""
     ) {
       this.orgId = this.$route.params.orgId
     }
@@ -309,11 +309,11 @@ export default {
     this.getYmlPlugins()
   },
   methods: {
-    showPlugin(e) {
+    showPlugin (e) {
       this.pluginShow = true
       this.pluginyml = e.ymlContent
     },
-    subFun() {
+    subFun () {
       this.saveBtu = true
       if (!this.checkForm()) {
         this.saveBtu = false
@@ -325,50 +325,50 @@ export default {
       }
       this.newPie()
     },
-    pipeInfo() {
-      PipelineInfo({id: this.pipeId}).then((res) => {
-        this.formData.name = res.data.name
-        this.formData.url = res.data.url
-        this.formData.username = res.data.username
-        this.formData.accessToken = res.data.accessToken
-        this.formData.content = res.data.ymlContent
-        this.formData.displayName = res.data.displayName
+    pipeInfo () {
+      PipelineInfo({ id: this.pipeId }).then((res) => {
+        this.formData.name = res.data.pipe.name
+        this.formData.url = res.data.pipe.url
+        this.formData.username = res.data.pipe.username
+        this.formData.accessToken = res.data.pipe.accessToken
+        this.formData.content = res.data.pipe.ymlContent
+        this.formData.displayName = res.data.pipe.displayName
       }).catch((err) => UtilCatch(this, err));
     },
-    newPie() {
+    newPie () {
       console.log(this.varItems)
       let formData = this.formData;
       formData.vars = this.varItems
       formData.orgId = this.orgId
       NewPipeline(formData)
-          .then((res) => {
-            this.saveBtu = false
-            this.$msgOk("保存成功");
-            setTimeout(() => {
-              this.$router.push("/pipeline/info/" + res.data.id)
-            }, 500);
-          })
-          .catch((err) => {
-            this.saveBtu = false
-            UtilCatch(this, err)
-          });
+        .then((res) => {
+          this.saveBtu = false
+          this.$msgOk("保存成功");
+          setTimeout(() => {
+            this.$router.push("/pipeline/info/" + res.data.id)
+          }, 500);
+        })
+        .catch((err) => {
+          this.saveBtu = false
+          UtilCatch(this, err)
+        });
     },
-    savePie() {
+    savePie () {
       console.log(this.varItems)
       let formData = this.formData;
       formData.pipelineId = this.pipeId
       SavePipeline(formData)
-          .then((res) => {
-            this.saveBtu = false
-            this.$msgOk("保存成功");
-            this.pipeInfo(this.pipeId)
-          })
-          .catch((err) => {
-            this.saveBtu = false
-            UtilCatch(this, err)
-          });
+        .then((res) => {
+          this.saveBtu = false
+          this.$msgOk("保存成功");
+          this.pipeInfo(this.pipeId)
+        })
+        .catch((err) => {
+          this.saveBtu = false
+          UtilCatch(this, err)
+        });
     },
-    checkForm() {
+    checkForm () {
       if (!this.formData.name || this.formData.name === "") {
         this.$msgErr("请输入流水线名称");
         return false
@@ -383,7 +383,7 @@ export default {
       }
       return true
     },
-    closeVars() {
+    closeVars () {
       this.vars = {
         public: true,
         remarks: "",
@@ -392,7 +392,7 @@ export default {
       }
       this.varsShow = false
     },
-    openVars() {
+    openVars () {
       this.vars = {
         public: true,
         remarks: "",
@@ -401,7 +401,7 @@ export default {
       }
       this.varsShow = true
     },
-    addVars() {
+    addVars () {
       if (!this.vars.name || this.vars.name == "") {
         this.$msgErr("请输入变量名")
         return;
@@ -417,7 +417,7 @@ export default {
       }
       this.addLocalVar()
     },
-    editVar(item) {
+    editVar (item) {
       if (item != undefined && item != null) {
         this.vars = {
           aid: item.aid,
@@ -430,7 +430,7 @@ export default {
       }
       this.varsShow = true
     },
-    addLocalVar() {
+    addLocalVar () {
       let ls = [];
       for (const v in this.varItems) {
         if (this.varItems[v].name === this.backVar.name) {
@@ -447,14 +447,14 @@ export default {
       this.varItems = ls
       this.closeVars()
     },
-    delVar(item) {
+    delVar (item) {
       if (this.editf) {
         this.deletedPipelineVars(item.aid)
         return
       }
       this.delLocalVar(item.name)
     },
-    delLocalVar(name) {
+    delLocalVar (name) {
       let ls = [];
       for (const v in this.varItems) {
         if (this.varItems[v].name === name) {
@@ -464,29 +464,42 @@ export default {
       }
       this.varItems = ls
     },
-    pipelineVars() {
-      PipelineVars({pipelineId: this.pipeId, page: this.varPage})
-          .then((res) => {
-            this.varItems = []
-            let ls = []
-            for (const resKey in res.data.data) {
-              let v = res.data.data[resKey]
-              v.public = v.public == 1
-              ls.push(v)
-            }
-            this.varPage = res.data.page
-            this.varPages = res.data.pages
-            this.varItems = res.data.data
-          })
-          .catch((err) => {
-            UtilCatch(this, err)
-          });
+    pipelineVars () {
+      PipelineVars({ pipelineId: this.pipeId, page: this.varPage })
+        .then((res) => {
+          this.varItems = []
+          let ls = []
+          for (const resKey in res.data.data) {
+            let v = res.data.data[resKey]
+            v.public = v.public == 1
+            ls.push(v)
+          }
+          this.varPage = res.data.page
+          this.varPages = res.data.pages
+          this.varItems = res.data.data
+        })
+        .catch((err) => {
+          UtilCatch(this, err)
+        });
     },
-    savePipelineVars() {
+    savePipelineVars () {
       let v = this.vars
       v.pipelineId = this.pipeId
       SavePipelineVars(v)
+        .then((res) => {
+          this.closeVars()
+          this.pipelineVars()
+        })
+        .catch((err) => {
+          this.pipelineVars()
+          UtilCatch(this, err)
+        });
+    },
+    deletedPipelineVars (aid) {
+      this.$confirm("确定删除变量?", null, () => {
+        DeletedPipelineVars({ aid: aid })
           .then((res) => {
+            this.$msgOk("删除成功")
             this.closeVars()
             this.pipelineVars()
           })
@@ -494,43 +507,30 @@ export default {
             this.pipelineVars()
             UtilCatch(this, err)
           });
-    },
-    deletedPipelineVars(aid) {
-      this.$confirm("确定删除变量?", null, () => {
-        DeletedPipelineVars({aid: aid})
-            .then((res) => {
-              this.$msgOk("删除成功")
-              this.closeVars()
-              this.pipelineVars()
-            })
-            .catch((err) => {
-              this.pipelineVars()
-              UtilCatch(this, err)
-            });
       })
     },
-    getYmlTemplates() {
+    getYmlTemplates () {
       YmlTemplates()
-          .then((res) => {
-            this.tmps = res.data
-          })
-          .catch((err) => {
-            UtilCatch(this, err)
-          });
+        .then((res) => {
+          this.tmps = res.data
+        })
+        .catch((err) => {
+          UtilCatch(this, err)
+        });
     },
-    getYmlPlugins() {
+    getYmlPlugins () {
       YmlPlugins()
-          .then((res) => {
-            this.pluginInfos = res.data
-          })
-          .catch((err) => {
-            UtilCatch(this, err)
-          });
+        .then((res) => {
+          this.pluginInfos = res.data
+        })
+        .catch((err) => {
+          UtilCatch(this, err)
+        });
     },
-    chooseTmp(ymlContent) {
+    chooseTmp (ymlContent) {
       this.formData.content = ymlContent
     },
-    defaultTmp() {
+    defaultTmp () {
       if (this.pipeId && this.pipeId != "") {
         this.pipeInfo()
         return

@@ -178,7 +178,7 @@
         </div>
       </CCardBody>
     </CCard>
-    <pluginView title="流水线YAML" :shown.sync="pluginShow" :pluginyml="pipe.ymlContent" />
+    <pluginView title="流水线YAML" :shown.sync="pluginShow" :pluginyml="pv.content" />
   </div>
 </template>
 <script>

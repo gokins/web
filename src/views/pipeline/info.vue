@@ -2,12 +2,14 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>流水线:{{ pipelineName }} </strong>
+        <strong>流水线:{{ pipe.name }} </strong>
         <div class="card-header-actions">
-          <CButton color="dark" variant="outline" square size="sm" @click="copy()" style="margin-left:5px">
+          <CButton color="dark" variant="outline" square size="sm" @click="copy()" style="margin-left:5px"
+            v-if="uinfo.permPipe==1">
             复制
           </CButton>
-          <CButton color="info" variant="outline" square size="sm" @click="run()" style="margin-left:5px">
+          <CButton color="info" variant="outline" square size="sm" @click="run()" style="margin-left:5px"
+            v-if="perm.exec==true">
             运行
           </CButton>
         </div>
@@ -23,7 +25,7 @@
             <CPagination :activePage="versionpage" :pages="versionpages" @update:activePage="getVersionList"
               style="float: right;margin-top:20px" />
           </CTab>
-          <CTab>
+          <CTab v-if="perm.write==true">
             <template slot="title">
               <CIcon name="cil-chart-pie" />
               设置
@@ -70,7 +72,8 @@ export default {
       versionpage: 0,
       versionpages: 0,
       versionitems: [],
-      pipelineName: "",
+      pipe: "",
+      perm: {},
       formData: {
         name: "",
         content: "",
@@ -79,6 +82,11 @@ export default {
       pipelineId: "",
       selectShow: false,
     };
+  },
+  computed: {
+    uinfo () {
+      return this.$store.state.uinfo || {}
+    },
   },
   mounted () {
     console.log("$options.coreics", this.$options.coreics["cliXcircle"]);
@@ -109,7 +117,8 @@ export default {
     },
     pipeInfo () {
       PipelineInfo({ id: this.pipelineId }).then((res) => {
-        this.pipelineName = res.data.name
+        this.pipe = res.data.pipe
+        this.perm = res.data.perm;
       }).catch((err) => UtilCatch(this, err));
     },
     run () {
@@ -146,7 +155,6 @@ export default {
 <style lang="sass" scoped>
 .subRow
   margin-top: 10px
-
 
 .org-users
   display: flex

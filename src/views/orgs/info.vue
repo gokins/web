@@ -4,7 +4,7 @@
       <CCardHeader>
         <strong>组织: {{ info.name }}</strong>
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="selPip = true">
+          <CButton size="sm" color="info" variant="outline" @click="selPip = true" v-if="perm.adm==true">
             添加流水线
           </CButton>
           &nbsp;
@@ -24,10 +24,12 @@
             <CCard>
               <CCardBody>
                 <PipelistView :items="pipeitems" :loading="loading" #default="{item}">
-                  <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn">
+                  <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn"
+                    v-if="perm.exec==true">
                     运行
                   </CButton>
-                  <CButton color="danger" size="sm" @click.stop="rmPipeFun(item.id)" class="pipeBtn">
+                  <CButton color="danger" size="sm" @click.stop="rmPipeFun(item.id)" class="pipeBtn"
+                    v-if="perm.adm==true">
                     移除
                   </CButton>
                 </PipelistView>
@@ -59,7 +61,7 @@
               <CCardHeader>
                 <strong>管理员</strong> <small style="color:#aaa">可管理组织和操作流水线</small>
                 <div class="card-header-actions">
-                  <CButton size="sm" color="info" variant="outline" @click="selAdm = true">
+                  <CButton size="sm" color="info" variant="outline" @click="selAdm = true" v-if="perm.own==true">
                     新增用户
                   </CButton>
                 </div>
@@ -74,7 +76,7 @@
                     </div>
                     <div class="tools">{{ it.nick }}</div>
                     <div class="tools">
-                      <CButton color="danger" size="sm" @click="rmUserFun(it.id)">
+                      <CButton color="danger" size="sm" @click="rmUserFun(it.id)" v-if="perm.own==true">
                         <CIcon :content="$options.coreics['cilXCircle']" />移除
                       </CButton>
                     </div>
@@ -86,7 +88,7 @@
               <CCardHeader>
                 <strong>普通用户</strong> <small style="color:#aaa">只能操作流水线</small>
                 <div class="card-header-actions">
-                  <CButton size="sm" color="info" variant="outline" @click="selUsr = true">
+                  <CButton size="sm" color="info" variant="outline" @click="selUsr = true" v-if="perm.adm==true">
                     新增用户
                   </CButton>
                 </div>
@@ -109,10 +111,10 @@
                       }}</CBadge>
                     </div>
                     <div class="tools">
-                      <CButton color="warning" size="sm" @click="upPermFun(it)">
+                      <CButton color="warning" size="sm" @click="upPermFun(it)" v-if="perm.adm==true">
                         <CIcon :content="$options.coreics['cilPenAlt']" />
                       </CButton>
-                      <CButton color="danger" size="sm" @click="rmUserFun(it.id)">
+                      <CButton color="danger" size="sm" @click="rmUserFun(it.id)" v-if="perm.adm==true">
                         <CIcon :content="$options.coreics['cilXCircle']" />
                       </CButton>
                     </div>
@@ -121,7 +123,7 @@
               </CCardBody>
             </CCard>
           </CTab>
-          <CTab>
+          <CTab v-if="perm.adm==true">
             <template slot="title">
               <CIcon name="cil-chart-pie" /> 设置
             </template>
@@ -173,11 +175,11 @@
         </CTabs>
       </CCardBody>
     </CCard>
-    <SelectPipe :shown.sync="selPip" @addFun="addPipFun" />
-    <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" />
-    <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" />
+    <SelectPipe :shown.sync="selPip" @addFun="addPipFun" v-if="perm.adm==true" />
+    <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" v-if="perm.own==true" />
+    <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />
     <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
-    <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId" v-if="perm.adm==true" />
   </div>
 </template>
 <script>
@@ -213,6 +215,7 @@ export default {
       pipepage: 0,
       pipepages: 0,
       pipeitems: [],
+      perm: {},
       formData: {
         id: "",
         name: "",
@@ -251,6 +254,7 @@ export default {
         .then((res) => {
           this.info = res.data.org;
           this.user = res.data.user;
+          this.perm = res.data.perm;
           this.formData.id = this.info.id;
           this.formData.name = this.info.name;
           this.formData.desc = this.info.desc;

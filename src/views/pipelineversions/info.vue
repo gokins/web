@@ -20,11 +20,12 @@
           <div style="flex:1"></div>
           <div>
             &nbsp;
-            <CButton size="sm" color="warning" variant="outline" @click="cancelFun" v-if="!this.builded">
+            <CButton size="sm" color="warning" variant="outline" @click="cancelFun"
+              v-if="perm.exec==true&&!this.builded">
               停止构建
             </CButton>
             &nbsp;
-            <CButton size="sm" color="info" variant="outline" @click="rebuildFun">
+            <CButton size="sm" color="info" variant="outline" @click="rebuildFun" v-if="perm.exec==true">
               重新构建
             </CButton>
             &nbsp;
@@ -200,6 +201,7 @@ export default {
     return {
       pv: {},
       pipe: {},
+      perm: {},
       build: {},
       stageids: {},
       stages: {},
@@ -214,7 +216,13 @@ export default {
       workpgss: 0,
       pluginShow: false,
     }
-  }, destroyed () {
+  },
+  computed: {
+    uinfo () {
+      return this.$store.state.uinfo || {}
+    },
+  },
+  destroyed () {
     this.isrun = false;
   }, mounted () {
     if (
@@ -232,6 +240,7 @@ export default {
       PipelineVersion(id).then((res) => {
         this.pv = res.data.pv;
         this.pipe = res.data.pipe;
+        this.perm = res.data.perm;
         this.build = res.data.build;
         this.builded = this.$isEndStatus(this.build.status);
         if (this.builded) this.workpgss = 100;

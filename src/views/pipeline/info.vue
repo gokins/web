@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>流水线:{{ pipe.name }} </strong>
+        <strong>{{ pipe.name }} </strong>
         <div class="card-header-actions">
           <CButton color="dark" variant="outline" square size="sm" @click="copy()" style="margin-left:5px"
             v-if="uinfo.permPipe==1">

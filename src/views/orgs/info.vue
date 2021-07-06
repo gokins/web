@@ -2,7 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
-        <strong>组织: {{ info.name }}</strong>
+        <strong>{{ info.name }}</strong>
         <div class="card-header-actions">
           <CButton size="sm" color="info" variant="outline" @click="selPip = true" v-if="perm.adm==true">
             添加流水线

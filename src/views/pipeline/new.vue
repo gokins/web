@@ -26,8 +26,7 @@
                   </CRow>
                   <CRow>
                     <CCol>
-                      <CInput label="仓库地址: " placeholder="仓库URL地址或者仓库目录(例如:https://xxx.com/test.git 或者 ~/dev/test)"
-                        v-model="formData.url" />
+                      <CInput label="仓库地址: " placeholder="Git仓库地址" v-model="formData.url" /><!-- 或者仓库目录 -->
                     </CCol>
                   </CRow>
                   <CRow>
@@ -375,6 +374,12 @@ export default {
       }
       if (!this.formData.url || this.formData.url === "") {
         this.$msgErr("请输入仓库地址");
+        return false
+      }
+      const reg1 = new RegExp("^(https?:)\\/\\/([\\w\\.]+)(:\\d+)?");
+      const reg2 = new RegExp("^(/|(\\w\\:))");
+      if (!reg1.test(this.formData.url) && !reg2.test(this.formData.url)) {
+        this.$msgErr("仓库地址格式错误");
         return false
       }
       if (!this.formData.content || this.formData.content === "") {

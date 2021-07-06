@@ -11,7 +11,7 @@
         </div>
       </CCardHeader>
       <CCardBody>
-        <PipelistView :items="items" #default="{item}">
+        <PipelistView :items="items" :loading="loading" #default="{item}">
           <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn">
             运行
           </CButton>
@@ -56,7 +56,8 @@ export default {
       pages: 0,
       orgId: "",
       pipelineId: "",
-      selectShow: false
+      selectShow: false,
+      loading: false,
     };
   },
   computed: {
@@ -76,9 +77,11 @@ export default {
   },
   methods: {
     getList (pg) {
+      this.loading = true;
       if (this.orgId != "") {
         OrgPipelineList({ page: pg, orgId: this.orgId })
           .then((res) => {
+            this.loading = false;
             this.page = res.data.page;
             this.pages = res.data.pages;
             this.items = res.data.data;
@@ -88,6 +91,7 @@ export default {
       }
       PipelineList({ page: pg, orgId: this.orgId })
         .then((res) => {
+          this.loading = false;
           this.page = res.data.page;
           this.pages = res.data.pages;
           this.items = res.data.data;

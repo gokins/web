@@ -9,7 +9,7 @@
           </CButton>
           &nbsp;
           <CButton size="sm" color="primary" variant="outline" @click="$router.push(`/pipeline/new/${info.aid}`)"
-            v-if="uinfo.permPipe==1">
+            v-if="uinfo.permPipe==1&&perm.adm==true">
             新建流水线
           </CButton>
         </div>

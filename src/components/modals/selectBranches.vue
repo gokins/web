@@ -1,7 +1,7 @@
 <template>
   <CModal title="请输入仓库分支或者commitSha" :show="shown" @update:show="(val) => $emit('update:shown', val)" :centered="true">
     <template #footer>
-      <CButton color="warning" @click="$emit('update:shown', false )">关闭</CButton>
+      <CButton color="warning" variant="outline" @click="$emit('update:shown', false )">取消</CButton>
       <CButton color="info" @click="run">确定</CButton>
     </template>
     <div>

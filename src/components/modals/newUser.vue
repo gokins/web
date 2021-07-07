@@ -1,6 +1,7 @@
 <template>
   <CModal title="新建用户" :show="shown" @update:show="(val) => $emit('update:shown', val)">
     <template #footer>
+      <CButton color="warning" variant="outline" @click="$emit('update:shown', false )">取消</CButton>
       <CButton color="info" @click="subFun" :disabled="subing">提交</CButton>
     </template>
     <CInput label="用户名" v-model="formData.name" placeholder="请输入用户名(必填)" />

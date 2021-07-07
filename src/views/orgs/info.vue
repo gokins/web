@@ -4,18 +4,22 @@
       <CCardHeader>
         <strong>{{ info.name }}</strong>
         <div class="card-header-actions">
-          <CButton size="sm" color="info" variant="outline" @click="selPip = true" v-if="perm.adm==true">
+          <CButton size="sm" color="primary" variant="outline" @click="selPip = true" v-if="perm.adm==true">
             添加流水线
           </CButton>
           &nbsp;
-          <CButton size="sm" color="primary" variant="outline" @click="$router.push(`/pipeline/new/${info.aid}`)"
+          <CButton size="sm" color="info" variant="outline" @click="$router.push(`/pipeline/new/${info.aid}`)"
             v-if="uinfo.permPipe==1&&perm.adm==true">
             新建流水线
+          </CButton>
+          &nbsp;
+          <CButton size="sm" color="info" variant="outline" @click="arteditr=null;selArt = true" v-if="perm.adm==true">
+            新建制品库
           </CButton>
         </div>
       </CCardHeader>
       <CCardBody>
-        <CTabs variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
+        <CTabs :activeTab="actTab" variant="pills" :vertical="{ navs: 'col-md-2', content: 'col-md-10' }">
           <CTab active>
             <template slot="title">
               <CIcon name="cil-calculator" />
@@ -33,6 +37,28 @@
                     移除
                   </CButton>
                 </PipelistView>
+                <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
+                  style="float: right;margin-top:20px" />
+              </CCardBody>
+            </CCard>
+          </CTab>
+          <CTab>
+            <template slot="title">
+              <CIcon name="cil-calculator" />
+              制品库
+            </template>
+            <CCard>
+              <CCardBody>
+                <ArtlistView :items="artitems" :loading="loadings" #default="{item}">
+                  <CButton color="info" variant="outline" square size="sm" @click.stop="arteditr=item;selArt = true"
+                    class="pipeBtn" v-if="perm.adm==true">
+                    修改
+                  </CButton>
+                  <CButton color="danger" size="sm" @click.stop="rmArtFun(item.id)" class="pipeBtn"
+                    v-if="perm.adm==true">
+                    删除
+                  </CButton>
+                </ArtlistView>
                 <CPagination :activePage="pipepage" :pages="pipepages" @update:activePage="getPipeList"
                   style="float: right;margin-top:20px" />
               </CCardBody>
@@ -175,6 +201,7 @@
         </CTabs>
       </CCardBody>
     </CCard>
+    <EditArt :shown.sync="selArt" :orgId="this.info.id" :info="arteditr" @subOk="editArtOkFun" v-if="perm.adm==true" />
     <SelectPipe :shown.sync="selPip" @addFun="addPipFun" v-if="perm.adm==true" />
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" v-if="perm.own==true" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />
@@ -193,20 +220,25 @@ import {
   OrgUserEdit,
   OrgUserRm,
   OrgUsers,
+  ArtOrgList,
+  ArtRm,
   UtilCatch,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 import PipelistView from "@/components/list/pipelist";
+import ArtlistView from "@/components/list/artlist";
 import SelectBranches from "@/components/modals/selectBranches";
+import EditArt from "@/components/modals/editArt";
 import SelectPipe from "@/components/modals/selectPipe";
 import SelectUser from "@/components/modals/selectUser";
 import OrgUserPerm from "@/components/modals/orgUserPerm";
 
 export default {
   coreics: freeSet,
-  components: { PipelistView, SelectPipe, SelectUser, OrgUserPerm, SelectBranches },
+  components: { ArtlistView, PipelistView, EditArt, SelectPipe, SelectUser, OrgUserPerm, SelectBranches },
   data () {
     return {
+      actTab: 0,
       info: {},
       user: {},
       adms: [],
@@ -215,6 +247,11 @@ export default {
       pipepage: 0,
       pipepages: 0,
       pipeitems: [],
+      loadings: true,
+      artpage: 0,
+      artpages: 0,
+      artitems: [],
+      arteditr: null,
       perm: {},
       formData: {
         id: "",
@@ -223,6 +260,7 @@ export default {
         public: false,
       },
       pipelineId: "",
+      selArt: false,
       selPip: false,
       selAdm: false,
       selUsr: false,
@@ -261,6 +299,7 @@ export default {
           this.formData.public = this.info.public == 1;
           this.getUserList();
           this.getPipeList();
+          this.getArtList();
         })
         .catch((err) =>
           UtilCatch(this, err)
@@ -292,6 +331,17 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
+    getArtList (pg) {
+      this.loadings = true;
+      ArtOrgList({ page: pg, orgId: this.info.id })
+        .then((res) => {
+          this.loadings = false;
+          this.artpage = res.data.page;
+          this.artpages = res.data.pages;
+          this.artitems = res.data.data;
+        })
+        .catch((err) => UtilCatch(this, err));
+    },
     goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
@@ -311,6 +361,7 @@ export default {
     addPipFun (pipeid, fn) {
       OrgPipeAdd(this.info.id, pipeid)
         .then(() => {
+          this.actTab = 0;
           fn(true);
           this.getPipeList();
           this.$msgOk("添加成功");
@@ -396,6 +447,15 @@ export default {
       this.$confirm("确定删除组织吗?", null, () => {
         OrgRm(this.info.id).then(() => {
           this.$router.push('/org/');
+        }).catch((err) => UtilCatch(this, err));
+      })
+    }, editArtOkFun () {
+      this.actTab = 1;
+      this.getArtList(this.artpage);
+    }, rmArtFun (id) {
+      this.$confirm("确定删除制品库吗?可能将无法找回其下所有制品!", null, () => {
+        ArtRm(id).then(() => {
+          this.getArtList(this.artpage);
         }).catch((err) => UtilCatch(this, err));
       })
     }

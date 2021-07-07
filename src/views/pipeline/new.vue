@@ -86,7 +86,7 @@
                       <template slot="title">
                         插件
                       </template>
-                      <CRow @click="showPlugin(itme)" v-for="(itme, index) in pluginInfos">
+                      <CRow @click="showPlugin(itme)" v-for="(itme,i) in pluginInfos" :key="i">
                         <CCol>
                           <CWidgetIcon :header="itme.name +'插件'" :text="itme.name" color="gradient-warning">
                             <CIcon name="cil-moon" width="24" />
@@ -183,7 +183,7 @@
           <CCol>
             <div style="display: flex">
               私密
-              <CSwitch class="mx-1" color="primary" checked shape="pill" :checked.sync="vars.public" />
+              <CSwitch class="mx-1" color="primary"  shape="pill" :checked.sync="vars.public" />
             </div>
           </CCol>
         </CRow>

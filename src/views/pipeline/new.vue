@@ -1,10 +1,4 @@
 <template>
-  <CTabs variant="tabs">
-    <CTab active>
-      <template slot="title">
-        <CIcon name="cil-calculator" />
-        基本信息
-      </template>
       <div class="pmainbox">
         <div class="pipebox">
           <CRow>
@@ -107,8 +101,6 @@
         </div>
         <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml" />
       </div>
-    </CTab>
-  </CTabs>
 </template>
 <script>
 import { codemirror } from 'vue-codemirror'
@@ -345,4 +337,7 @@ export default {
 
 .CodeMirror-scroll
   min-height: 300px
+
+.card-accent-primary  
+  border-top: 2px solid #ced2d8 !important
 </style>

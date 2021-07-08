@@ -110,3 +110,22 @@ export const parseGoTimestrs = (tms) => {
     }
     return rets;
 }
+export const copyText = (txt) => {
+    var copyok = false;
+    try {
+        window.getSelection().removeAllRanges();
+    } catch (e) {
+        console.log(e)
+    }
+    var txte = document.createElement("textarea");
+    txte.value = txt
+    document.body.appendChild(txte)
+    try {
+        txte.select();
+        copyok = document.execCommand('copy', false, null);
+    } catch (e) {
+        console.log(e)
+    }
+    document.body.removeChild(txte)
+    return copyok
+}

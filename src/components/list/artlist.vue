@@ -5,9 +5,11 @@
         <div class="tit">
           <div class="tits">
             {{ item.name }}
-            <span v-if="item.displayName&&item.displayName!=''">{{item.displayName}}</span>
           </div>
-          <div class="tips" v-show="item.disabled=='1'" v-c-tooltip.hover.click="'无法在上传制品'">
+          <div class="ids" @click.stop="copyIds(item.identifier)">
+            <i class="iconfont icon-bianhao" v-c-tooltip.hover.click="'复制制品库ID'" />
+          </div>
+          <div class="tips" v-if="item.disabled=='1'" v-c-tooltip.hover.click="'无法在上传制品'">
             已归档
           </div>
           <div style="flex:1"></div>
@@ -40,6 +42,7 @@
   </div>
 </template>
 <script>
+import { copyText } from "@/assets/js/utils";
 import myavatar from "@/components/avatar";
 export default {
   components: { myavatar },
@@ -55,6 +58,14 @@ export default {
   data () {
     return {}
   },
+  methods: {
+    copyIds (txt) {
+      if (copyText(txt))
+        this.$msgOk('已成功复制制品库ID');
+      else
+        this.$msgErr('复制制品库ID失败');
+    }
+  }
 }
 </script>
 <style lang="sass" scoped>
@@ -97,6 +108,14 @@ export default {
         font-size: 10px
         margin: 5px 0 0 10px
         line-height: 20px
+      .ids
+        color: #0072ff
+        font-size: 16px
+        margin-left: 5px
+        padding: 7px 5px 0 5px
+        cursor: pointer
+        &:hover
+          background: #bed6f5
 
     .infos
       display: flex

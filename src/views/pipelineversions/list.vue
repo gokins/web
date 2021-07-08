@@ -10,8 +10,6 @@
           > -->
         </div>
       </CCardHeader>
-      <CCardBody>
-        <CCard>
           <CCardBody>
             <VersionlistView :items="items" :loading="loading" />
             <CPagination
@@ -20,8 +18,7 @@
               @update:activePage="getList"
               style="float: right; margin-top: 20px"
             />
-          </CCardBody>
-        </CCard>
+
       </CCardBody>
     </CCard>
   </div>

@@ -177,7 +177,6 @@ export default {
   mounted () {
     if (this.pipeId && this.pipeId != "") {
       this.pipeInfo()
-      this.pipelineVars()
     }
     if (
       this.$route.params != null &&
@@ -217,9 +216,7 @@ export default {
       }).catch((err) => UtilCatch(this, err));
     },
     newPie () {
-      console.log(this.varItems)
       let formData = this.formData;
-      formData.vars = this.varItems
       formData.orgId = this.orgId
       NewPipeline(formData)
         .then((res) => {

@@ -125,7 +125,7 @@
               </CCardBody>
             </CCard>
           </CTab>
-          <CTab>
+          <CTab v-if="perm.write == true">
             <template slot="title">
               <CIcon name="cil-calculator" />
               变量
@@ -528,11 +528,8 @@ export default {
       return;
     },
     delVar(item) {
-      if (this.editf) {
-        this.deletedPipelineVars(item.aid);
-        return;
-      }
-      this.delLocalVar(item.name);
+      this.deletedPipelineVars(item.aid);
+      return;
     },
     editVar(item) {
       if (item != undefined && item != null) {

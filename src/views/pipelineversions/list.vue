@@ -10,10 +10,16 @@
           > -->
         </div>
       </CCardHeader>
-      <CCardBody>
-        <VersionlistView :items="items" :loading="loading" />
-        <CPagination :activePage="page" :pages="pages" @update:activePage="getList"
-          style="float: right;margin-top:20px" />
+          <CCardBody>
+            <VersionlistView :items="items" :loading="loading"/>
+            <CPagination
+             style="margin-top: 5px" 
+              size="sm" 
+              align="center"
+              :activePage="page"
+              :pages="pages"
+              @update:activePage="getList"
+            />
       </CCardBody>
     </CCard>
   </div>
@@ -23,7 +29,7 @@ import { PipelineVersions, UtilCatch } from "@/assets/js/apis";
 import VersionlistView from "@/components/list/versionlist";
 export default {
   components: { VersionlistView },
-  data () {
+  data() {
     return {
       fields: [
         {
@@ -47,7 +53,7 @@ export default {
       pipelineId: "",
     };
   },
-  mounted () {
+  mounted() {
     if (
       this.$route.params != null &&
       this.$route.params.pipelineId != null &&
@@ -58,24 +64,26 @@ export default {
     this.getList(0);
   },
   methods: {
-    getList (pg) {
+    getList(pg) {
       PipelineVersions({
         page: pg,
         orgId: this.orgId,
         pipelineId: this.pipelineId,
-      }).then((res) => {
-        this.loading = false;
-        if (res.data != null) {
-          this.page = res.data.page;
-          this.pages = res.data.pages;
-          this.items = res.data.data;
-        }
-      }).catch((err) => UtilCatch(this, err));
+      })
+        .then((res) => {
+          this.loading = false;
+          if (res.data != null) {
+            this.page = res.data.page;
+            this.pages = res.data.pages;
+            this.items = res.data.data;
+          }
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    goEdit (id) {
+    goEdit(id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    goNew () {
+    goNew() {
       this.$router.push("/pipeline/new/" + this.orgId);
     },
   },

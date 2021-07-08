@@ -11,14 +11,15 @@
         </div>
       </CCardHeader>
           <CCardBody>
-            <VersionlistView :items="items" :loading="loading" />
+            <VersionlistView :items="items" :loading="loading"/>
             <CPagination
+             style="margin-top: 5px" 
+              size="sm" 
+              align="center"
               :activePage="page"
               :pages="pages"
               @update:activePage="getList"
-              style="float: right; margin-top: 20px"
             />
-
       </CCardBody>
     </CCard>
   </div>

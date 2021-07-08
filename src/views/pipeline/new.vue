@@ -183,7 +183,7 @@
           <CCol>
             <div style="display: flex">
               私密
-              <CSwitch class="mx-1" color="primary"  shape="pill" :checked.sync="vars.public" />
+              <CSwitch class="mx-1" color="primary" shape="pill" :checked.sync="vars.public" />
             </div>
           </CCol>
         </CRow>

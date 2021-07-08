@@ -1,6 +1,7 @@
 <template>
   <CModal title="选择权限" size="sm" :show="shown" @update:show="(val) => $emit('update:shown', val)">
     <template #footer>
+      <CButton color="warning" variant="outline" @click="$emit('update:shown', false )">取消</CButton>
       <CButton color="info" @click="$emit('subFun',formData)">提交</CButton>
     </template>
 

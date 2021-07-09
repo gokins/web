@@ -87,5 +87,6 @@ export const RuntimeLogs = (buildId, stepId, offset) => Post('/runtime/logs', { 
 
 //Artifact
 export const ArtOrgList = pars => Post('/art/org-list', pars);
+export const ArtInfo = id => Post('/art/info', { id });
 export const ArtEdit = pars => Post('/art/edit', pars);
 export const ArtRm = id => Post('/art/rm', { id });

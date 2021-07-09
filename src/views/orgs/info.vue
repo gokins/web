@@ -2,6 +2,7 @@
   <div>
     <CCard>
       <CCardHeader>
+        <CIcon name="cil-devices" />&nbsp;
         <strong>{{ info.name }}</strong>
         <div class="card-header-actions">
           <CButton size="sm" color="primary" variant="outline" @click="selPip = true" v-if="perm.adm==true">

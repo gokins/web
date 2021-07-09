@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="tlist">
-      <li v-for="item in items" :key="'pipe:'+item.id" @click="$router.push(`/pipeline/info/${item.id}`)">
+      <li v-for="item in items" :key="'art:'+item.id" @click="$router.push(`/art/info/${item.aid}`)">
         <div class="tit">
           <div class="tits">
             {{ item.name }}

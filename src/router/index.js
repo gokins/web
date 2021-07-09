@@ -83,6 +83,19 @@ function configRoutes() {
                                 import ('@/views/orgs/info')
                         },
                     ]
+                }, {
+                    path: '/art',
+                    redirect: '/org/list',
+                    name: 'Artifact',
+                    component: {
+                        render(c) { return c('router-view') }
+                    },
+                    children: [{
+                        path: 'info/:id',
+                        name: 'Info',
+                        component: () =>
+                            import ('@/views/arts/info')
+                    }, ]
                 },
                 {
                     path: '/pipelineVersion',

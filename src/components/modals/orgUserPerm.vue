@@ -7,6 +7,7 @@
 
     <CInputCheckbox label="编辑权限" :checked.sync="formData.rw" />
     <CInputCheckbox label="执行权限" :checked.sync="formData.exec" />
+    <CInputCheckbox label="下载制品权限" :checked.sync="formData.down" />
 
   </CModal>
 </template>
@@ -22,6 +23,7 @@ export default {
         this.formData.id = this.perm.id;
         this.formData.rw = this.perm.rw;
         this.formData.exec = this.perm.exec;
+        this.formData.down = this.perm.down;
       }
     },
   },
@@ -29,16 +31,6 @@ export default {
     return {
       formData: {}
     };
-  },
-  methods: {
-    subFun () {
-      this.$emit('subFun', user.id, ok => {
-        if (ok == true) {
-          user.added = true;
-          this.$refs.table.$forceUpdate()
-        }
-      })
-    }
   },
 };
 </script>

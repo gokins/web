@@ -51,11 +51,11 @@
               <CCardBody>
                 <ArtlistView :items="artitems" :loading="loadings" #default="{item}">
                   <CButton color="info" variant="outline" square size="sm" @click.stop="arteditr=item;selArt = true"
-                    class="pipeBtn" v-if="perm.adm==true">
+                    class="pipeBtn" v-if="perm.write==true">
                     修改
                   </CButton>
                   <CButton color="danger" size="sm" @click.stop="rmArtFun(item.id)" class="pipeBtn"
-                    v-if="perm.adm==true">
+                    v-if="perm.write==true">
                     删除
                   </CButton>
                 </ArtlistView>
@@ -85,7 +85,7 @@
             </CCard>
             <CCard accent-color="primary">
               <CCardHeader>
-                <strong>管理员</strong> <small style="color:#aaa">可管理组织和操作流水线</small>
+                <strong>管理员</strong> <small style="color:#aaa">可管理 组织,流水线,制品库</small>
                 <div class="card-header-actions">
                   <CButton size="sm" color="info" variant="outline" @click="selAdm = true" v-if="perm.own==true">
                     新增用户
@@ -112,7 +112,7 @@
             </CCard>
             <CCard accent-color="primary">
               <CCardHeader>
-                <strong>普通用户</strong> <small style="color:#aaa">只能操作流水线</small>
+                <strong>普通用户</strong> <small style="color:#aaa">只能操作 流水线,制品库</small>
                 <div class="card-header-actions">
                   <CButton size="sm" color="info" variant="outline" @click="selUsr = true" v-if="perm.adm==true">
                     新增用户
@@ -129,12 +129,21 @@
                     </div>
                     <div class="tools">{{ it.nick }}</div>
                     <div class="tools">
-                      <CBadge color="info">{{
+                      <div>
+                        <CBadge color="info">{{
                         it.permRw == 1 ? "可编辑" : "不可编辑"
                       }}</CBadge>
-                      <CBadge color="info">{{
+                      </div>
+                      <div>
+                        <CBadge color="info">{{
                         it.permExec == 1 ? "可执行" : "不可执行"
                       }}</CBadge>
+                      </div>
+                      <div>
+                        <CBadge color="info">{{
+                        it.permDown == 1 ? "可下载" : "不可下载"
+                      }}</CBadge>
+                      </div>
                     </div>
                     <div class="tools">
                       <CButton color="warning" size="sm" @click="upPermFun(it)" v-if="perm.adm==true">
@@ -266,7 +275,7 @@ export default {
       selUsr: false,
       selPerm: false,
       selectShow: false,
-      curPerm: { rw: false, exec: false },
+      curPerm: { rw: false, exec: false, down: false },
     };
   },
   computed: {
@@ -426,6 +435,7 @@ export default {
         id: it.id,
         rw: it.permRw == 1,
         exec: it.permExec == 1,
+        down: it.permDown == 1,
       };
       this.selPerm = true;
     },
@@ -437,6 +447,7 @@ export default {
         adm: false,
         rw: data.rw,
         ex: data.exec,
+        dw: data.down,
       }).then((res) => {
         this.selPerm = false;
         this.getUserList();

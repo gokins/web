@@ -14,7 +14,7 @@
           </div>
           <div style="flex:1"></div>
           <div class="tipln">
-            <i class="iconfont icon-build" v-c-tooltip.hover.click="'制品数量'" />
+            <i class="iconfont icon-zhipinku" v-c-tooltip.hover.click="'制品数量'" />
             &nbsp;{{item.artln}}
           </div>
           <slot :item="item"></slot>

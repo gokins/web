@@ -90,3 +90,6 @@ export const ArtOrgList = pars => Post('/art/org-list', pars);
 export const ArtInfo = id => Post('/art/info', { id });
 export const ArtEdit = pars => Post('/art/edit', pars);
 export const ArtRm = id => Post('/art/rm', { id });
+export const ArtPackList = pars => Post('/art/package/list', pars);
+export const ArtVerList = pars => Post('/art/version/list', pars);
+export const ArtVerInfos = id => Post('/art/version/infos', { id });

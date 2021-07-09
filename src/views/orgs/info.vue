@@ -212,8 +212,7 @@
         </CTabs>
       </CCardBody>
     </CCard>
-    <EditArt :shown.sync="selArt" :orgId="this.info.id" :info="arteditr" @subOk="editArtOkFun"
-      v-if="perm.write==true" />
+    <EditArt :shown.sync="selArt" :orgId="info.id" :info="arteditr" @subOk="editArtOkFun" v-if="perm.write==true" />
     <SelectPipe :shown.sync="selPip" @addFun="addPipFun" v-if="perm.adm==true" />
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" v-if="perm.own==true" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />

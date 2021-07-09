@@ -36,13 +36,10 @@
         </div>
         <div class="hd-infos">
           <div style="flex:1">{{ pipe.displayName }}
-            <small>仓库地址: {{ pipe.url }}</small>
+            <small>仓库地址: <a :href="pipe.url" target="_blank">{{ pipe.url }}</a></small>
             <small style="color:#333">开始时间: {{ $dateFmt(pv.created) }}</small>
             <small style="color:#333">运行: {{ $dateCha(build.started,build.finished) }}</small>
-            <small style="color:red" v-if="build.status=='error'&&build.error&&build.error!=''">错误:
-              {{ build.error }}</small>
           </div>
-          <div></div>
         </div>
       </CCardHeader>
       <!-- <CCardHeader>
@@ -64,6 +61,9 @@
                   <CProgress :value="workpgss" color="info" :striped="true" show-percentage :animated="workpgss<100" />
                 </div>
               </div>
+            </div>
+            <div class="hd-errs" v-if="build.status=='error'&&build.error&&build.error!=''">
+              初始化错误: {{ build.error }}
             </div>
             <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
               <div class="tits clickitem" @click="toggleStage(stageid)">
@@ -444,6 +444,12 @@ export default {
   margin-left: 35px
   small
     margin-left: 10px
+.hd-errs
+  color: red
+  font-size: 16px
+  font-weight: bold
+  margin-top: 10px
+  text-align: center
 .icons
   width: 30px
   margin-right: 5px

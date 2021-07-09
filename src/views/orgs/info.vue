@@ -13,7 +13,8 @@
             新建流水线
           </CButton>
           &nbsp;
-          <CButton size="sm" color="info" variant="outline" @click="arteditr=null;selArt = true" v-if="perm.adm==true">
+          <CButton size="sm" color="info" variant="outline" @click="arteditr=null;selArt = true"
+            v-if="perm.write==true">
             新建制品库
           </CButton>
         </div>
@@ -210,7 +211,8 @@
         </CTabs>
       </CCardBody>
     </CCard>
-    <EditArt :shown.sync="selArt" :orgId="this.info.id" :info="arteditr" @subOk="editArtOkFun" v-if="perm.adm==true" />
+    <EditArt :shown.sync="selArt" :orgId="this.info.id" :info="arteditr" @subOk="editArtOkFun"
+      v-if="perm.write==true" />
     <SelectPipe :shown.sync="selPip" @addFun="addPipFun" v-if="perm.adm==true" />
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" v-if="perm.own==true" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />

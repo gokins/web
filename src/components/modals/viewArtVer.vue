@@ -20,10 +20,10 @@
         <div>{{infos.desc}}</div>
         <div>----------------------------------------</div>
         <div>
-          <ul>
+          <ul v-if="infos.files&&infos.files.length>0">
             <li v-for="(it,ix) in infos.files" :key="'verfl:'+ix">
               {{it.name}}
-              <ul>
+              <ul v-if="it.files&&it.files.length>0">
                 <li v-for="(its,jx) in it.files" :key="'verfls:'+jx">
                   {{its.name}}
                 </li>

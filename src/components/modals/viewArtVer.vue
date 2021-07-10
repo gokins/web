@@ -25,7 +25,7 @@
               {{it.name}}
               <ul v-if="it.files&&it.files.length>0">
                 <li v-for="(its,jx) in it.files" :key="'verfls:'+jx">
-                  {{its.name}}
+                  <a :href="'api/art/pub/down'+its.id+'/'+it.name+'/'+its.name" target="_blank">{{its.name}}</a>
                 </li>
               </ul>
             </li>
@@ -59,6 +59,7 @@ export default {
   },
   methods: {
     getList (pg) {
+      this.infoShow = false;
       ArtVerList({ packId: this.packArt.id, page: pg }).then((res) => {
         this.page = res.data.page;
         this.pages = res.data.pages;

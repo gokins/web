@@ -5,6 +5,8 @@
         <i class="iconfont icon-zhipinku" />&nbsp;
         <strong>{{ arty.name }} </strong>
         <small>ID: {{arty.identifier}}</small>
+        <i class="iconfont icon-bianhao cpicn" @click.stop="copyIds(arty.identifier)"
+          v-c-tooltip.hover.click="'复制制品库ID'" />
         <div class="card-header-actions">
           <CButton size="sm" color="primary" variant="outline" @click="selArt = true" v-if="perm.write==true">
             修改制品库
@@ -21,13 +23,13 @@
       </CCardHeader>
       <CCardBody>
         <PacklistView :items="packitems" :loading="loading" #default="{item}">
-          <CButton color="info" variant="outline" square size="sm" @click.stop="arteditr=item;selArt = true"
+          <!-- <CButton color="info" variant="outline" square size="sm" @click.stop="arteditr=item;selArt = true"
             class="pipeBtn" v-if="perm.write==true">
             修改
           </CButton>
           <CButton color="danger" size="sm" @click.stop="rmArtFun(item.id)" class="pipeBtn" v-if="perm.write==true">
             删除
-          </CButton>
+          </CButton> -->
         </PacklistView>
       </CCardBody>
     </CCard>
@@ -40,6 +42,7 @@ import {
   ArtPackList,
   UtilCatch,
 } from "@/assets/js/apis";
+import { copyText } from "@/assets/js/utils";
 import EditArt from "@/components/modals/editArt";
 import PacklistView from "@/components/list/packlist";
 export default {
@@ -79,7 +82,24 @@ export default {
         this.loading = false;
         this.packitems = res.data.data;
       }).catch(err => UtilCatch(this, err))
+    },
+    copyIds (txt) {
+      if (copyText(txt))
+        this.$msgOk('已成功复制制品库ID');
+      else
+        this.$msgErr('复制制品库ID失败');
     }
   }
 }
 </script>
+<style lang="sass" scoped>
+.cpicn
+  margin-left: 10px
+  color: #0072ff
+  font-size: 16px
+  margin-left: 5px
+  padding: 7px 5px 5px 5px
+  cursor: pointer
+  &:hover
+    background: #bed6f5
+</style>

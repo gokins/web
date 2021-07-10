@@ -19,13 +19,17 @@
         <div>{{$dateFmt(infos.created)}}</div>
         <div>{{infos.desc}}</div>
         <div>----------------------------------------</div>
+        <!-- <div>
+          <a :href="'api/art/pub/down/'+infos.id+'/'+'?authToken='+tokens()" target="_blank">下载全部</a>
+        </div> -->
         <div>
           <ul v-if="infos.files&&infos.files.length>0">
             <li v-for="(it,ix) in infos.files" :key="'verfl:'+ix">
-              {{it.name}}
-              <ul v-if="it.files&&it.files.length>0">
-                <li v-for="(its,jx) in it.files" :key="'verfls:'+jx">
-                  <a :href="'api/art/pub/down'+its.id+'/'+it.name+'/'+its.name" target="_blank">{{its.name}}</a>
+              <a :href="'api/art/pub/down/'+infos.id+'/'+it.name+'?authToken='+tokens()" target="_blank">{{it.name}}</a>
+              <ul v-if="it.child&&it.child.length>0">
+                <li v-for="(its,jx) in it.child" :key="'verfls:'+jx">
+                  <a :href="'api/art/pub/down/'+infos.id+'/'+it.name+'/'+its.name+'?authToken='+tokens()"
+                    target="_blank">{{its.name}}</a>
                 </li>
               </ul>
             </li>
@@ -36,6 +40,7 @@
   </CModal>
 </template>
 <script>
+import { getToken } from '@/assets/js/token';
 import { UtilCatch, ArtVerList, ArtVerInfos } from "@/assets/js/apis";
 export default {
   props: {
@@ -77,6 +82,8 @@ export default {
         this.infoShow = true;
         this.infos = res.data.info;
       }).catch((err) => UtilCatch(this, err));
+    }, tokens () {
+      return getToken();
     }
   },
 };

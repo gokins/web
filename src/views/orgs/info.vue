@@ -217,7 +217,7 @@
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" v-if="perm.own==true" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />
     <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
-    <SelectBranches :shown.sync="selectShow" :id="pipelineId" v-if="perm.adm==true" />
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
   </div>
 </template>
 <script>

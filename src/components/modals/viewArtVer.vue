@@ -18,22 +18,11 @@
         <div>{{infos.sha}}</div>
         <div>{{$dateFmt(infos.created)}}</div>
         <div>{{infos.desc}}</div>
-        <div>----------------------------------------</div>
         <!-- <div>
           <a :href="'api/art/pub/down/'+infos.id+'/'+'?authToken='+tokens()" target="_blank">下载全部</a>
         </div> -->
-        <div>
-          <ul v-if="infos.files&&infos.files.length>0">
-            <li v-for="(it,ix) in infos.files" :key="'verfl:'+ix">
-              <a :href="'api/art/pub/down/'+infos.id+'/'+it.name+'?authToken='+tokens()" target="_blank">{{it.name}}</a>
-              <ul v-if="it.child&&it.child.length>0">
-                <li v-for="(its,jx) in it.child" :key="'verfls:'+jx">
-                  <a :href="'api/art/pub/down/'+infos.id+'/'+it.name+'/'+its.name+'?authToken='+tokens()"
-                    target="_blank">{{its.name}}</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
+        <div class="fls">
+          <DirsItem :verid="infos.id" :items="infos.files" pths="" />
         </div>
       </div>
     </div>
@@ -42,6 +31,7 @@
 <script>
 import { getToken } from '@/assets/js/token';
 import { UtilCatch, ArtVerList, ArtVerInfos } from "@/assets/js/apis";
+import DirsItem from "@/components/view/dirsItem";
 export default {
   props: {
     shown: Boolean,
@@ -52,6 +42,7 @@ export default {
       if (nv == true) this.getList(0);
     },
   },
+  components: { DirsItem },
   data () {
     return {
       items: [],
@@ -92,7 +83,8 @@ export default {
 .tlistDiv
   margin: 20px 10px
   text-align: center
-  flex: 1
+  width: 300px
+  border-right: 1px solid #ddd
   ul
     margin-bottom: 20px
   li
@@ -120,9 +112,12 @@ export default {
         margin-left: 10px
 
 .verInfos
-  width: 500px
+  flex: 1
   padding: 0 10px
-  border-left: 1px solid #ddd
   .vers
     color: red
+  .fls
+    border: 1px solid #ccc
+    padding: 10px
+    margin-top: 20px
 </style>

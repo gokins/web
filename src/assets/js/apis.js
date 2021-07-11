@@ -5,27 +5,27 @@ export const UInfo = () => Post('/lg/info', {});
 
 //catch
 export const UtilCatch = (that, err, fn) => {
-    const stat = err.response ? err.response.status : 0;
-    if (stat == 403) {
-        that.$store.commit('clearUserInfo');
-        that.$router.push('/login')
-        return;
+  const stat = err.response ? err.response.status : 0;
+  if (stat == 403) {
+    that.$store.commit('clearUserInfo');
+    that.$router.push('/login')
+    return;
+  }
+  let isnotshow = false;
+  if (fn && typeof fn === 'function') {
+    isnotshow = fn(err, that);
+  }
+  if (isnotshow != true) {
+    if (stat == 404) {
+      that.$msgErr('未找到内容');
+    } else if (stat == 405) {
+      that.$msgErr('无权限');
+    } else {
+      that.$msgErr(
+        err.response ? err.response.data || "服务器错误" : "网络错误"
+      );
     }
-    let isnotshow = false;
-    if (fn && typeof fn === 'function') {
-        isnotshow = fn(err, that);
-    }
-    if (isnotshow != true) {
-        if (stat == 404) {
-            that.$msgErr('未找到内容');
-        } else if (stat == 405) {
-            that.$msgErr('无权限');
-        } else {
-            that.$msgErr(
-                err.response ? err.response.data || "服务器错误" : "网络错误"
-            );
-        }
-    }
+  }
 }
 
 
@@ -93,3 +93,4 @@ export const ArtRm = id => Post('/art/rm', { id });
 export const ArtPackList = pars => Post('/art/package/list', pars);
 export const ArtVerList = pars => Post('/art/version/list', pars);
 export const ArtVerInfos = id => Post('/art/version/infos', { id });
+export const ArtVerUrl = (id, path) => Post('/art/version/url', { id, path });

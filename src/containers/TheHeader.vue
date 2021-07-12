@@ -12,8 +12,8 @@
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/user" exact>
-          用户
+        <CHeaderNavLink to="/pipeline" exact>
+          流水线
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">

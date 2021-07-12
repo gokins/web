@@ -1,5 +1,5 @@
 <template>
-  <CModal title="新建用户" :show="shown" @update:show="(val) => $emit('update:shown', val)">
+  <CModal title="新建用户" :closeOnBackdrop="false" :show="shown" @update:show="(val) => $emit('update:shown', val)">
     <template #footer>
       <CButton color="warning" variant="outline" @click="$emit('update:shown', false )">取消</CButton>
       <CButton color="info" @click="subFun" :disabled="subing">提交</CButton>
@@ -55,7 +55,8 @@ export default {
       }
       this.subing = true;
       UserNew(this.formData).then(() => {
-        this.$emit('update:shown', false)
+        this.$emit('update:shown', false);
+        this.$emit('subOk', false);
       }).catch(err => UtilCatch(this, err, err => {
         this.subing = false;
         const stat = err.response ? err.response.status : 0;

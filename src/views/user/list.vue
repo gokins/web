@@ -53,7 +53,7 @@
         <CPagination :activePage="page" :pages="pages" @update:activePage="getList" style="float: right" />
       </CCardBody>
     </CCard>
-    <NewUser :shown.sync="newshow" />
+    <NewUser :shown.sync="newshow" @subOk="getList(page)" />
     <SelUserPerm :shown.sync="permSel" :uid="permUid" />
   </div>
 </template>

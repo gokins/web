@@ -60,14 +60,16 @@ export const SavePipeline = pars => Post('/pipeline/save', pars);
 export const RunPipeline = pars => Post('/pipeline/run', pars);
 export const PipelineVersions = pars => Post('/pipeline/pipelineVersions', pars);
 export const PipelineVersion = (id) => Post('/pipeline/pipelineVersion', { id });
-export const DeletedPipeline = (id) => Post('/pipeline/deleted', { id });
+export const DeletePipeline = (id) => Post('/pipeline/delete', { id });
 export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
 export const RebuildVersion = (pipelineVersionId) => Post('/pipeline/rebuild', { pipelineVersionId: pipelineVersionId });
 export const SearchSha = pars => Post('/pipeline/search/sha', pars);
+//pieplineVersion
+export const DeletePipelineVersion = (id) => Post('/pipelineVersion/delete', {id:id});
 //piepline Vars
 export const PipelineVars = pars => Post('/pipeline/vars', pars);
 export const SavePipelineVars = pars => Post('pipeline/var/save', pars);
-export const DeletedPipelineVars = pars => Post('/pipeline/var/del', pars);
+export const DeletePipelineVars = pars => Post('/pipeline/var/del', pars);
 //yml
 export const YmlTemplates = () => Post('/yml/templates');
 export const YmlPlugins = () => Post('/yml/plugins');

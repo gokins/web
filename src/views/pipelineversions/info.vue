@@ -24,6 +24,10 @@
               v-if="perm.exec==true&&!this.builded">
               停止构建
             </CButton>
+
+           <CButton size="sm" color="danger" variant="outline" @click="delVersion" v-if="perm.exec==true">
+            删除构建
+          </CButton>
             &nbsp;
             <CButton size="sm" color="info" variant="outline" @click="rebuildFun" v-if="perm.exec==true">
               重新构建
@@ -191,6 +195,7 @@ import {
   RuntimeCancel,
   RuntimeLogs,
   RebuildVersion,
+  DeletePipelineVersion
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 import pluginView from "@/components/modals/pluginView";
@@ -417,6 +422,13 @@ export default {
       this.$confirm("确定重新构建?", null, () => {
         RebuildVersion(this.pv.id).then((res) => {
           this.$router.push("/pipeline/build/" + res.data.id)
+        }).catch((err) => UtilCatch(this, err));
+      })
+    },
+    delVersion(){
+      this.$confirm("确定删除?", null, () => {
+        DeletePipelineVersion(this.pv.id).then((res) => {
+          this.$router.back(-1);
         }).catch((err) => UtilCatch(this, err));
       })
     }

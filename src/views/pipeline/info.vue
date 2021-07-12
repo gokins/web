@@ -175,12 +175,12 @@
 <script>
 import {
   CopyPipeline,
-  DeletedPipeline,
+  DeletePipeline,
   PipelineInfo,
   PipelineVersions,
   PipelineVars,
   SavePipelineVars,
-  DeletedPipelineVars,
+  DeletePipelineVars,
   UtilCatch,
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
@@ -341,7 +341,7 @@ export default {
     },
     deletedPipe () {
       this.$confirm("确定删除流水线?", null, () => {
-        DeletedPipeline(this.pipelineId)
+        DeletePipeline(this.pipelineId)
           .then((res) => {
             this.$router.back(-1);
           })
@@ -414,11 +414,9 @@ export default {
       this.savePipelineVars();
       this.getPipelineVars();
       this.getInfoPipelineVars();
-      return;
     },
     delVar (item) {
       this.deletedPipelineVars(item.aid);
-      return;
     },
     editVar (item) {
       if (item != undefined && item != null) {
@@ -448,7 +446,7 @@ export default {
     },
     deletedPipelineVars (aid) {
       this.$confirm("确定删除变量?", null, () => {
-        DeletedPipelineVars({ aid: aid })
+        DeletePipelineVars({ aid: aid })
           .then((res) => {
             this.$msgOk("删除成功");
             this.closeVars();

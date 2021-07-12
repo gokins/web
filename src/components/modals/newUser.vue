@@ -55,7 +55,8 @@ export default {
       }
       this.subing = true;
       UserNew(this.formData).then(() => {
-        this.$emit('update:shown', false)
+        this.$emit('update:shown', false);
+        this.$emit('subOk', false);
       }).catch(err => UtilCatch(this, err, err => {
         this.subing = false;
         const stat = err.response ? err.response.status : 0;

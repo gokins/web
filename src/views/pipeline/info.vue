@@ -251,6 +251,7 @@
                 <TriggerListView
                   :items="triggerList"
                   :loading="triggerLoading"
+                  :host="this.host"
                   #default="{ item }"
                 >
                   <CButton
@@ -470,25 +471,13 @@ export default {
         value: "",
         name: "",
       },
+      host: "",
       triggerVar: {},
       triggerList: [],
       triggerLoading: false,
       triggerPage: 0,
       triggerPages: 0,
       triggerShow: false,
-      triggerOptions: [
-        { label: "webHook", value: "webHook" },
-        { label: "定时器", value: "timer" },
-        { label: "Web", value: "web" },
-        // {label: "流水线结束后触发", value: "pipeline"}
-      ],
-      webHookOptions: ["Github", "Gitee", "Gitea", "Gitlab", "Codeup"],
-      hookEventOptions: [{ label: "所有事件", value: "" }, "push"],
-      timerOptions: [
-        { label: "不重复", value: 0 },
-        { label: "每天", value: 1 },
-        { label: "每周", value: 2 },
-      ],
       formTriggerData: {},
       formTriggerHook: {},
       formTriggerPipeline: {},
@@ -686,9 +675,11 @@ export default {
         .then((res) => {
           this.triggerLoading = false;
           if (res.data != null) {
-            this.triggerPage = res.data.page;
-            this.triggerPages = res.data.pages;
-            this.triggerList = res.data.data;
+            let r = res.data.page;
+            this.host = res.data.host;
+            this.triggerPage = r.page;
+            this.triggerPages = r.pages;
+            this.triggerList = r.data;
           }
         })
         .catch((err) => UtilCatch(this, err));

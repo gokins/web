@@ -69,11 +69,12 @@
   </div>
 </template>
 <script>
+import { copyText } from "@/assets/js/utils";
 import RunView from "@/components/modals/runView";
 export default {
   components: { RunView },
   props: {
-    perm: Object,
+    host: String,
     items: Array,
     triggerLoading: Boolean,
   },
@@ -81,7 +82,7 @@ export default {
     return {
       timers: ["不重复", "每天", "每周"],
       triggerId: "",
-      runShow:false,
+      runShow: false,
     };
   },
   mounted() {},
@@ -110,6 +111,12 @@ export default {
               param.hookEvent +
               "</span>";
           }
+          h +=
+            '<br> <span style=" border:1px solid #eee ;font-size: 10px">hook地址: ' +
+            this.host +
+            " /hook/" +
+            item.id +
+            "<span>";
           break;
         case "timer":
           h =
@@ -126,10 +133,14 @@ export default {
     },
     openRuns(item) {
       this.triggerId = item.id;
-      this.runShow=true
+      this.runShow = true;
     },
     closeRun() {
       this.runShow = false;
+    },
+    copyHook(txt) {
+      if (copyText(txt)) this.$msgOk("已成功Hook地址");
+      else this.$msgErr("复制Hook地址失败");
     },
   },
 };

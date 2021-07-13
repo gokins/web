@@ -34,7 +34,7 @@
           variant="pills"
           :vertical="{ navs: 'col-md-2', content: 'col-md-10' }"
         >
-          <CTab>
+          <CTab active>
             <template slot="title">
               <CIcon name="cil-calculator" />
               构建历史
@@ -227,7 +227,7 @@
               </CCardBody>
             </CCard>
           </CTab>
-          <CTab active>
+          <CTab>
             <template slot="title">
               <CIcon name="cil-calculator" />
               触发器

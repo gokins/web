@@ -114,7 +114,7 @@ export default {
           h +=
             '<br> <span style=" border:1px solid #eee ;font-size: 10px">hook地址: ' +
             this.host +
-            " /hook/" +
+            "/hook/" +
             item.id +
             "<span>";
           break;

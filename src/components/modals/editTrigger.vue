@@ -23,7 +23,7 @@
             label="触发器类型"
             :options="triggerOptions"
             placeholder="请选择触发器类型"
-            :value="triggerVar.types"
+            :value.sync="triggerVar.types"
             custom
           />
         </CCol>
@@ -43,7 +43,7 @@
             label="WebHook类型"
             :options="webHookOptions"
             placeholder="请选择WebHook类型"
-            :value="formTriggerHook.hookType"
+            :value.sync="formTriggerHook.hookType"
             custom
           />
         </CCol>
@@ -72,7 +72,7 @@
             label="触发事件"
             :options="hookEventOptions"
             placeholder="请选择Hook事件"
-            :value="formTriggerHook.hookEvent"
+            :value.sync="formTriggerHook.hookEvent"
             custom
           />
         </CCol>
@@ -83,7 +83,7 @@
             label="重复:"
             :options="timerOptions"
             placeholder="请选择"
-            :value="formTriggerData.timerType"
+            :value.sync="formTriggerData.timerType"
             custom
           />
         </CCol>
@@ -111,7 +111,7 @@
             label="流水线名称:"
             :options="timerOptions"
             placeholder="请选择"
-            :value="formTriggerPipeline.pipeIds"
+            :value.sync="formTriggerPipeline.pipeIds"
             custom
           />
         </CCol>

@@ -96,3 +96,10 @@ export const ArtPackList = pars => Post('/art/package/list', pars);
 export const ArtVerList = pars => Post('/art/version/list', pars);
 export const ArtVerInfos = id => Post('/art/version/infos', { id });
 export const ArtVerUrl = (id, path) => Post('/art/version/url', { id, path });
+
+//trigger
+export const TriggerList = pars => Post('/trigger/triggers', pars);
+export const SaveTrigger = pars => Post('/trigger/save', pars);
+export const DeleteTrigger = id => Post('/trigger/delete', {id:id});
+//trigger runs
+export const TriggerRuns = id => Post('/trigger/runs', {id:id});

@@ -168,7 +168,7 @@ function configRoutes() {
                                 import ('@/views/pipeline/info')
                         },
                     ]
-                }
+                },
             ]
         },
         /* {

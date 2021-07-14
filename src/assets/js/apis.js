@@ -5,27 +5,27 @@ export const UInfo = () => Post('/lg/info', {});
 
 //catch
 export const UtilCatch = (that, err, fn) => {
-  const stat = err.response ? err.response.status : 0;
-  if (stat == 403) {
-    that.$store.commit('clearUserInfo');
-    that.$router.push('/login')
-    return;
-  }
-  let isnotshow = false;
-  if (fn && typeof fn === 'function') {
-    isnotshow = fn(err, that);
-  }
-  if (isnotshow != true) {
-    if (stat == 404) {
-      that.$msgErr('未找到内容');
-    } else if (stat == 405) {
-      that.$msgErr('无权限');
-    } else {
-      that.$msgErr(
-        err.response ? err.response.data || "服务器错误" : "网络错误"
-      );
+    const stat = err.response ? err.response.status : 0;
+    if (stat == 403) {
+        that.$store.commit('clearUserInfo');
+        that.$router.push('/login')
+        return;
     }
-  }
+    let isnotshow = false;
+    if (fn && typeof fn === 'function') {
+        isnotshow = fn(err, that);
+    }
+    if (isnotshow != true) {
+        if (stat == 404) {
+            that.$msgErr('未找到内容');
+        } else if (stat == 405) {
+            that.$msgErr('无权限');
+        } else {
+            that.$msgErr(
+                err.response ? err.response.data || "服务器错误" : "网络错误"
+            );
+        }
+    }
 }
 
 
@@ -65,7 +65,7 @@ export const CopyPipeline = (id) => Post('/pipeline/copy', { pipelineId: id });
 export const RebuildVersion = (pipelineVersionId) => Post('/pipeline/rebuild', { pipelineVersionId: pipelineVersionId });
 export const SearchSha = pars => Post('/pipeline/search/sha', pars);
 //pieplineVersion
-export const DeletePipelineVersion = (id) => Post('/pipelineVersion/delete', {id:id});
+export const DeletePipelineVersion = (id) => Post('/pipelineVersion/delete', { id: id });
 //piepline Vars
 export const PipelineVars = pars => Post('/pipeline/vars', pars);
 export const SavePipelineVars = pars => Post('pipeline/var/save', pars);
@@ -95,11 +95,13 @@ export const ArtRm = id => Post('/art/rm', { id });
 export const ArtPackList = pars => Post('/art/package/list', pars);
 export const ArtVerList = pars => Post('/art/version/list', pars);
 export const ArtVerInfos = id => Post('/art/version/infos', { id });
+export const ArtVerSave = pars => Post('/art/version/save', pars);
+export const ArtVerRm = id => Post('/art/version/rm', { id });
 export const ArtVerUrl = (id, path) => Post('/art/version/url', { id, path });
 
 //trigger
 export const TriggerList = pars => Post('/trigger/triggers', pars);
 export const SaveTrigger = pars => Post('/trigger/save', pars);
-export const DeleteTrigger = id => Post('/trigger/delete', {id:id});
+export const DeleteTrigger = id => Post('/trigger/delete', { id: id });
 //trigger runs
-export const TriggerRuns = id => Post('/trigger/runs', {id:id});
+export const TriggerRuns = id => Post('/trigger/runs', { id: id });

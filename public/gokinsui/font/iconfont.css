@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2638356 */
-  src: url('iconfont.woff2?t=1625818014009') format('woff2'),
-       url('iconfont.woff?t=1625818014009') format('woff'),
-       url('iconfont.ttf?t=1625818014009') format('truetype');
+  src: url('iconfont.woff2?t=1626238576632') format('woff2'),
+       url('iconfont.woff?t=1626238576632') format('woff'),
+       url('iconfont.ttf?t=1626238576632') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-prohibit-fill:before {
+  content: "\eb25";
+}
+
+.icon-prohibit:before {
+  content: "\eb26";
 }
 
 .icon-zhipinku:before {

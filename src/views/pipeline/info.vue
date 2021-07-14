@@ -34,7 +34,7 @@
           variant="pills"
           :vertical="{ navs: 'col-md-2', content: 'col-md-10' }"
         >
-          <CTab active>
+          <CTab>
             <template slot="title">
               <CIcon name="cil-calculator" />
               构建历史
@@ -227,7 +227,7 @@
               </CCardBody>
             </CCard>
           </CTab>
-          <CTab>
+          <CTab active>
             <template slot="title">
               <CIcon name="cil-calculator" />
               触发器
@@ -260,7 +260,8 @@
                     color="info"
                     variant="outline"
                     @click.stop="editrigger(item)"
-                    class="tit_btu"
+                    class="tri_btu"
+                    square
                   >
                     编辑
                   </CButton>
@@ -270,14 +271,11 @@
                     color="danger"
                     variant="outline"
                     @click.stop="deleteTrigger(item.id)"
-                    class="tit_btu"
+                    class="tri_btu"
+                    square
                   >
                     删除
                   </CButton>
-                  <div style="display: flex">
-                    创建者:
-                    <myavatar :src="item.avat" :nick="item.nick" imgw="15px" />
-                  </div>
                 </TriggerListView>
                 <CPagination
                   :activePage="triggerPage"
@@ -343,15 +341,7 @@
         </CRow>
       </div>
     </CModal>
-    <EditTrigger
-      :shown.sync="this.triggerShow"
-      :triggerVar.sync="this.triggerVar"
-      :formTriggerData.sync="this.formTriggerData"
-      :formTriggerHook.sync="this.formTriggerHook"
-      :formTriggerWeb.sync="this.formTriggerWeb"
-      @closeTrigger="closeTrigger"
-      @saveTrigger="saveTrigger"
-    />
+    <EditTrigger :triggerShow.sync="triggerShow" :item="triggerVar" :pipelineId="pipelineId" @getTriggerList="getTriggerList"/>
   </div>
 </template>
 <script>
@@ -364,7 +354,6 @@ import {
   PipelineVersions,
   SavePipelineVars,
   TriggerList,
-  SaveTrigger,
   DeleteTrigger,
   UtilCatch,
 } from "@/assets/js/apis";
@@ -379,7 +368,6 @@ import "codemirror/lib/codemirror.css";
 import "codemirror/theme/eclipse.css";
 import "codemirror/mode/yaml/yaml";
 import "codemirror/addon/display/autorefresh";
-import myavatar from "@/components/avatar";
 
 export default {
   coreics: freeSet,
@@ -390,7 +378,6 @@ export default {
     codemirror,
     TriggerListView,
     EditTrigger,
-    myavatar,
   },
   data() {
     return {
@@ -478,10 +465,6 @@ export default {
       triggerPage: 0,
       triggerPages: 0,
       triggerShow: false,
-      formTriggerData: {},
-      formTriggerHook: {},
-      formTriggerPipeline: {},
-      formTriggerWeb: {},
     };
   },
   computed: {
@@ -684,41 +667,7 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    openTrigger() {
-      this.triggerVar = {};
-      this.formTriggerData = {
-        dates: new Date(),
-      };
-      this.formTriggerHook = {};
-      // this.formTriggerPipeline = {}
-      this.formTriggerWeb = {};
-      this.triggerShow = true;
-    },
-    closeTrigger() {
-      this.triggerVar = {};
-      this.triggerShow = false;
-    },
-    editrigger(item) {
-      switch (item.types) {
-        case "webHook":
-          this.formTriggerHook = JSON.parse(item.params);
-          break;
-        case "timer":
-          let p = JSON.parse(item.params);
-          p.dates = new Date(p.dates);
-          this.formTriggerData = p;
-          break;
-        case "web":
-          this.formTriggerWeb = JSON.parse(item.params);
-          break;
-      }
-      item.enabled = item.enabled == 1;
-      this.triggerVar = item;
-      this.triggerShow = true;
-    },
-    chooseToday() {
-      this.formTriggerData.dates = new Date();
-    },
+
     deleteTrigger(id) {
       this.$confirm("确定删除触发器?", null, () => {
         DeleteTrigger(id)
@@ -729,83 +678,13 @@ export default {
           .catch((err) => UtilCatch(this, err));
       });
     },
-    saveTrigger() {
-      if (!this.checkForm()) {
-        return;
-      }
-      this.triggerVar.pipelineId = this.pipelineId;
-      let param = "";
-      switch (this.triggerVar.types) {
-        case "webHook":
-          param = JSON.stringify(this.formTriggerHook);
-          break;
-        case "timer":
-          param = JSON.stringify(this.formTriggerData);
-          break;
-        case "web":
-          param = JSON.stringify(this.formTriggerWeb);
-          break;
-      }
-      this.triggerVar.params = param;
-      SaveTrigger(this.triggerVar)
-        .then((res) => {
-          this.$msgOk("保存成功");
-          this.getTriggerList();
-          this.closeTrigger();
-        })
-        .catch((err) => UtilCatch(this, err));
-      this.triggerVar.params = param;
+    editrigger(item) {
+      this.triggerVar = item;
+      this.triggerShow = true;
     },
-    checkForm() {
-      if (!this.triggerVar.name || this.triggerVar.name === "") {
-        this.$msgErr("请输入触发器名称");
-        return;
-      }
-      if (!this.triggerVar.types || this.triggerVar.types === "") {
-        this.$msgErr("必须选择一种触发器类型");
-        return;
-      }
-
-      if (this.triggerVar.types === "webHook") {
-        if (
-          !this.formTriggerHook.hookType ||
-          this.formTriggerHook.hookType === ""
-        ) {
-          this.$msgErr("必须选择一种WebHook类型");
-          return;
-        }
-        if (
-          !this.formTriggerHook.secret ||
-          this.formTriggerHook.secret === ""
-        ) {
-          this.$msgErr("请输入密钥");
-          return;
-        }
-      }
-
-      if (this.triggerVar.types === "timer") {
-        if (this.formTriggerData.timerType === undefined) {
-          this.$msgErr("必须选择一种定时器类型");
-          return;
-        }
-        if (!this.formTriggerData.dates) {
-          this.$msgErr("请选择时间段");
-          return;
-        }
-      }
-      if (this.triggerVar.types === "web") {
-        if (!this.formTriggerWeb.secret || this.formTriggerWeb.secret === "") {
-          this.$msgErr("请输入密钥");
-          return;
-        }
-      }
-      // if (this.triggerVar.types === "pipeline") {
-      //   if (!this.formTriggerPipeline.pipeIds || this.formTriggerPipeline.pipeIds === "") {
-      //     this.$msgErr("至少选择一条流水线")
-      //     return
-      //   }
-      // }
-      return true;
+    openTrigger() {
+      this.triggerVar = {};
+      this.triggerShow = true;
     },
   },
 };
@@ -853,7 +732,7 @@ export default {
 
     .tits
 
-.pipeBtn
+.tri_btu
   margin: 5px 0 0 5px
   line-height: 20px
   height: 20px

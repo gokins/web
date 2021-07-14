@@ -14,29 +14,22 @@
         <li
           v-for="item in runList"
           :key="item.id"
-          @click="
-            item.pipeVersionId != '' && goVersion(item.pipeVersionId)
-          "
+          @click="item.pipeVersionId != '' && goVersion(item.pipeVersionId)"
         >
           <div style="display: flex">
-            <div style="flex: 0.6">
+            <div style="flex: 1">
               <i
-                class="iconfont icon-success color-success"
-                style="font-size: 15px; margin-left: 5px"
-                v-if="item.error == ''"
+                class="iconfont icon-prohibit color-warning"
+                v-if="item.error != ''"
               />
-              <i
-                class="iconfont icon-chacha color-error"
-                style="font-size: 15px; margin-left: 5px"
-                v-else-if="item.error != ''"
-              />
-              <span style="margin-left: 5px"
-                >触发时间:{{ $dateFmt(item.created) }}</span
-              >
+            <i class="iconfont icon-success color-success" style="font-size:15px" v-else-if="item.bStatus=='ok'" />
+            <i class="iconfont icon-chacha color-error" style="font-size:15px" v-else-if="item.bStatus=='error'" />
+            <i class="iconfont icon-jinzhide color-cancel" style="font-size:15px" v-else-if="item.bStatus=='cancel'" />
+            <i class="iconfont icon-jiazaizhong color-runing" style="font-size:15px" v-else />
+             <span v-if="item.error != ''" style="margin-left: 5px;color:#e55353">{{item.error}}</span>
+            <span v-else style="margin-left: 5px">#{{ item.number }} {{item.pipelineName}}</span>
             </div>
-            <span v-if="item.error != ''" style="margin-left: 5px"
-              >错误原因:{{ item.error }}</span
-            >
+            <span >{{ $dateFmt(item.created) }}</span>
           </div>
         </li>
       </ul>
@@ -78,14 +71,13 @@ export default {
     };
   },
   watch: {
-    triggerId(nv) {
-      if (nv != "") {
-        this.geList();
+    runShow(nv) {
+      if (nv == true) {
+        if (this.triggerId != "") this.geList();
       }
     },
   },
   mounted() {
-    this.geList();
   },
   methods: {
     goVersion(pipeVersionId) {

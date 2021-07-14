@@ -2,13 +2,15 @@
   <div>
     <CModal
       title="添加触发器"
-      :show="shown"
-      @update:show="close"
+      :show="triggerShow"
+      @update:show="(val) => $emit('update:triggerShow', val)"
       :centered="true"
     >
       <template #footer>
-        <CButton color="warning" @click="close">关闭</CButton>
-        <CButton color="info" @click="save">确定</CButton>
+        <CButton color="warning" @click="$emit('update:triggerShow', false)"
+          >关闭</CButton
+        >
+        <CButton color="info" @click="saveTrigger">确定</CButton>
       </template>
       <CRow>
         <CCol>
@@ -24,6 +26,7 @@
             :options="triggerOptions"
             placeholder="请选择触发器类型"
             :value.sync="triggerVar.types"
+            @change="change"
             custom
           />
         </CCol>
@@ -142,7 +145,7 @@
               class="mx-1"
               color="primary"
               shape="pill"
-              :checked="triggerVar.enabled"
+              :checked.sync="triggerVar.enabled"
             />
           </div>
         </CCol>
@@ -151,21 +154,52 @@
   </div>
 </template>
 <script>
+import { SaveTrigger, UtilCatch } from "@/assets/js/apis";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 export default {
   components: { DatePicker },
   props: {
-    triggerVar: Object,
-    shown: Boolean,
+    item: Object,
+    triggerShow: Boolean,
     closeTrigger: Function,
-    saveTrigger: Function,
-    formTriggerData: Object,
-    formTriggerHook: Object,
-    formTriggerPipeline: Object,
-    formTriggerWeb: Object,
+    pipelineId: String,
   },
-  watch: {},
+  watch: {
+    triggerShow(nv) {
+      if (nv == true) {
+        if (this.item && this.item.id != undefined && this.item.id != "") {
+          switch (this.item.types) {
+            case "webHook":
+              this.formTriggerHook = JSON.parse(this.item.params);
+              break;
+            case "timer":
+              let p = JSON.parse(this.item.params);
+              p.dates = new Date(p.dates);
+              this.formTriggerData = p;
+              break;
+            case "web":
+              this.formTriggerWeb = JSON.parse(this.item.params);
+              break;
+          }
+          this.triggerVar.id = this.item.id;
+          this.triggerVar.name = this.item.name;
+          this.triggerVar.types = this.item.types;
+          this.triggerVar.desc = this.item.desc;
+          this.triggerVar.enabled = this.item.enabled == 1;
+        } else {
+          this.triggerVar = {
+            enabled: true,
+          };
+          this.formTriggerData = { dates: new Date() };
+          this.formTriggerHook = {};
+          // this.formTriggerPipeline = {}
+          this.formTriggerWeb = {};
+          this.triggerShow = true;
+        }
+      }
+    },
+  },
   data() {
     return {
       triggerOptions: [
@@ -182,18 +216,100 @@ export default {
         { label: "每周", value: 2 },
       ],
       timers: ["不重复", "每天", "每周"],
+      formTriggerData: {},
+      formTriggerHook: {},
+      formTriggerPipeline: {},
+      formTriggerWeb: {},
+      triggerVar: {},
     };
   },
-  mounted() {},
+  mounted() {
+    console.log(this.triggerVar);
+  },
   methods: {
     chooseToday() {
       this.formTriggerData.dates = new Date();
     },
-    save() {
-      this.$emit("saveTrigger");
+    saveTrigger() {
+      if (!this.checkForm()) {
+        return;
+      }
+      this.triggerVar.pipelineId = this.pipelineId;
+      let param = "";
+      switch (this.triggerVar.types) {
+        case "webHook":
+          param = JSON.stringify(this.formTriggerHook);
+          break;
+        case "timer":
+          param = JSON.stringify(this.formTriggerData);
+          break;
+        case "web":
+          param = JSON.stringify(this.formTriggerWeb);
+          break;
+      }
+      this.triggerVar.params = param;
+      SaveTrigger(this.triggerVar)
+        .then((res) => {
+          this.$msgOk("保存成功");
+          this.$emit("update:triggerShow", false);
+          this.$emit("getTriggerList");
+        })
+        .catch((err) => UtilCatch(this, err));
     },
-    close() {
-      this.$emit("closeTrigger");
+    checkForm() {
+      if (!this.triggerVar.name || this.triggerVar.name === "") {
+        this.$msgErr("请输入触发器名称");
+        return;
+      }
+      if (!this.triggerVar.types || this.triggerVar.types === "") {
+        this.$msgErr("必须选择一种触发器类型");
+        return;
+      }
+
+      if (this.triggerVar.types === "webHook") {
+        if (
+          !this.formTriggerHook.hookType ||
+          this.formTriggerHook.hookType === ""
+        ) {
+          this.$msgErr("必须选择一种WebHook类型");
+          return;
+        }
+        if (
+          !this.formTriggerHook.secret ||
+          this.formTriggerHook.secret === ""
+        ) {
+          this.$msgErr("请输入密钥");
+          return;
+        }
+      }
+
+      if (this.triggerVar.types === "timer") {
+        if (this.formTriggerData.timerType === undefined) {
+          this.$msgErr("必须选择一种定时器类型");
+          return;
+        }
+        if (!this.formTriggerData.dates) {
+          this.$msgErr("请选择时间段");
+          return;
+        }
+      }
+      if (this.triggerVar.types === "web") {
+        if (!this.formTriggerWeb.secret || this.formTriggerWeb.secret === "") {
+          this.$msgErr("请输入密钥");
+          return;
+        }
+      }
+      // if (this.triggerVar.types === "pipeline") {
+      //   if (!this.formTriggerPipeline.pipeIds || this.formTriggerPipeline.pipeIds === "") {
+      //     this.$msgErr("至少选择一条流水线")
+      //     return
+      //   }
+      // }
+      return true;
+    },
+    change(e) {
+      console.log(123);
+      this.$forceUpdate();
     },
   },
 };

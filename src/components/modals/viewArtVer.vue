@@ -1,23 +1,46 @@
 <template>
   <CModal title="查看制品详情" size="lg" :show="shown" @update:show="(val) => $emit('update:shown', val)">
     <template #footer>
-      <CButton color="warning" @click="$emit('update:shown', false )">关闭</CButton>
+      <span></span>
     </template>
     <div style="display:flex">
       <div class="tlistDiv">
         <ul>
-          <li v-for="it in items" :key="'actver:'+it.id" @click="showVer(it)">
-            <div class="tits" v-if="it.version">{{it.sha}}</div>
+          <li v-for="it in items" :key="'actver:'+it.id" @click="showVer(it.id)">
+            <div class="tits" v-if="it.version">{{it.version}}</div>
             <div class="tits" v-else>{{it.sha}}</div>
           </li>
         </ul>
         <CPagination :activePage="page" :pages="pages" @update:activePage="getList" style="float:right" />
       </div>
-      <div class="verInfos" v-show="infoShow">
-        <div class="vers" v-if="infos.version">{{infos.version}}</div>
-        <div>{{infos.sha}}</div>
-        <div>{{$dateFmt(infos.created)}}</div>
-        <div>{{infos.desc}}</div>
+      <div class="verInfos" v-show="infoShow&&infos.id">
+        <CCard>
+          <CCardHeader>
+            <strong v-if="infos.version">{{infos.version}}</strong>
+            <strong v-else>{{infos.sha}}</strong>
+            <div class="card-header-actions">
+              <CButton size="sm" color="info" variant="outline" @click="editFun">
+                {{editFlag?'保存':'编辑'}}
+              </CButton>
+              <CButton size="sm" color="warning" variant="outline" @click="rmFun">
+                删除
+              </CButton>
+            </div>
+          </CCardHeader>
+          <CCardBody v-if="!editFlag">
+            <!-- <div class="vers" v-if="infos.version">{{infos.version}}</div> -->
+            <div style="margin-bottom:10px">sha&id: {{infos.sha}}</div>
+            <div style="margin-bottom:10px">创建时间: {{$dateFmt(infos.created)}}</div>
+            <div>{{infos.desc}}</div>
+          </CCardBody>
+          <CCardBody v-else>
+            <CInput label="版本TAG" v-model="formData.version" placeholder="eg: v1.0.0" />
+            <CInput label="描述" v-model="formData.desc" placeholder="请输入描述" />
+            <div>这是一个preview:&nbsp;&nbsp;&nbsp;&nbsp;
+              <CSwitch color="info" variant="3d" :checked.sync="formData.ispre" />
+            </div>
+          </CCardBody>
+        </CCard>
         <!-- <div>
           <a :href="'api/art/pub/down/'+infos.id+'/'+'?authToken='+tokens()" target="_blank">下载全部</a>
         </div> -->
@@ -30,7 +53,7 @@
 </template>
 <script>
 import { getToken } from '@/assets/js/token';
-import { UtilCatch, ArtVerList, ArtVerInfos } from "@/assets/js/apis";
+import { UtilCatch, ArtVerList, ArtVerInfos, ArtVerSave, ArtVerRm } from "@/assets/js/apis";
 import DirsItem from "@/components/view/dirsItem";
 export default {
   props: {
@@ -51,6 +74,9 @@ export default {
 
       infoShow: false,
       infos: {},
+
+      editFlag: false,
+      formData: {},
     };
   },
   methods: {
@@ -68,13 +94,36 @@ export default {
           this.$refs.table.$forceUpdate()
         }
       })
-    }, showVer (it) {
-      ArtVerInfos(it.id).then(res => {
+    }, showVer (id) {
+      ArtVerInfos(id).then(res => {
         this.infoShow = true;
         this.infos = res.data.info;
+        this.editFlag = false;
+        this.formData.id = this.infos.id;
+        this.formData.version = this.infos.version;
+        this.formData.desc = this.infos.desc;
+        this.formData.ispre = this.infos.preview == 1;
       }).catch((err) => UtilCatch(this, err));
     }, tokens () {
       return getToken();
+    }, editFun () {
+      if (!this.editFlag) {
+        this.editFlag = true
+        return;
+      }
+      ArtVerSave(this.formData).then(res => {
+        this.getList(this.page);
+        this.showVer(res.data);
+      }).catch((err) => UtilCatch(this, err));
+    }, rmFun () {
+      this.$confirm('确定删除此制品包括文件吗(无法恢复)?', null, () => {
+        ArtVerRm(this.infos.id).then(() => {
+          this.$msgOk("操作成功");
+          this.infoShow = false;
+          this.infos = {};
+          this.getList(this.page);
+        }).catch((err) => UtilCatch(this, err));
+      })
     }
   },
 };

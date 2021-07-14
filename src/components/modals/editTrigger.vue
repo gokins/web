@@ -1,105 +1,55 @@
 <template>
   <div>
-    <CModal
-      title="添加触发器"
-      :show="triggerShow"
-      @update:show="(val) => $emit('update:triggerShow', val)"
-      :centered="true"
-    >
+    <CModal title="添加触发器" :show="triggerShow" @update:show="(val) => $emit('update:triggerShow', val)" :centered="true">
       <template #footer>
-        <CButton color="warning" @click="$emit('update:triggerShow', false)"
-          >关闭</CButton
-        >
+        <CButton color="warning" @click="$emit('update:triggerShow', false)">关闭</CButton>
         <CButton color="info" @click="saveTrigger">确定</CButton>
       </template>
       <CRow>
         <CCol>
-          <CInput
-            label="触发器名称: "
-            placeholder="触发器名称"
-            v-model="triggerVar.name"
-          />
+          <CInput label="触发器名称: " placeholder="触发器名称" v-model="triggerVar.name" />
         </CCol>
         <CCol>
-          <CSelect
-            label="触发器类型"
-            :options="triggerOptions"
-            placeholder="请选择触发器类型"
-            :value.sync="triggerVar.types"
-            @change="change"
-            custom
-          />
+          <CSelect label="触发器类型" :options="triggerOptions" placeholder="请选择触发器类型" :value.sync="triggerVar.types"
+            @change="change" custom />
         </CCol>
       </CRow>
       <CRow>
         <CCol>
-          <CInput
-            label="备注: "
-            placeholder="请输入备注"
-            v-model="triggerVar.desc"
-          />
+          <CInput label="备注: " placeholder="请输入备注" v-model="triggerVar.desc" />
         </CCol>
       </CRow>
       <CRow v-if="triggerVar.types === 'webHook'">
         <CCol>
-          <CSelect
-            label="WebHook类型"
-            :options="webHookOptions"
-            placeholder="请选择WebHook类型"
-            :value.sync="formTriggerHook.hookType"
-            custom
-          />
+          <CSelect label="WebHook类型" :options="webHookOptions" placeholder="请选择WebHook类型"
+            :value.sync="formTriggerHook.hookType" custom />
         </CCol>
       </CRow>
       <CRow v-if="triggerVar.types === 'webHook'">
         <CCol>
-          <CInput
-            label="密钥: "
-            placeholder="请输入密钥"
-            v-model="formTriggerHook.secret"
-          />
+          <CInput label="密钥: " placeholder="请输入密钥" v-model="formTriggerHook.secret" />
         </CCol>
       </CRow>
       <CRow v-if="triggerVar.types === 'webHook'">
         <CCol>
-          <CInput
-            label="分支: "
-            placeholder="请输入分支"
-            v-model="formTriggerHook.branch"
-          />
+          <CInput label="分支: " placeholder="请输入分支" v-model="formTriggerHook.branch" />
         </CCol>
       </CRow>
       <CRow v-if="triggerVar.types === 'webHook'">
         <CCol>
-          <CSelect
-            label="触发事件"
-            :options="hookEventOptions"
-            placeholder="请选择Hook事件"
-            :value.sync="formTriggerHook.hookEvent"
-            custom
-          />
+          <CSelect label="触发事件" :options="hookEventOptions" placeholder="请选择Hook事件"
+            :value.sync="formTriggerHook.hookEvent" custom />
         </CCol>
       </CRow>
       <CRow v-else-if="triggerVar.types === 'timer'">
         <CCol>
-          <CSelect
-            label="重复:"
-            :options="timerOptions"
-            placeholder="请选择"
-            :value.sync="formTriggerData.timerType"
-            custom
-          />
+          <CSelect label="重复:" :options="timerOptions" placeholder="请选择" :value.sync="formTriggerData.timerType"
+            custom />
         </CCol>
         <CCol>
           <label>时间:</label>
-          <date-picker
-            v-model="formTriggerData.dates"
-            type="datetime"
-            :show-hour="true"
-            :show-minute="true"
-            confirm-text="确定"
-            :confirm="true"
-          >
+          <date-picker v-model="formTriggerData.dates" type="datetime" :show-hour="true" :show-minute="true"
+            confirm-text="确定" :confirm="true">
             <template v-slot:footer>
               <button class="mx-btn mx-btn-text" @click="chooseToday">
                 此刻
@@ -110,43 +60,25 @@
       </CRow>
       <CRow v-else-if="triggerVar.types === 'pipeline'">
         <CCol>
-          <CSelect
-            label="流水线名称:"
-            :options="timerOptions"
-            placeholder="请选择"
-            :value.sync="formTriggerPipeline.pipeIds"
-            custom
-          />
+          <CSelect label="流水线名称:" :options="timerOptions" placeholder="请选择" :value.sync="formTriggerPipeline.pipeIds"
+            custom />
         </CCol>
       </CRow>
       <CRow v-if="triggerVar.types === 'web'">
         <CCol>
-          <CInput
-            label="密钥: "
-            placeholder="请输入密钥"
-            v-model="formTriggerWeb.secret"
-          />
+          <CInput label="密钥: " placeholder="请输入密钥" v-model="formTriggerWeb.secret" />
         </CCol>
       </CRow>
       <CRow v-if="triggerVar.types === 'web'">
         <CCol>
-          <CInput
-            label="分支: "
-            placeholder="请输入分支"
-            v-model="formTriggerWeb.branch"
-          />
+          <CInput label="分支: " placeholder="请输入分支" v-model="formTriggerWeb.branch" />
         </CCol>
       </CRow>
       <CRow>
         <CCol>
           <div style="display: flex">
             激活
-            <CSwitch
-              class="mx-1"
-              color="primary"
-              shape="pill"
-              :checked.sync="triggerVar.enabled"
-            />
+            <CSwitch class="mx-1" color="primary" shape="pill" :checked.sync="triggerVar.enabled" />
           </div>
         </CCol>
       </CRow>
@@ -171,15 +103,14 @@ export default {
         if (this.item && this.item.id != undefined && this.item.id != "") {
           switch (this.item.types) {
             case "webHook":
-              this.formTriggerHook = JSON.parse(this.item.params);
+              this.formTriggerHook = this.item.params;
               break;
             case "timer":
-              let p = JSON.parse(this.item.params);
-              p.dates = new Date(p.dates);
-              this.formTriggerData = p;
+              this.item.params.dates = new Date(this.item.params.dates);
+              this.formTriggerData = this.item.params;
               break;
             case "web":
-              this.formTriggerWeb = JSON.parse(this.item.params);
+              this.formTriggerWeb = this.item.params;
               break;
           }
           this.triggerVar.id = this.item.id;
@@ -249,7 +180,7 @@ export default {
       }
       this.triggerVar.params = param;
       SaveTrigger(this.triggerVar)
-        .then((res) => {
+        .then(() => {
           this.$msgOk("保存成功");
           this.$emit("update:triggerShow", false);
           this.$emit("getTriggerList");
@@ -307,8 +238,7 @@ export default {
       // }
       return true;
     },
-    change(e) {
-      console.log(123);
+    change() {
       this.$forceUpdate();
     },
   },

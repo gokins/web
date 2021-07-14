@@ -1,47 +1,34 @@
 <template>
   <div>
     <ul class="items">
-      <li
-        v-for="item in items"
-        :key="'version:' + item.id"
-        @click="openRuns(item)"
-      >
+      <li v-for="item in items" :key="'version:' + item.id" @click="openRuns(item)">
         <div>
           <div class="tit">
             <div class="tit_info">
               <div style="flex: 1">
                 <CIcon v-if="item.types == 'timer'" name="cil-alarm" />
-                <CIcon
-                  v-else-if="item.types == 'webHook'"
-                  name="cil-vertical-align-bottom"
-                />
+                <CIcon v-else-if="item.types == 'webHook'" name="cil-vertical-align-bottom" />
                 <CIcon v-else-if="item.types == 'web'" name="cil-cloud" />
-                {{ item.name }}
-                <i
-                  class="iconfont icon-chacha color-error"
-                  style="font-size: 15px; margin-left: 5px"
-                  v-if="item.enabled == 0"
-                />
-                <i
-                  class="iconfont icon-success color-success"
-                  style="font-size: 15px; margin-left: 5px"
-                  v-else-if="item.enabled == 1"
-                />
-                <span v-if="item.types == 'webHook'">
-                  <span class="tit_params" v-if="item.params.hookType">{{
-                    item.params.hookType
-                  }}</span>
-                  <span class="tit_params" v-if="item.params.branch">{{
-                    item.params.branch
-                  }}</span>
-                  <span class="tit_params" v-if="item.params.hookEvent">{{
-                    item.params.hookEvent
-                  }}</span>
+                <span :style="{ color: item.enabled == 1 ? '' : '#999' }">
+                  {{ item.name}}
                 </span>
-                <span class="tit_params" v-if="item.types == 'timer'">{{
-                  timers[item.params.timerType]
-                }}</span>
-                <span class="tit_params" v-if="item.types == 'web'">Web</span>
+                <!-- <i class="iconfont icon-success color-error" style="font-size: 15px; margin-left: 5px"
+                  :style="{ color: item.enabled == 1 ? '' : '#999' }" /> -->
+                <span class="tit_params" v-if="item.enabled != 1" style="color:#e55353">未激活</span>
+                <span v-if="item.enabled == 1&&item.types == 'webHook'">
+                  <span class="tit_params" v-if="item.params.hookType">
+                    {{item.params.hookType}}
+                  </span>
+                  <span class="tit_params" v-if="item.params.branch">
+                    {{item.params.branch}}
+                  </span>
+                  <span class="tit_params" v-if="item.params.hookEvent">
+                    {{item.params.hookEvent}}
+                  </span>
+                </span>
+                <span class="tit_params"
+                  v-if="item.enabled == 1 && item.types == 'timer'">{{timers[item.params.timerType]}}</span>
+                <span class="tit_params" v-if="item.enabled == 1 && item.types == 'web'">Web</span>
               </div>
               <slot :item="item"></slot>
             </div>
@@ -49,22 +36,16 @@
             <div class="tit_desc">
               <div style="flex: 1">
                 {{ $dateFmt(item.created) }}
-                <span class="tit_span" v-if="item.types == 'webHook'"
-                  >hook地址: {{ host }}/hook/{{ item.id }}
-                  <i
-                    style="font-size: 12px"
-                    class="iconfont icon-bianhao cpicn"
-                    @click.stop="copyHook(item.id)"
-                    v-c-tooltip.hover.click="'复制hook地址'"
-                  />
+                <span class="tit_span" v-if="item.types == 'webHook'">
+                  hook地址: {{ host }}/hook/{{ item.id }}
+                  <i style="font-size: 12px" class="iconfont icon-bianhao cpicn" @click.stop="copyHook(item.id)"
+                    v-c-tooltip.hover.click="'复制hook地址'" />
                 </span>
               </div>
               <myavatar :src="item.avat" :nick="item.nick" imgw="15px" />
             </div>
           </div>
-          <div style="display: flex">
-            {{ item.desc }}
-          </div>
+          <div style="display: flex">{{ item.desc }}</div>
         </div>
       </li>
     </ul>
@@ -79,12 +60,7 @@
     <div class="emptyCont" v-else-if="!items || items.length <= 0">
       <i class="iconfont icon-jinzhide" />没有内容
     </div>
-    <RunView
-      :runShow.sync="this.runShow"
-      @closeRun="closeRun"
-      :triggerId="triggerId"
-    >
-    </RunView>
+    <RunView :runShow.sync="this.runShow" @closeRun="closeRun" :triggerId="triggerId"></RunView>
   </div>
 </template>
 <script>
@@ -106,7 +82,7 @@ export default {
       runShow: false,
     };
   },
-  mounted() {},
+  mounted() { },
   methods: {
     openRuns(item) {
       this.triggerId = item.id;
@@ -144,7 +120,7 @@ export default {
       line-height: 35px
     .tit_params
       color: #aaa
-      font-size: 15px
+      font-size: 12px
       padding: 0 5px
       margin: 10px 0 0 10px
       height: 20px

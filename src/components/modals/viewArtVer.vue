@@ -22,7 +22,7 @@
               {{infos.version?infos.version:infos.sha}}
               <i class="iconfont icon-release releaseCls" v-c-tooltip.hover.click="'release'" v-if="infos.preview!=1" />
             </strong>
-            <div class="card-header-actions">
+            <div class="card-header-actions" v-if="perm.write==true">
               <CButton size="sm" color="info" variant="outline" @click="editFun">
                 {{editFlag?'保存':'编辑'}}
               </CButton>
@@ -78,6 +78,7 @@ export default {
 
       infoShow: false,
       infos: {},
+      perm: {},
 
       editFlag: false,
       formData: {},
@@ -102,6 +103,7 @@ export default {
       ArtVerInfos(id).then(res => {
         this.infoShow = true;
         this.infos = res.data.info;
+        this.perm = res.data.perm;
         this.editFlag = false;
         this.formData.id = this.infos.id;
         this.formData.version = this.infos.version;

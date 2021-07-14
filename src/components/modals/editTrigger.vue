@@ -99,7 +99,7 @@ export default {
     pipelineId: String,
   },
   watch: {
-    triggerShow (nv) {
+    triggerShow(nv) {
       if (nv == true) {
         if (this.item && this.item.id != undefined && this.item.id != "") {
           switch (this.item.types) {
@@ -132,7 +132,7 @@ export default {
       }
     },
   },
-  data () {
+  data() {
     return {
       triggerOptions: [
         { label: "webHook", value: "webHook" },
@@ -140,7 +140,7 @@ export default {
         { label: "Web", value: "web" },
         // {label: "流水线结束后触发", value: "pipeline"}
       ],
-      webHookOptions: ["Github", "Gitee", "Gitea", "Gitlab", "Codeup"],
+      webHookOptions: ["Github", "Gitee", "Gitea", "Gitlab"],
       hookEventOptions: [{ label: "所有事件", value: "" }, "push"],
       timerOptions: [
         { label: "不重复", value: 0 },
@@ -155,14 +155,14 @@ export default {
       triggerVar: {},
     };
   },
-  mounted () {
+  mounted() {
     console.log(this.triggerVar);
   },
   methods: {
-    chooseToday () {
+    chooseToday() {
       this.formTriggerData.dates = new Date();
     },
-    saveTrigger () {
+    saveTrigger() {
       if (!this.checkForm()) {
         return;
       }
@@ -188,7 +188,7 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    checkForm () {
+    checkForm() {
       if (!this.triggerVar.name || this.triggerVar.name === "") {
         this.$msgErr("请输入触发器名称");
         return;
@@ -239,7 +239,7 @@ export default {
       // }
       return true;
     },
-    change () {
+    change() {
       this.$forceUpdate();
     },
   },

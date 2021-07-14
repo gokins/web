@@ -1,6 +1,7 @@
 <template>
   <div>
-    <CModal title="添加触发器" :show="triggerShow" @update:show="(val) => $emit('update:triggerShow', val)" :centered="true">
+    <CModal title="编辑触发器" :closeOnBackdrop="false" :show="triggerShow"
+      @update:show="(val) => $emit('update:triggerShow', val)" :centered="true">
       <template #footer>
         <CButton color="warning" @click="$emit('update:triggerShow', false)">关闭</CButton>
         <CButton color="info" @click="saveTrigger">确定</CButton>
@@ -98,7 +99,7 @@ export default {
     pipelineId: String,
   },
   watch: {
-    triggerShow(nv) {
+    triggerShow (nv) {
       if (nv == true) {
         if (this.item && this.item.id != undefined && this.item.id != "") {
           switch (this.item.types) {
@@ -131,7 +132,7 @@ export default {
       }
     },
   },
-  data() {
+  data () {
     return {
       triggerOptions: [
         { label: "webHook", value: "webHook" },
@@ -154,14 +155,14 @@ export default {
       triggerVar: {},
     };
   },
-  mounted() {
+  mounted () {
     console.log(this.triggerVar);
   },
   methods: {
-    chooseToday() {
+    chooseToday () {
       this.formTriggerData.dates = new Date();
     },
-    saveTrigger() {
+    saveTrigger () {
       if (!this.checkForm()) {
         return;
       }
@@ -187,7 +188,7 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    checkForm() {
+    checkForm () {
       if (!this.triggerVar.name || this.triggerVar.name === "") {
         this.$msgErr("请输入触发器名称");
         return;
@@ -238,7 +239,7 @@ export default {
       // }
       return true;
     },
-    change() {
+    change () {
       this.$forceUpdate();
     },
   },

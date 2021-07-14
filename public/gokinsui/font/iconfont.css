@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2638356 */
-  src: url('iconfont.woff2?t=1626238576632') format('woff2'),
-       url('iconfont.woff?t=1626238576632') format('woff'),
-       url('iconfont.ttf?t=1626238576632') format('truetype');
+  src: url('iconfont.woff2?t=1626258690628') format('woff2'),
+       url('iconfont.woff?t=1626258690628') format('woff'),
+       url('iconfont.ttf?t=1626258690628') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-agora_kuaisufaban-kuaisushangxian:before {
+  content: "\e613";
+}
+
+.icon-release:before {
+  content: "\e600";
 }
 
 .icon-prohibit-fill:before {

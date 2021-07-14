@@ -7,8 +7,10 @@
       <div class="tlistDiv">
         <ul>
           <li v-for="it in items" :key="'actver:'+it.id" @click="showVer(it.id)">
-            <div class="tits" v-if="it.version">{{it.version}}</div>
-            <div class="tits" v-else>{{it.sha}}</div>
+            <div class="tits">
+              {{it.version?it.version:it.sha}}
+              <i class="iconfont icon-release releaseCls" v-c-tooltip.hover.click="'release'" v-if="it.preview!=1" />
+            </div>
           </li>
         </ul>
         <CPagination :activePage="page" :pages="pages" @update:activePage="getList" style="float:right" />
@@ -16,8 +18,10 @@
       <div class="verInfos" v-show="infoShow&&infos.id">
         <CCard>
           <CCardHeader>
-            <strong v-if="infos.version">{{infos.version}}</strong>
-            <strong v-else>{{infos.sha}}</strong>
+            <strong>
+              {{infos.version?infos.version:infos.sha}}
+              <i class="iconfont icon-release releaseCls" v-c-tooltip.hover.click="'release'" v-if="infos.preview!=1" />
+            </strong>
             <div class="card-header-actions">
               <CButton size="sm" color="info" variant="outline" @click="editFun">
                 {{editFlag?'保存':'编辑'}}
@@ -129,6 +133,9 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
+.releaseCls
+  color: #569a4e
+  font-size: 14px
 .tlistDiv
   margin: 20px 10px
   text-align: center

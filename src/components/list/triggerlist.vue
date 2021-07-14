@@ -38,8 +38,13 @@
                 {{ $dateFmt(item.created) }}
                 <span class="tit_span" v-if="item.types == 'webHook'">
                   hook地址: {{ host }}/hook/{{ item.id }}
-                  <i style="font-size: 12px" class="iconfont icon-bianhao cpicn" @click.stop="copyHook(item.id)"
+                  <i style="font-size: 12px" class="iconfont icon-bianhao cpicn" @click.stop="copyHook(item)"
                     v-c-tooltip.hover.click="'复制hook地址'" />
+                </span>
+                <span class="tit_span" v-if="item.types == 'web'">
+                  请求地址: {{ host }}/hook/web/{{ item.id }}
+                  <i style="font-size: 12px" class="iconfont icon-bianhao cpicn" @click.stop="copyHook(item)"
+                    v-c-tooltip.hover.click="'复制请求地址'" />
                 </span>
               </div>
               <myavatar :src="item.avat" :nick="item.nick" imgw="15px" />
@@ -77,7 +82,7 @@ export default {
   },
   data() {
     return {
-      timers: ["不重复", "每天", "每周"],
+      timers: ["不重复", "每分钟", "每小时", "每天"],
       triggerId: "",
       runShow: false,
     };
@@ -91,10 +96,15 @@ export default {
     closeRun() {
       this.runShow = false;
     },
-    copyHook(id) {
-      let txt = this.host + "/hook/" + id;
-      if (copyText(txt)) this.$msgOk("已成功复制Hook地址");
-      else this.$msgErr("复制Hook地址失败");
+    copyHook(item) {
+      let txt = this.host
+      if (item.types == "webHook") {
+        txt = txt + "/hook/" + item.id;
+      } else {
+        txt = txt + "/hook/web/" + item.id;
+      }
+      if (copyText(txt)) this.$msgOk("已成功复制地址")
+      else this.$msgErr("复制地址失败");
     },
   },
 };

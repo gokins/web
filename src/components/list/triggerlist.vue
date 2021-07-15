@@ -37,12 +37,12 @@
               <div style="flex: 1">
                 {{ $dateFmt(item.created) }}
                 <span class="tit_span" v-if="item.types == 'webHook'">
-                  hook地址: {{ host }}/hook/{{ item.id }}
+                  hook地址: {{ host }}/trigger/hook/{{ item.id }}
                   <i style="font-size: 12px" class="iconfont icon-bianhao cpicn" @click.stop="copyHook(item)"
                     v-c-tooltip.hover.click="'复制hook地址'" />
                 </span>
                 <span class="tit_span" v-if="item.types == 'web'">
-                  请求地址: {{ host }}/hook/web/{{ item.id }}
+                  请求地址: {{ host }}/trigger/web/{{ item.id }}
                   <i style="font-size: 12px" class="iconfont icon-bianhao cpicn" @click.stop="copyHook(item)"
                     v-c-tooltip.hover.click="'复制请求地址'" />
                 </span>
@@ -99,9 +99,9 @@ export default {
     copyHook(item) {
       let txt = this.host
       if (item.types == "webHook") {
-        txt = txt + "/hook/" + item.id;
+        txt = txt + "/trigger/hook/" + item.id;
       } else {
-        txt = txt + "/hook/web/" + item.id;
+        txt = txt + "/trigger/web/" + item.id;
       }
       if (copyText(txt)) this.$msgOk("已成功复制地址")
       else this.$msgErr("复制地址失败");

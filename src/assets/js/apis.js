@@ -104,4 +104,4 @@ export const TriggerList = pars => Post('/trigger/triggers', pars);
 export const SaveTrigger = pars => Post('/trigger/save', pars);
 export const DeleteTrigger = id => Post('/trigger/delete', { id: id });
 //trigger runs
-export const TriggerRuns = id => Post('/trigger/runs', { id: id });
+export const TriggerRuns = pars => Post('/trigger/runs', pars);

@@ -13,9 +13,10 @@
               <i class="iconfont icon-chacha color-error" style="font-size:15px" v-else-if="item.bStatus=='error'" />
               <i class="iconfont icon-jinzhide color-cancel" style="font-size:15px"
                 v-else-if="item.bStatus=='cancel'" />
-              <i v-else class="iconfont icon-jiazaizhong " style="font-size:15px;color: #049bfd" />
+              <i v-else class="iconfont icon-jiazaizhong color-runing" style="font-size:15px;" />
               <span v-if="item.error != ''" style="margin-left: 5px;color:#e55353">{{item.error}}</span>
-              <span v-else style="margin-left: 5px">#{{ item.number }} {{item.pipelineName}}</span>
+              <span v-else :style="{ 'margin-left' : item.bStatus == 'running' ? '20px' : '8px' }">#{{ item.number }}
+                {{item.pipelineName}}</span>
             </div>
             <span>{{ $dateFmt(item.created) }}</span>
           </div>
@@ -70,12 +71,12 @@ export default {
       this.runList = [];
       this.$emit("closeRun");
     },
-    geList() {
+    geList(pg) {
       if (this.triggerId == "") {
         return;
       }
       this.runLoading = true;
-      TriggerRuns(this.triggerId)
+      TriggerRuns({ page: pg, id: this.triggerId })
         .then((res) => {
           this.runLoading = false;
           if (res.data != null) {

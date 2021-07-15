@@ -117,9 +117,7 @@
               <CIcon name="cil-calculator" />
               设置
             </template>
-            <CCard accent-color="primary">
-              <PipeNew :pipeId.sync="this.$route.params.id" :editf="true" />
-            </CCard>
+            <PipeNew :pipeId.sync="this.$route.params.id" :editf="true" />
             <CCard accent-color="danger">
               <CCardHeader style="background-color: #ffe8e6">
                 <strong>危险操作区</strong>
@@ -239,7 +237,7 @@ export default {
     TriggerListView,
     EditTrigger,
   },
-  data() {
+  data () {
     return {
       loading: true,
       versionPage: 0,
@@ -328,11 +326,11 @@ export default {
     };
   },
   computed: {
-    uinfo() {
+    uinfo () {
       return this.$store.state.uinfo || {};
     },
   },
-  mounted() {
+  mounted () {
     console.log("$options.coreics", this.$options.coreics["cliXcircle"]);
     if (
       this.$route.params == null ||
@@ -350,7 +348,7 @@ export default {
     this.getTriggerList();
   },
   methods: {
-    getVersionList(pg) {
+    getVersionList (pg) {
       this.loading = true;
       PipelineVersions({
         page: pg,
@@ -364,7 +362,7 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    pipeInfo() {
+    pipeInfo () {
       PipelineInfo({ id: this.pipelineId })
         .then((res) => {
           this.pipe = res.data.pipe;
@@ -373,16 +371,16 @@ export default {
         })
         .catch((err) => UtilCatch(this, err));
     },
-    run() {
+    run () {
       this.selectShow = true;
     },
-    goVersion(id) {
+    goVersion (id) {
       this.$router.push("/pipeline/build/" + id);
     },
-    goEdit(id) {
+    goEdit (id) {
       this.$router.push("/pipeline/info/" + id);
     },
-    copy() {
+    copy () {
       this.$confirm("确定复制流水线?", null, () => {
         CopyPipeline(this.pipelineId)
           .then((res) => {
@@ -391,7 +389,7 @@ export default {
           .catch((err) => UtilCatch(this, err));
       });
     },
-    deletedPipe() {
+    deletedPipe () {
       this.$confirm("确定删除流水线?", null, () => {
         DeletePipeline(this.pipelineId)
           .then((res) => {
@@ -400,7 +398,7 @@ export default {
           .catch((err) => UtilCatch(this, err));
       });
     },
-    getPipelineVars() {
+    getPipelineVars () {
       PipelineVars({ pipelineId: this.pipelineId, page: this.varPage })
         .then((res) => {
           this.varItems = [];
@@ -418,7 +416,7 @@ export default {
           UtilCatch(this, err);
         });
     },
-    getInfoPipelineVars() {
+    getInfoPipelineVars () {
       PipelineVars({ pipelineId: this.pipelineId, page: this.varPage })
         .then((res) => {
           this.infoVarItems = [];
@@ -436,7 +434,7 @@ export default {
           UtilCatch(this, err);
         });
     },
-    openVars() {
+    openVars () {
       this.vars = {
         public: true,
         remarks: "",
@@ -445,7 +443,7 @@ export default {
       };
       this.varsShow = true;
     },
-    closeVars() {
+    closeVars () {
       this.vars = {
         public: true,
         remarks: "",
@@ -454,7 +452,7 @@ export default {
       };
       this.varsShow = false;
     },
-    addVars() {
+    addVars () {
       if (!this.vars.name || this.vars.name == "") {
         this.$msgErr("请输入变量名");
         return;
@@ -467,10 +465,10 @@ export default {
       this.getPipelineVars();
       this.getInfoPipelineVars();
     },
-    delVar(item) {
+    delVar (item) {
       this.deletedPipelineVars(item.aid);
     },
-    editVar(item) {
+    editVar (item) {
       if (item != undefined && item != null) {
         this.vars = {
           aid: item.aid,
@@ -483,7 +481,7 @@ export default {
       }
       this.varsShow = true;
     },
-    savePipelineVars() {
+    savePipelineVars () {
       let v = this.vars;
       v.pipelineId = this.pipelineId;
       SavePipelineVars(v)
@@ -496,7 +494,7 @@ export default {
           UtilCatch(this, err);
         });
     },
-    deletedPipelineVars(aid) {
+    deletedPipelineVars (aid) {
       this.$confirm("确定删除变量?", null, () => {
         DeletePipelineVars({ aid: aid })
           .then((res) => {
@@ -510,7 +508,7 @@ export default {
           });
       });
     },
-    getTriggerList() {
+    getTriggerList () {
       TriggerList({
         page: this.triggerPage,
         pipelineId: this.pipelineId,
@@ -528,7 +526,7 @@ export default {
         .catch((err) => UtilCatch(this, err));
     },
 
-    deleteTrigger(id) {
+    deleteTrigger (id) {
       this.$confirm("确定删除触发器?", null, () => {
         DeleteTrigger(id)
           .then((res) => {
@@ -538,11 +536,11 @@ export default {
           .catch((err) => UtilCatch(this, err));
       });
     },
-    editrigger(item) {
+    editrigger (item) {
       this.triggerVar = item;
       this.triggerShow = true;
     },
-    openTrigger() {
+    openTrigger () {
       this.triggerVar = {};
       this.triggerShow = true;
     },

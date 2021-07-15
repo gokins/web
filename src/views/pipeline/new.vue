@@ -1,106 +1,95 @@
 <template>
-      <div class="pmainbox">
-        <div class="pipebox">
-          <CRow>
-            <CCol>
-              <CCard>
-                <CCardHeader>
-                  <strong>流水线</strong>
-                </CCardHeader>
-                <CCardBody>
-                  <CRow>
-                    <CCol>
-                      <CInput label="流水线名称: " placeholder="请输入流水线名称" v-model="formData.name" />
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol>
-                      <CInput label="流水线描述: " placeholder="请输入流水线描述" v-model="formData.displayName" />
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol>
-                      <CInput label="仓库地址: " placeholder="Git仓库地址" v-model="formData.url" /><!-- 或者仓库目录 -->
-                    </CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol>
-                      <template slot="title">
-                        yaml
-                      </template>
-                      <div class="ymldiv">
-                        流水线配置:
-                        <!-- <CButton @click="defaultTmp" color="dark" size="sm" variant="outline">
+  <div class="pmainbox">
+    <div class="pipebox">
+      <CCard>
+        <CCardHeader>
+          <strong>流水线</strong>
+        </CCardHeader>
+        <CCardBody style="display:flex">
+          <div style="flex:1">
+            <CRow>
+              <CCol>
+                <CInput label="流水线名称: " placeholder="请输入流水线名称" v-model="formData.name" />
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol>
+                <CInput label="流水线描述: " placeholder="请输入流水线描述" v-model="formData.displayName" />
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol>
+                <CInput label="仓库地址: " placeholder="Git仓库地址" v-model="formData.url" /><!-- 或者仓库目录 -->
+              </CCol>
+            </CRow>
+            <CRow>
+              <CCol>
+                <template slot="title">
+                  yaml
+                </template>
+                <div class="ymldiv">
+                  流水线配置:
+                  <!-- <CButton @click="defaultTmp" color="dark" size="sm" variant="outline">
                           还原
                         </CButton> -->
-                        <CButton v-for="(tmpsItme,index) in tmps" :key="'tmps:'+index"
-                          @click="chooseTmp(tmpsItme.ymlContent)" color="dark" size="sm" variant="outline">
-                          {{ tmpsItme.name }}
-                        </CButton>
-                      </div>
-                      <codemirror ref="myCm" v-model="formData.content" :options="cmOptions" class="json-editor">
-                      </codemirror>
-                    </CCol>
-                  </CRow>
-                  <CRow class="subRow" sm="16">
-                    <CCol sm="8">
-                      <CButton color="info" @click="subFun()" :disabled="saveBtu">保存</CButton>
-                    </CCol>
-                  </CRow>
-                </CCardBody>
-              </CCard>
-            </CCol>
-          </CRow>
-        </div>
-        <div class="tabbox">
-          <CRow>
-            <CCol>
-              <CCard>
-                <CCardBody class="tabh">
-                  <CTabs variant="tabs">
-                    <CTab active>
-                      <template slot="title">
-                        安全
-                      </template>
-                      <CRow style="margin-top: 10px">
-                        <CCol>
-                          <CInput label="账号: " placeholder="clone仓库的账号" v-model="formData.username" />
-                          <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
-                        </CCol>
-                      </CRow>
-                      <CRow>
-                        <CCol>
-                          <CInput label="Access Token: " placeholder="clone仓库的用户Access Token"
-                            v-model="formData.accessToken" />
-                          <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
-                        </CCol>
-                      </CRow>
-                    </CTab>
-                    <CTab>
-                      <template slot="title">
-                        插件
-                      </template>
-                      <CRow @click="showPlugin(itme)" v-for="(itme,i) in pluginInfos" :key="i">
-                        <CCol>
-                          <CWidgetIcon :header="itme.name +'插件'" :text="itme.name" color="gradient-warning">
-                            <CIcon name="cil-moon" width="24" />
-                          </CWidgetIcon>
-                        </CCol>
-                      </CRow>
-                    </CTab>
-                    <CTab>
+                  <CButton v-for="(tmpsItme,index) in tmps" :key="'tmps:'+index" @click="chooseTmp(tmpsItme.ymlContent)"
+                    color="dark" size="sm" variant="outline">
+                    {{ tmpsItme.name }}
+                  </CButton>
+                </div>
+                <codemirror ref="myCm" v-model="formData.content" :options="cmOptions" class="json-editor">
+                </codemirror>
+              </CCol>
+            </CRow>
+            <CRow class="subRow" sm="16">
+              <CCol sm="8">
+                <CButton color="info" @click="subFun()" :disabled="saveBtu">保存</CButton>
+              </CCol>
+            </CRow>
+          </div>
+          <CTabs variant="tabs" class="tabbox">
+            <CTab active>
+              <template slot="title">
+                安全
+              </template>
+              <CRow style="margin-top: 10px">
+                <CCol>
+                  <CInput label="账号: " placeholder="clone仓库的账号" v-model="formData.username" />
+                  <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol>
+                  <CInput label="Access Token: " placeholder="clone仓库的用户Access Token" v-model="formData.accessToken" />
+                  <label class="tips">tips: 如果是公开或者仓库目录模式下,不用填写</label>
+                </CCol>
+              </CRow>
+            </CTab>
+            <CTab>
+              <template slot="title">
+                插件
+              </template>
+              <div style="margin-top:10px">
+                <CRow @click="showPlugin(itme)" v-for="(itme,i) in pluginInfos" :key="i">
+                  <CCol>
+                    <CWidgetIcon :header="itme.name +'插件'" :text="itme.name" color="gradient-warning">
+                      <CIcon name="cil-moon" width="24" />
+                    </CWidgetIcon>
+                  </CCol>
+                </CRow>
+              </div>
+            </CTab>
+            <!-- <CTab>
                       <template slot="title">
                         触发器
                       </template>
-                    </CTab>
-                  </CTabs>
-                </CCardBody>
-              </CCard>
-            </CCol>
-          </CRow>
-        </div>
-        <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml" />
-      </div>
+                    </CTab> -->
+          </CTabs>
+        </CCardBody>
+      </CCard>
+    </div>
+    <pluginView :shown.sync="pluginShow" :pluginyml.sync="pluginyml" />
+  </div>
 </template>
 <script>
 import { codemirror } from 'vue-codemirror'
@@ -291,9 +280,6 @@ export default {
 };
 </script>
 <style lang="sass" scoped>
-.card
-  border: 0px
-
 .tmpBut
   width: 50px
   font-size: 5px
@@ -306,9 +292,11 @@ export default {
     overflow-x: hidden
 
   .tabbox
-    width: 300px
-    margin-left: 10px
+    width: 310px
+    margin-left: 20px
+    padding-left: 20px
     overflow-x: hidden
+    border-left: 1px solid #ccc
 
 .subRow
   margin-top: 10px
@@ -318,9 +306,6 @@ export default {
 
 .json-editor
   border: #768192 1px solid
-
-.card
-  margin-bottom: 0px
 
 .ymldiv
   margin-bottom: 10px
@@ -337,7 +322,4 @@ export default {
 
 .CodeMirror-scroll
   min-height: 300px
-
-.card-accent-primary  
-  border-top: 2px solid #ced2d8 !important
 </style>

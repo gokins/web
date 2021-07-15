@@ -1,35 +1,23 @@
 <template>
-  <CModal
-    title="触发记录"
-    :show="runShow"
-    @update:show="close"
-    :centered="true"
-    size="lg"
-  >
+  <CModal title="触发记录" :show="runShow" @update:show="close" :centered="true" size="lg">
     <template #footer>
       <CButton color="warning" @click="close">关闭</CButton>
     </template>
     <div>
       <ul class="runlist">
-        <li
-          v-for="item in runList"
-          :key="item.id"
-          @click="item.pipeVersionId != '' && goVersion(item.pipeVersionId)"
-        >
+        <li v-for="item in runList" :key="item.id" @click="item.pipeVersionId != '' && goVersion(item.pipeVersionId)">
           <div style="display: flex">
             <div style="flex: 1">
-              <i
-                class="iconfont icon-prohibit color-warning"
-                v-if="item.error != ''"
-              />
-            <i class="iconfont icon-success color-success" style="font-size:15px" v-else-if="item.bStatus=='ok'" />
-            <i class="iconfont icon-chacha color-error" style="font-size:15px" v-else-if="item.bStatus=='error'" />
-            <i class="iconfont icon-jinzhide color-cancel" style="font-size:15px" v-else-if="item.bStatus=='cancel'" />
-            <i class="iconfont icon-jiazaizhong color-runing" style="font-size:15px" v-else />
-             <span v-if="item.error != ''" style="margin-left: 5px;color:#e55353">{{item.error}}</span>
-            <span v-else style="margin-left: 5px">#{{ item.number }} {{item.pipelineName}}</span>
+              <i class="iconfont icon-prohibit color-warning" v-if="item.error != ''" />
+              <i class="iconfont icon-success color-success" style="font-size:15px" v-else-if="item.bStatus=='ok'" />
+              <i class="iconfont icon-chacha color-error" style="font-size:15px" v-else-if="item.bStatus=='error'" />
+              <i class="iconfont icon-jinzhide color-cancel" style="font-size:15px"
+                v-else-if="item.bStatus=='cancel'" />
+              <i v-else class="iconfont icon-jiazaizhong " style="font-size:15px;color: #049bfd" />
+              <span v-if="item.error != ''" style="margin-left: 5px;color:#e55353">{{item.error}}</span>
+              <span v-else style="margin-left: 5px">#{{ item.number }} {{item.pipelineName}}</span>
             </div>
-            <span >{{ $dateFmt(item.created) }}</span>
+            <span>{{ $dateFmt(item.created) }}</span>
           </div>
         </li>
       </ul>
@@ -45,13 +33,8 @@
         <i class="iconfont icon-jinzhide" />没有内容
       </div>
     </div>
-    <CPagination
-      :activePage.sync="runPage"
-      :pages="runPages"
-      size="sm"
-      style="float: right; margin-top: 20px"
-      @update:activePage="geList"
-    />
+    <CPagination :activePage.sync="runPage" :pages="runPages" size="sm" style="float: right; margin-top: 20px"
+      @update:activePage="geList" />
   </CModal>
 </template>
 <script>

@@ -14,6 +14,9 @@
             &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
           </div>
           <div class="sha">
+            {{getEvents(pv.events)}}
+          </div>
+          <div class="sha">
             <i class="iconfont icon-branches" style="font-size:14px" />
             {{pv.sha||'默认分支'}}
           </div>
@@ -25,9 +28,9 @@
               停止构建
             </CButton>
 
-           <CButton size="sm" color="danger" variant="outline" @click="delVersion" v-if="perm.exec==true">
-            删除构建
-          </CButton>
+            <CButton size="sm" color="danger" variant="outline" @click="delVersion" v-if="perm.exec==true">
+              删除构建
+            </CButton>
             &nbsp;
             <CButton size="sm" color="info" variant="outline" @click="rebuildFun" v-if="perm.exec==true">
               重新构建
@@ -39,6 +42,7 @@
           </div>
         </div>
         <div class="hd-infos">
+          <myavatar :src="usr.avat" :nick="usr.nick" imgw="18px" class="avat" />&nbsp;
           <div style="flex:1">{{ pipe.displayName }}
             <small>仓库地址: <a :href="pipe.url" target="_blank">{{ pipe.url }}</a></small>
             <small style="color:#333">开始时间: {{ $dateFmt(pv.created) }}</small>
@@ -198,13 +202,15 @@ import {
   DeletePipelineVersion
 } from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
+import myavatar from "@/components/avatar";
 import pluginView from "@/components/modals/pluginView";
 export default {
   coreics: freeSet,
-  components: { pluginView },
+  components: { myavatar, pluginView },
   data () {
     return {
       pv: {},
+      usr: {},
       pipe: {},
       perm: {},
       build: {},
@@ -244,6 +250,7 @@ export default {
     getInfo (id, first) {
       PipelineVersion(id).then((res) => {
         this.pv = res.data.pv;
+        this.usr = res.data.usr;
         this.pipe = res.data.pipe;
         this.perm = res.data.perm;
         this.build = res.data.build;
@@ -425,12 +432,22 @@ export default {
         }).catch((err) => UtilCatch(this, err));
       })
     },
-    delVersion(){
+    delVersion () {
       this.$confirm("确定删除?", null, () => {
         DeletePipelineVersion(this.pv.id).then((res) => {
           this.$router.back(-1);
         }).catch((err) => UtilCatch(this, err));
       })
+    },
+
+    getEvents (e) {
+      switch (e) {
+        // case 'run': return '手动运行';
+        case 'web': return 'Api出发';
+        case 'webhook': return 'webhook触发';
+        case 'timer': return '定时器触发';
+      }
+      return '手动运行';
     }
   }
 }

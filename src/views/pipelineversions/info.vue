@@ -444,7 +444,7 @@ export default {
       switch (e) {
         // case 'run': return '手动运行';
         case 'web': return 'Api出发';
-        case 'webhook': return 'webhook触发';
+        case 'webHook': return 'webhook触发';
         case 'timer': return '定时器触发';
       }
       return '手动运行';

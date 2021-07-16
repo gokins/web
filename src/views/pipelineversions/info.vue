@@ -27,7 +27,7 @@
               v-if="perm.exec==true&&!this.builded">
               停止构建
             </CButton>
-
+            &nbsp;
             <CButton size="sm" color="danger" variant="outline" @click="delVersion" v-if="perm.exec==true">
               删除构建
             </CButton>

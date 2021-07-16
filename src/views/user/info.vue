@@ -218,13 +218,15 @@ export default {
           repass: ''
         }
       }).catch(err => UtilCatch(this, err, err => {
-        debugger
         const stat = err.response ? err.response.status : 0;
         if (stat == 511) {
           this.$msgErr('旧密码错误!');
           return true;
         } else if (stat == 512) {
           this.$msgErr('旧密码错误!!');
+          return true;
+        } else if (stat == 513) {
+          this.$msgErr('无法修改密码!!');
           return true;
         }
       }))

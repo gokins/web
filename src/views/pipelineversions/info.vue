@@ -43,12 +43,13 @@
         </div>
         <div class="hd-infos">
           <myavatar :src="usr.avat" :nick="usr.nick" imgw="18px" class="avat" />&nbsp;
-          <div style="flex:1">{{ pipe.displayName }}
+          <div style="flex:1">
             <small>仓库地址: <a :href="pipe.url" target="_blank">{{ pipe.url }}</a></small>
             <small style="color:#333">开始时间: {{ $dateFmt(pv.created) }}</small>
             <small style="color:#333">运行: {{ $dateCha(build.started,build.finished) }}</small>
           </div>
         </div>
+        <div class="hd-infos">{{ pipe.displayName }}</div>
       </CCardHeader>
       <!-- <CCardHeader>
         123

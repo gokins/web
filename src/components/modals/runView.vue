@@ -15,7 +15,7 @@
                 v-else-if="item.bStatus=='cancel'" />
               <i v-else class="iconfont icon-jiazaizhong color-runing" style="font-size:15px;" />
               <span v-if="item.error != ''" style="margin-left: 5px;color:#e55353">{{item.error}}</span>
-              <span v-else :style="{ 'margin-left' : item.bStatus == 'running' ? '20px' : '8px' }">#{{ item.number }}
+              <span v-else :style="{ 'margin-left' : item.bStatus != 'running' ? '8px' : '20px' }">#{{ item.number }}
                 {{item.pipelineName}}</span>
             </div>
             <span>{{ $dateFmt(item.created) }}</span>

@@ -54,7 +54,7 @@ A fully functional demo is available at [CoreUI](http://coreui.io/vue/)
 
 ``` bash
 # clone the repo
-$ git clone git@github.com:gokins/web.git
+$ git clone https://github.com/gokins/web.git
 
 # go into app's directory
 $ cd web

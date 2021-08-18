@@ -16,7 +16,7 @@
 
 Gokins UI is built on the CoreUI Free Vue Bootstrap Admin Template framework.
 
-Back-end service code repository: https://github.com/gokins/gokins
+Gokins backend service code repository: https://github.com/gokins/gokins
 
 
 ## Preview of the backend UI

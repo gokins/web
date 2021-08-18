@@ -1,4 +1,4 @@
-# CoreUI Free Vue Bootstrap Admin Template
+# Gokins Web UI
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=CoreUI%20-%20Free%20Vue%20Admin%20Template%20&url=http://coreui.io/vue/&hashtags=bootstrap,admin,template,dashboard,panel,free,angular,react,vue)
 [![NPM][npm-coreui-vue-badge-latest]][npm-coreui-vue]
@@ -54,10 +54,10 @@ A fully functional demo is available at [CoreUI](http://coreui.io/vue/)
 
 ``` bash
 # clone the repo
-$ git clone https://github.com/coreui/coreui-free-vue-admin-template.git CoreUI-Vue
+$ git clone git@github.com:gokins/web.git
 
 # go into app's directory
-$ cd CoreUI-Vue
+$ cd web
 
 # install app's dependencies
 $ npm install

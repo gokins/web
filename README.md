@@ -69,11 +69,13 @@ npm run test:e2e
 ## CoreUI
 
 CoreUI: https://github.com/coreui/coreui
+
 Docs: https://coreui.io/vue/docs/
 
+
 Free Vue.js Admin Template: https://coreui.io/vue/
+
 coreui-free-vue-admin-template: https://github.com/coreui/coreui-free-vue-admin-template
 
-Why we decided to create CoreUI? Please read this article: [Jack of all trades, master of none. Why Boostrap Admin Templates suck.](https://medium.com/@lukaszholeczek/jack-of-all-trades-master-of-none-5ea53ef8a1f#.7eqx1bcd8)
 
 For a detailed explanation on how things work, check out the [Vue CLI Guide](https://cli.vuejs.org/guide/).

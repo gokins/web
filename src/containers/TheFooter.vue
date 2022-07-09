@@ -3,7 +3,7 @@
     <div>
       <a href="http://gokins.cn" target="_blank">Gokins</a>
       <span class="ml-1">&copy; {{new Date().getFullYear()}} </span>
-      <span class="ml-1">Version: {{version}}.</span>
+      <span class="ml-1">Version: {{version}}。</span>
     </div>
     <div class="mfs-auto">
       <span class="mr-1">Powered by</span>

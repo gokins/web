@@ -28,6 +28,9 @@ export const UtilCatch = (that, err, fn) => {
     }
 }
 
+//Index
+export const GetVersion = () => Post('/version');
+
 
 //User
 export const UserPage = pars => Post('/user/page', pars);

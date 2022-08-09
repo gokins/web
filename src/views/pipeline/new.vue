@@ -232,15 +232,17 @@ export default {
         this.$msgErr("请输入流水线名称");
         return false
       }
-      if (!this.formData.url || this.formData.url === "") {
+      /* if (!this.formData.url || this.formData.url === "") {
         this.$msgErr("请输入仓库地址");
         return false
-      }
-      const reg1 = new RegExp("^(https?:)\\/\\/([\\w\\.]+)(:\\d+)?");
-      const reg2 = new RegExp("^(/|(\\w\\:))");
-      if (!reg1.test(this.formData.url) && !reg2.test(this.formData.url)) {
-        this.$msgErr("仓库地址格式错误");
-        return false
+      } */
+      if (this.formData.url && this.formData.url !== "") {
+        const reg1 = new RegExp("^(https?:)\\/\\/([\\w\\.]+)(:\\d+)?");
+        const reg2 = new RegExp("^(/|(\\w\\:))");
+        if (!reg1.test(this.formData.url) && !reg2.test(this.formData.url)) {
+          this.$msgErr("仓库地址格式错误");
+          return false
+        }
       }
       if (!this.formData.content || this.formData.content === "") {
         this.$msgErr("请输入yaml");

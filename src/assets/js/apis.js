@@ -50,6 +50,10 @@ export const OrgUserEdit = pars => Post('/org/user/edit', pars);
 export const OrgUserRm = (id, uid) => Post('/org/user/rm', { id, uid });
 export const OrgPipeAdd = (id, pipeId) => Post('/org/pipe/add', { id, pipeId });
 export const OrgPipeRm = (id, pipeId) => Post('/org/pipe/rm', { id, pipeId });
+//org Vars
+export const OrgVars = pars => Post('/org/vars', pars);
+export const SaveOrgVars = pars => Post('org/var/save', pars);
+export const DeleteOrgVars = pars => Post('/org/var/del', pars);
 
 //Pipeline
 export const PipelineList = pars => Post('/pipeline/pipelines', pars);

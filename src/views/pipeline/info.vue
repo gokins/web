@@ -402,11 +402,9 @@ export default {
       PipelineVars({ pipelineId: this.pipelineId, page: this.varPage })
         .then((res) => {
           this.varItems = [];
-          let ls = [];
           for (const resKey in res.data.data) {
             let v = res.data.data[resKey];
             v.public = v.public == 1;
-            ls.push(v);
           }
           this.varPage = res.data.page;
           this.varPages = res.data.pages;
@@ -420,11 +418,9 @@ export default {
       PipelineVars({ pipelineId: this.pipelineId, page: this.varPage })
         .then((res) => {
           this.infoVarItems = [];
-          let ls = [];
           for (const resKey in res.data.data) {
             let v = res.data.data[resKey];
             v.public = v.public == 1;
-            ls.push(v);
           }
           this.infoVarPage = res.data.page;
           this.infoVarPages = res.data.pages;

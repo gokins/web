@@ -160,6 +160,60 @@
               </CCardBody>
             </CCard>
           </CTab>
+          <CTab>
+            <template slot="title">
+              <CIcon name="cil-calculator" />
+              变量
+            </template>
+            <CCard v-if="perm.write == true">
+              <CCardHeader>
+                变量
+                <div class="card-header-actions">
+                  <CButton size="sm" color="info" variant="outline" @click="openVars()">
+                    添加变量
+                  </CButton>
+                </div>
+              </CCardHeader>
+              <CCardBody>
+                <CDataTable :items="varItems" :fields="varFields" pagination>
+                  <template #public="{ item }">
+                    <td>
+                      <CIcon v-if="item.public" style="color: #52c41a" name="cil-check-circle" />
+                      <CIcon v-else style="color: #ff0042" name="cil-x-circle" />
+                    </td>
+                  </template>
+                  <template #del="{ item }">
+                    <td>
+                      <CButton color="info" variant="outline" square size="sm" class="pipeBtn" @click="editVar(item)">
+                        编辑
+                      </CButton>
+                      <CButton color="warning" variant="outline" square size="sm" class="pipeBtn"
+                        style="margin-left: 5px" @click="delVar(item)">
+                        移除
+                      </CButton>
+                    </td>
+                  </template>
+                </CDataTable>
+                <CPagination :activePage.sync="varPage" :pages="varPages" size="sm" align="center"
+                  @update:activePage="getVars" />
+              </CCardBody>
+            </CCard>
+            <CCard v-else>
+              <CCardHeader>变量</CCardHeader>
+              <CCardBody>
+                <CDataTable :items="varItems" :fields="infoVarFields" pagination>
+                  <template #public="{ item }">
+                    <td>
+                      <CIcon v-if="item.public" style="color: #52c41a" name="cil-check-circle" />
+                      <CIcon v-else style="color: #ff0042" name="cil-x-circle" />
+                    </td>
+                  </template>
+                </CDataTable>
+                <CPagination :activePage.sync="varPage" :pages="varPages" size="sm" align="center"
+                  @update:activePage="getVars" />
+              </CCardBody>
+            </CCard>
+          </CTab>
           <CTab v-if="perm.adm==true">
             <template slot="title">
               <CIcon name="cil-calculator" /> 设置
@@ -218,6 +272,36 @@
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />
     <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
     <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
+
+    <CModal title="添加变量" :show="varsShow" @update:show="closeVars" :centered="true">
+      <template #footer>
+        <CButton color="warning" @click="closeVars">关闭</CButton>
+        <CButton color="info" @click="addVars">确定</CButton>
+      </template>
+      <div>
+        <CRow>
+          <CCol>
+            <CInput label="变量名称: " placeholder="请输入变量名称" v-model="vars.name" />
+          </CCol>
+          <CCol>
+            <CInput label="值: " placeholder="请输入变量的值" v-model="vars.value" />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
+            <CInput label="备注: " placeholder="请输入备注" v-model="vars.remarks" />
+          </CCol>
+        </CRow>
+        <CRow>
+          <CCol>
+            <div style="display: flex">
+              私密
+              <CSwitch class="mx-1" color="primary" shape="pill" :checked.sync="vars.public" />
+            </div>
+          </CCol>
+        </CRow>
+      </div>
+    </CModal>
   </div>
 </template>
 <script>
@@ -231,6 +315,9 @@ import {
   OrgUserEdit,
   OrgUserRm,
   OrgUsers,
+  OrgVars,
+  SaveOrgVars,
+  DeleteOrgVars,
   ArtOrgList,
   ArtRm,
   UtilCatch,
@@ -278,6 +365,59 @@ export default {
       selPerm: false,
       selectShow: false,
       curPerm: { rw: false, exec: false, down: false },
+
+      varItems: [],
+      varPage: 0,
+      varPages: 0,
+      varFields: [
+        {
+          key: "name",
+          label: "名称",
+        },
+        {
+          key: "value",
+          label: "值",
+        },
+        {
+          key: "remarks",
+          label: "备注",
+        },
+        {
+          key: "public",
+          label: "私密",
+        },
+        {
+          key: "del",
+          label: "操作",
+          sorter: false,
+          filter: false,
+        },
+      ],
+      infoVarFields: [
+        {
+          key: "name",
+          label: "名称",
+        },
+        {
+          key: "value",
+          label: "值",
+        },
+        {
+          key: "remarks",
+          label: "备注",
+        },
+        {
+          key: "public",
+          label: "私密",
+        },
+      ],
+      varsShow: false,
+      vars: {
+        public: true,
+        remarks: "",
+        value: "",
+        name: "",
+      },
     };
   },
   computed: {
@@ -311,6 +451,7 @@ export default {
           this.getUserList();
           this.getPipeList();
           this.getArtList();
+          this.getVars();
         })
         .catch((err) =>
           UtilCatch(this, err)
@@ -471,7 +612,96 @@ export default {
           this.getArtList(this.artpage);
         }).catch((err) => UtilCatch(this, err));
       })
-    }
+    },
+
+    
+    getVars () {
+      OrgVars({ orgId: this.info.id, page: this.varPage })
+        .then((res) => {
+          this.varItems = [];
+          for (const resKey in res.data.data) {
+            let v = res.data.data[resKey];
+            v.public = v.public == 1;
+          }
+          this.varPage = res.data.page;
+          this.varPages = res.data.pages;
+          this.varItems = res.data.data;
+        })
+        .catch((err) => {
+          UtilCatch(this, err);
+        });
+    },
+    openVars () {
+      this.vars = {
+        public: true,
+        remarks: "",
+        value: "",
+        name: "",
+      };
+      this.varsShow = true;
+    },
+    closeVars () {
+      this.vars = {
+        public: true,
+        remarks: "",
+        value: "",
+        name: "",
+      };
+      this.varsShow = false;
+    },
+    addVars () {
+      if (!this.vars.name || this.vars.name == "") {
+        this.$msgErr("请输入变量名");
+        return;
+      }
+      if (!this.vars.value || this.vars.value == "") {
+        this.$msgErr("请输入值");
+        return;
+      }
+      this.saveVars();
+      this.getVars();
+    },
+    delVar (item) {
+      this.deletedPipelineVars(item.aid);
+    },
+    editVar (item) {
+      if (item != undefined && item != null) {
+        this.vars = {
+          aid: item.aid,
+          public: item.public,
+          remarks: item.remarks,
+          value: item.value,
+          name: item.name,
+        };
+        this.backVar = item;
+      }
+      this.varsShow = true;
+    },
+    saveVars () {
+      let v = this.vars;
+      v.orgId = this.info.id;
+      SaveOrgVars(v)
+        .then((res) => {
+          this.closeVars();
+          this.getVars();
+        })
+        .catch((err) => {
+          UtilCatch(this, err);
+        });
+    },
+    deletedVars (aid) {
+      this.$confirm("确定删除变量?", null, () => {
+        DeleteOrgVars({ aid: aid })
+          .then((res) => {
+            this.$msgOk("删除成功");
+            this.closeVars();
+            this.getVars();
+          })
+          .catch((err) => {
+            UtilCatch(this, err);
+          });
+      });
+    },
   },
 };
 </script>

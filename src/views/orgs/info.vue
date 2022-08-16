@@ -29,7 +29,7 @@
             </template>
             <CCard>
               <CCardBody>
-                <PipelistView :items="pipeitems" :loading="loading" #default="{item}">
+                <PipelistView :orgId="info.aid+''" :items="pipeitems" :loading="loading" #default="{item}">
                   <CButton color="info" variant="outline" square size="sm" @click.stop="run(item.id)" class="pipeBtn"
                     v-if="perm.exec==true">
                     运行

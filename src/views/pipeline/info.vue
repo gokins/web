@@ -22,7 +22,7 @@
               <CIcon name="cil-calculator" />
               构建历史
             </template>
-            <VersionlistView :items="versionItems" :loading="loading" :hidepipe="true" />
+            <VersionlistView :orgId="orgId" :items="versionItems" :loading="loading" :hidepipe="true" />
             <CPagination :activePage="versionPage" :pages="versionPages" @update:activePage="getVersionList"
               style="float: right; margin-top: 20px" />
           </CTab>
@@ -239,6 +239,7 @@ export default {
   },
   data () {
     return {
+      orgId:'',
       loading: true,
       versionPage: 0,
       versionPages: 0,
@@ -340,6 +341,7 @@ export default {
       this.$router.push("/404");
       return;
     }
+    this.orgId=this.$route.query.org || '';
     this.pipelineId = this.$route.params.id;
     this.getVersionList();
     this.pipeInfo();

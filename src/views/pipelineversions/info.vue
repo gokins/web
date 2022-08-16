@@ -4,39 +4,41 @@
       <CCardHeader>
         <div class="hd-tit">
           <div class="icons rotateDiv">
-            <i class="iconfont icon-success color-success" style="font-size:30px" v-if="build.status=='ok'" />
-            <i class="iconfont icon-chacha color-error" style="font-size:30px" v-else-if="build.status=='error'" />
-            <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px" v-else-if="build.status=='cancel'" />
+            <i class="iconfont icon-success color-success" style="font-size:30px" v-if="build.status == 'ok'" />
+            <i class="iconfont icon-chacha color-error" style="font-size:30px" v-else-if="build.status == 'error'" />
+            <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px" v-else-if="build.status == 'cancel'" />
             <i class="iconfont icon-jiazaizhong color-runing" style="font-size:25px" v-else />
           </div>
           <div>
-            <CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink>
-            &nbsp;:&nbsp; <strong>#{{pv.number}}</strong>
+            <!--<CLink :to="'../info/'+pipe.id">{{ pipe.name }}</CLink>-->
+            <a href="javascript:;" @click="goPipline(pipe.id)">{{ pipe.name }}</a>
+            &nbsp;:&nbsp; <strong>#{{ pv.number }}</strong>
           </div>
           <div class="sha">
-            {{getEvents(pv.events)}}
+            {{ getEvents(pv.events) }}
           </div>
           <div class="sha">
             <i class="iconfont icon-branches" style="font-size:14px" />
-            {{pv.sha||'默认分支'}}
+            {{ pv.sha || '默认分支' }}
           </div>
           <div style="flex:1"></div>
           <div>
             &nbsp;
             <CButton size="sm" color="warning" variant="outline" @click="cancelFun"
-              v-if="perm.exec==true&&!this.builded">
+              v-if="perm.exec == true && !this.builded">
               停止构建
             </CButton>
             &nbsp;
-            <CButton size="sm" color="danger" variant="outline" @click="delVersion" v-if="perm.exec==true&&this.builded">
+            <CButton size="sm" color="danger" variant="outline" @click="delVersion"
+              v-if="perm.exec == true && this.builded">
               删除构建
             </CButton>
             &nbsp;
-            <CButton size="sm" color="info" variant="outline" @click="rebuildFun" v-if="perm.exec==true">
+            <CButton size="sm" color="info" variant="outline" @click="rebuildFun" v-if="perm.exec == true">
               重新构建
             </CButton>
             &nbsp;
-            <CButton size="sm" color="dark" variant="outline" @click="pluginShow=true">
+            <CButton size="sm" color="dark" variant="outline" @click="pluginShow = true">
               查看配置
             </CButton>
           </div>
@@ -46,7 +48,7 @@
           <div style="flex:1">
             <small>仓库地址: <a :href="pipe.url" target="_blank">{{ pipe.url }}</a></small>
             <small style="color:#333">开始时间: {{ $dateFmt(pv.created) }}</small>
-            <small style="color:#333">运行: {{ $dateCha(build.started,build.finished) }}</small>
+            <small style="color:#333">运行: {{ $dateCha(build.started, build.finished) }}</small>
           </div>
         </div>
         <div class="hd-infos">{{ pipe.displayName }}</div>
@@ -67,37 +69,37 @@
                   工作目录文件准备
                 </div>
                 <div class="pgss">
-                  <CProgress :value="workpgss" color="info" :striped="true" show-percentage :animated="workpgss<100" />
+                  <CProgress :value="workpgss" color="info" :striped="true" show-percentage :animated="workpgss < 100" />
                 </div>
               </div>
             </div>
-            <div class="hd-errs" v-if="build.status=='error'&&build.error&&build.error!=''">
+            <div class="hd-errs" v-if="build.status == 'error' && build.error && build.error != ''">
               初始化错误: {{ build.error }}
             </div>
-            <div class="stage" v-for="stageid in this.stageids" :key="'stage:'+stageid">
+            <div class="stage" v-for="stageid in this.stageids" :key="'stage:' + stageid">
               <div class="tits clickitem" @click="toggleStage(stageid)">
                 <div class="kktit">
                   <div class="iconstage">
                     <CIcon
-                      :content="$options.coreics[stages[stageid].collapse==true?'cilCaretBottom':'cilCaretLeft']" />
+                      :content="$options.coreics[stages[stageid].collapse == true ? 'cilCaretBottom' : 'cilCaretLeft']" />
                   </div>
                   <div class="icons rotateDiv">
                     <i class="iconfont icon-success color-success" style="font-size:20px"
-                      v-if="stages[stageid].status=='ok'" />
+                      v-if="stages[stageid].status == 'ok'" />
                     <i class="iconfont icon-chacha color-error" style="font-size:20px"
-                      v-else-if="stages[stageid].status=='error'" />
+                      v-else-if="stages[stageid].status == 'error'" />
                     <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
-                      v-else-if="stages[stageid].status=='cancel'" />
+                      v-else-if="stages[stageid].status == 'cancel'" />
                     <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
                   </div>
                   <div class="titcont">
-                    {{stages[stageid].name}}
+                    {{ stages[stageid].name }}
                   </div>
-                  <div class="times">{{$dateCha(stages[stageid].started,stages[stageid].finished)}}</div>
+                  <div class="times">{{ $dateCha(stages[stageid].started, stages[stageid].finished) }}</div>
                 </div>
                 <div class="infos" style="margin-left:60px">
                   <!-- <div style="flex:1"></div> -->
-                  <div>{{stages[stageid].displayName}}</div>
+                  <div>{{ stages[stageid].displayName }}</div>
                 </div>
                 <!-- <div class="errs" style="margin-left:60px">
                   {{stages[stageid].error}}
@@ -105,30 +107,30 @@
               </div>
               <CCollapse :show="stages[stageid].collapse" :duration="400">
                 <ul>
-                  <li class="clickitem" :class="[stepid==showStepid?'clickitems':'']"
-                    v-for="stepid in stages[stageid].stepids" :key="'step:'+stepid" @click="showStep(stepid)">
+                  <li class="clickitem" :class="[stepid == showStepid ? 'clickitems' : '']"
+                    v-for="stepid in stages[stageid].stepids" :key="'step:' + stepid" @click="showStep(stepid)">
                     <div class="kktit">
                       <div class="icons rotateDiv">
                         <i class="iconfont icon-success color-success" style="font-size:20px"
-                          v-if="steps[stepid].status=='ok'" />
+                          v-if="steps[stepid].status == 'ok'" />
                         <i class="iconfont icon-chacha color-error" style="font-size:20px"
-                          v-else-if="steps[stepid].status=='error'" />
+                          v-else-if="steps[stepid].status == 'error'" />
                         <i class="iconfont icon-jinzhide color-cancel" style="font-size:20px"
-                          v-else-if="steps[stepid].status=='cancel'" />
+                          v-else-if="steps[stepid].status == 'cancel'" />
                         <i class="iconfont icon-jiazaizhong color-runing" style="font-size:20px" v-else />
                       </div>
                       <div class="titcont">
-                        {{steps[stepid].name}}
+                        {{ steps[stepid].name }}
                       </div>
-                      <div class="times">{{$dateCha(steps[stepid].started,steps[stepid].finished)}}</div>
+                      <div class="times">{{ $dateCha(steps[stepid].started, steps[stepid].finished) }}</div>
                     </div>
                     <div class="infos">
-                      <div>{{steps[stepid].displayName}}</div>
+                      <div>{{ steps[stepid].displayName }}</div>
                       <div style="flex:1"></div>
-                      <div v-if="steps[stepid].waits&&steps[stepid].waits.length>0"
-                        v-c-tooltip.hover.click="{content:'等待的步骤',placement:'bottom'}">
+                      <div v-if="steps[stepid].waits && steps[stepid].waits.length > 0"
+                        v-c-tooltip.hover.click="{ content: '等待的步骤', placement: 'bottom' }">
                         <i class="iconfont icon-shijian" style="font-size:15px;color:#ad34ea" />
-                        {{steps[stepid].waits.join(",")}}
+                        {{ steps[stepid].waits.join(",") }}
                       </div>
                     </div>
                     <!-- <div class="errs">
@@ -140,29 +142,29 @@
             </div>
           </div>
           <div class="logdiv">
-            <div v-if="showStepid!=''&&stepcmdids[showStepid]">
+            <div v-if="showStepid != '' && stepcmdids[showStepid]">
               <div class="logs">
-                <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:'+cmdid">
+                <div class="cmdcont" v-for="cmdid in stepcmdids[showStepid]" :key="'cmd:' + cmdid">
                   <div class="cmdline">
                     <div class="rotateDiv">
                       <i class="iconfont icon-success color-success" style="font-size:10px"
-                        v-if="stepcmds[cmdid].status=='ok'" />
+                        v-if="stepcmds[cmdid].status == 'ok'" />
                       <i class="iconfont icon-chacha color-error" style="font-size:10px"
-                        v-else-if="stepcmds[cmdid].status=='error'" />
+                        v-else-if="stepcmds[cmdid].status == 'error'" />
                       <i class="iconfont icon-jinzhide color-cancel" style="font-size:10px"
-                        v-else-if="stepcmds[cmdid].status=='cancel'" />
+                        v-else-if="stepcmds[cmdid].status == 'cancel'" />
                       <i class="iconfont icon-jiazaizhong color-runing" style="font-size:8px" v-else />
                     </div>
-                    <div style="flex:1">{{stepcmds[cmdid].content}}</div>
-                    <div>{{$dateCha(stepcmds[cmdid].started,stepcmds[cmdid].finished)}}</div>
+                    <div style="flex:1">{{ stepcmds[cmdid].content }}</div>
+                    <div>{{ $dateCha(stepcmds[cmdid].started, stepcmds[cmdid].finished) }}</div>
                   </div>
-                  <ul v-if="steplogs[showStepid]&&steplogs[showStepid].logs">
-                    <li v-for="(log,$i) in steplogs[showStepid].logs[cmdid]" :key="'log:'+log.id+'-'+$i">
-                      <div class="num">{{$i+1}}</div>
+                  <ul v-if="steplogs[showStepid] && steplogs[showStepid].logs">
+                    <li v-for="(log, $i) in steplogs[showStepid].logs[cmdid]" :key="'log:' + log.id + '-' + $i">
+                      <div class="num">{{ $i + 1 }}</div>
                       <div class="cont">
-                        <div style="float:right">{{$dateFmt(log.times)}}</div>
-                        <div style="color:#ff0042" v-if="log.errs==true">{{log.content}}</div>
-                        <div v-else>{{log.content}}</div>
+                        <div style="float:right">{{ $dateFmt(log.times) }}</div>
+                        <div style="color:#ff0042" v-if="log.errs == true">{{ log.content }}</div>
+                        <div v-else>{{ log.content }}</div>
                       </div>
                     </li>
                   </ul>
@@ -171,16 +173,16 @@
               <div class="status">
                 <div class="icons rotateDiv">
                   <i class="iconfont icon-success color-success" style="font-size:30px"
-                    v-if="steps[showStepid].status=='ok'" />
+                    v-if="steps[showStepid].status == 'ok'" />
                   <i class="iconfont icon-chacha color-error" style="font-size:30px"
-                    v-else-if="steps[showStepid].status=='error'" />
+                    v-else-if="steps[showStepid].status == 'error'" />
                   <i class="iconfont icon-jinzhide color-cancel" style="font-size:30px"
-                    v-else-if="steps[showStepid].status=='cancel'" />
+                    v-else-if="steps[showStepid].status == 'cancel'" />
                   <i class="iconfont icon-jiazaizhong color-runing" style="font-size:30px" v-else />
                 </div>
-                <div class="suc" v-if="steps[showStepid].status=='ok'">Success</div>
-                <div class="err" v-if="steps[showStepid].status=='error'">{{steps[showStepid].error}}</div>
-                <div class="cncl" v-if="steps[showStepid].status=='cancel'">Cancel</div>
+                <div class="suc" v-if="steps[showStepid].status == 'ok'">Success</div>
+                <div class="err" v-if="steps[showStepid].status == 'error'">{{ steps[showStepid].error }}</div>
+                <div class="cncl" v-if="steps[showStepid].status == 'cancel'">Cancel</div>
               </div>
             </div>
           </div>
@@ -210,6 +212,7 @@ export default {
   components: { myavatar, pluginView },
   data () {
     return {
+      orgId: '',
       pv: {},
       usr: {},
       pipe: {},
@@ -246,8 +249,15 @@ export default {
       return;
     }
     this.isrun = true;
+    this.orgId = this.$route.query.org || '';
     this.getInfo(this.$route.params.id, true);
   }, methods: {
+    goPipline (id) {
+      if (this.orgId && this.orgId != '')
+        this.$router.push(`/pipeline/info/${id}?org=${this.orgId}`);
+      else
+        this.$router.push(`/pipeline/info/${id}`);
+    },
     getInfo (id, first) {
       PipelineVersion(id).then((res) => {
         this.pv = res.data.pv;

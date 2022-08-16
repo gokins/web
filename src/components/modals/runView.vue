@@ -65,7 +65,7 @@ export default {
   },
   methods: {
     goVersion(pipeVersionId) {
-      this.$router.push("/pipeline/build/" + pipeVersionId);
+      this.$router.push(`/pipeline/build/${pipeVersionId}`);
     },
     close() {
       this.runList = [];

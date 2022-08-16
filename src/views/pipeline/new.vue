@@ -32,7 +32,7 @@
                   <!-- <CButton @click="defaultTmp" color="dark" size="sm" variant="outline">
                           还原
                         </CButton> -->
-                  <CButton v-for="(tmpsItme,index) in tmps" :key="'tmps:'+index" @click="chooseTmp(tmpsItme.ymlContent)"
+                  <CButton v-for="(tmpsItme, index) in tmps" :key="'tmps:' + index" @click="chooseTmp(tmpsItme.ymlContent)"
                     color="dark" size="sm" variant="outline">
                     {{ tmpsItme.name }}
                   </CButton>
@@ -70,9 +70,9 @@
                 插件
               </template>
               <div style="margin-top:10px">
-                <CRow @click="showPlugin(itme)" v-for="(itme,i) in pluginInfos" :key="i">
+                <CRow @click="showPlugin(itme)" v-for="(itme, i) in pluginInfos" :key="i">
                   <CCol>
-                    <CWidgetIcon :header="itme.name +'插件'" :text="itme.name" color="gradient-warning">
+                    <CWidgetIcon :header="itme.name + '插件'" :text="itme.name" color="gradient-warning">
                       <CIcon name="cil-moon" width="24" />
                     </CWidgetIcon>
                   </CCol>
@@ -204,7 +204,7 @@ export default {
           this.saveBtu = false
           this.$msgOk("保存成功");
           setTimeout(() => {
-            this.$router.push("/pipeline/info/" + res.data.id)
+            this.$router.push(`/pipeline/info/${res.data.id}?org=${this.orgId}`);
           }, 500);
         })
         .catch((err) => {

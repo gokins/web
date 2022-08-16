@@ -1,7 +1,7 @@
 <template>
   <CModal title="请输入仓库分支或者commitSha" :show="shown" @update:show="(val) => $emit('update:shown', val)" :centered="true">
     <template #footer>
-      <CButton color="warning" variant="outline" @click="$emit('update:shown', false )">取消</CButton>
+      <CButton color="warning" variant="outline" @click="$emit('update:shown', false)">取消</CButton>
       <CButton color="info" @click="run">确定</CButton>
     </template>
     <div>
@@ -21,6 +21,7 @@ export default {
   props: {
     id: String,
     shown: Boolean,
+    orgId: String,
   },
   watch: {
     id (nv) {
@@ -65,7 +66,10 @@ export default {
       RunPipeline(par)
         .then((res) => {
           this.value = {}
-          this.$router.push("/pipeline/build/" + res.data.id);
+          if (this.orgId && this.orgId != '')
+            this.$router.push(`/pipeline/build/${res.data.id}?org=${this.orgId}`);
+          else
+            this.$router.push(`/pipeline/build/${res.data.id}`);
         })
         .catch((err) => UtilCatch(this, err));
     }

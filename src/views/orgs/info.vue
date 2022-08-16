@@ -271,7 +271,7 @@
     <SelectUser :shown.sync="selAdm" @addFun="addAdmFun" v-if="perm.own==true" />
     <SelectUser :shown.sync="selUsr" @addFun="addUsrFun" v-if="perm.adm==true" />
     <OrgUserPerm :shown.sync="selPerm" :perm="curPerm" @subFun="upUsrPermFun" />
-    <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId" :orgId="info.aid+''" />
 
     <CModal title="添加变量" :show="varsShow" @update:show="closeVars" :centered="true">
       <template #footer>
@@ -470,7 +470,7 @@ export default {
         .catch((err) => UtilCatch(this, err));
     },
     goVersion (id) {
-      this.$router.push("/pipeline/build/" + id);
+      this.$router.push(`/pipeline/build/${id}`);
     },
     getPipeList (pg) {
       this.loading = true;
@@ -495,7 +495,7 @@ export default {
         .catch((err) => UtilCatch(this, err));
     },
     goEdit (id) {
-      this.$router.push("/pipeline/info/" + id);
+      this.$router.push(`/pipeline/info/${id}`);
     },
     subFun () {
       if (this.formData.name == "") {

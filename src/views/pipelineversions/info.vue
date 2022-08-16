@@ -439,7 +439,7 @@ export default {
     }, rebuildFun () {
       this.$confirm("确定重新构建?", null, () => {
         RebuildVersion(this.pv.id).then((res) => {
-          this.$router.push("/pipeline/build/" + res.data.id)
+          this.$router.push(`/pipeline/build/${res.data.id}?org=${this.orgId}`)
         }).catch((err) => UtilCatch(this, err));
       })
     },

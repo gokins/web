@@ -11,7 +11,7 @@
         </div>
       </CCardHeader>
           <CCardBody>
-            <VersionlistView :items="items" :loading="loading"/>
+            <VersionlistView :orgId="orgId" :items="items" :loading="loading"/>
             <CPagination
              style="margin-top: 5px" 
               size="sm" 
@@ -81,10 +81,10 @@ export default {
         .catch((err) => UtilCatch(this, err));
     },
     goEdit(id) {
-      this.$router.push("/pipeline/info/" + id);
+      this.$router.push(`/pipeline/info/${id}?org=${this.orgId}`);
     },
     goNew() {
-      this.$router.push("/pipeline/new/" + this.orgId);
+      this.$router.push(`/pipeline/new/${this.orgId}`);
     },
   },
 };

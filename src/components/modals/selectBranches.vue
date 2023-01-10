@@ -24,26 +24,26 @@ export default {
     orgId: String,
   },
   watch: {
-    id (nv) {
+    id(nv) {
       if (nv != "") {
         this.searchSha()
       }
     },
-    shown (nv) {
+    shown(nv) {
       this.value = {}
     }
   },
-  mounted () {
+  mounted() {
     this.searchSha();
   },
-  data () {
+  data() {
     return {
       value: {},
       options: []
     }
   },
   methods: {
-    searchSha (q) {
+    searchSha(q) {
       if (this.id === "") {
         return
       }
@@ -51,14 +51,16 @@ export default {
         q: q,
         id: this.id,
       }).then((res) => {
-        this.options = res.data;
+        this.options = res.data || [];
+        if (this.options.length > 0)
+          this.value = this.options[0];
       }).catch((err) => UtilCatch(this, err));
     },
-    change (value, id) {
+    change(value, id) {
       this.value = { name: value }
       this.searchSha(value)
     },
-    run () {
+    run() {
       let par = { pipelineId: this.id, }
       if (this.value != null) {
         par.sha = this.value.name

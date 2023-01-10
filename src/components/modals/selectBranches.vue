@@ -56,6 +56,8 @@ export default {
         this.options = res.data || [];
         if (this.options.length > 0)
           this.value = this.options[0];
+        else
+          this.value = {}
       }).catch((err) => UtilCatch(this, err));
     },
     change(value, id) {

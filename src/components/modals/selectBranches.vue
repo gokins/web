@@ -30,7 +30,9 @@ export default {
       }
     },
     shown(nv) {
-      this.value = {}
+      /* this.value = {}
+      if (this.options.length > 0)
+        this.value = this.options[0]; */
     }
   },
   mounted() {

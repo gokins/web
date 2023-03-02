@@ -1,7 +1,7 @@
 <template>
   <div>
     <ul class="tlist">
-      <li v-for="item in items" :key="'pipe:'+item.id" @click="$router.push(`/pipeline/info/${item.id}`)">
+      <li v-for="item in items" :key="'pipe:'+item.id" @click="goPipline(item.id)">
         <div class="tit">
           <div class="icons rotateDiv" v-if="item.build&&item.build.id!=''">
             <i class="iconfont icon-success color-success" style="font-size:20px" v-if="item.build.status=='ok'" />
@@ -52,6 +52,7 @@ export default {
   props: {
     items: Array,
     loading: Boolean,
+    orgId:String,
   },
   /* watch: {
     param (nv) {
@@ -60,7 +61,14 @@ export default {
   }, */
   data () {
     return {}
-  },
+  },methods:{
+    goPipline(id){
+      if(this.orgId&&this.orgId!='')
+        this.$router.push(`/pipeline/info/${id}?org=${this.orgId}`);
+      else
+        this.$router.push(`/pipeline/info/${id}`);
+    }
+  }
 }
 </script>
 <style lang="sass" scoped>

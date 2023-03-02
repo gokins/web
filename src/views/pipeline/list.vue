@@ -17,7 +17,7 @@
         </div>
       </CCardHeader>
       <CCardBody>
-        <PipelistView :items="items" :loading="loading" #default="{ item }">
+        <PipelistView :orgId="orgId" :items="items" :loading="loading" #default="{ item }">
           <CButton
             color="info"
             variant="outline"
@@ -39,7 +39,7 @@
         />
       </CCardBody>
     </CCard>
-    <SelectBranches :shown.sync="selectShow" :id="pipelineId" />
+    <SelectBranches :shown.sync="selectShow" :id="pipelineId" :orgId="orgId" />
   </div>
 </template>
 <script>
@@ -123,13 +123,13 @@ export default {
       this.selectShow = true;
     },
     goVersion(id) {
-      this.$router.push("/pipeline/build/" + id);
+      this.$router.push(`/pipeline/build/?org=${this.orgId}`);
     },
     goEdit(id) {
-      this.$router.push("/pipeline/info/" + id);
+      this.$router.push(`/pipeline/info/?org=${this.orgId}`);
     },
     goNew() {
-      this.$router.push("/pipeline/new");
+      this.$router.push(`/pipeline/new/${this.orgId}`);
     },
   },
 };

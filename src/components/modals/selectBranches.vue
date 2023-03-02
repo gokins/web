@@ -21,6 +21,7 @@ export default {
   props: {
     id: String,
     shown: Boolean,
+    orgId: String,
   },
   watch: {
     id(nv) {
@@ -30,6 +31,9 @@ export default {
     },
     shown(nv) {
       this.value = {};
+      /* this.value = {}
+      if (this.options.length > 0)
+        this.value = this.options[0]; */
     }
   },
   mounted() {
@@ -50,7 +54,11 @@ export default {
         q: q,
         id: this.id,
       }).then((res) => {
-        this.options = res.data;
+        this.options = res.data || [];
+        if (this.options.length > 0)
+          this.value = this.options[0];
+        else
+          this.value = {}
       }).catch((err) => UtilCatch(this, err));
     },
     change(value, id) {
@@ -58,7 +66,7 @@ export default {
       this.searchSha(value)
     },
     run() {
-      console.log('run value:',this.value);
+      console.log('run value:', this.value);
       let par = { pipelineId: this.id, }
       if (this.value) {
         par.sha = this.value.name
@@ -66,7 +74,10 @@ export default {
       RunPipeline(par)
         .then((res) => {
           this.value = {}
-          this.$router.push("/pipeline/build/" + res.data.id);
+          if (this.orgId && this.orgId != '')
+            this.$router.push(`/pipeline/build/${res.data.id}?org=${this.orgId}`);
+          else
+            this.$router.push(`/pipeline/build/${res.data.id}`);
         })
         .catch((err) => UtilCatch(this, err));
     }

@@ -44,12 +44,19 @@
       <CButton class="backBtn" @click="goBack" v-show="showBack">
         <CIcon :content="$options.coreics['cilChevronLeft']" />back
       </CButton>
+      <CButton class="backBtn" @click="goOrg(orgId)" v-show="orgId && orgId != ''" style="margin-left: 10px;">
+        <CIcon :content="$options.coreics['cilChevronLeft']" />组织: {{ orgName }}
+      </CButton>
       <CBreadcrumbRouter class="border-0 mb-0" />
     </CSubheader>
   </CHeader>
 </template>
 
 <script>
+import {
+  OrgInfo,
+  UtilCatch,
+} from "@/assets/js/apis";
 import { freeSet } from "@coreui/icons";
 import TheHeaderDropdownAccnt from './TheHeaderDropdownAccnt'
 
@@ -61,6 +68,8 @@ export default {
   },
   data () {
     return {
+      orgId: '',
+      orgName: '',
       showBack: false
     }
   },
@@ -68,15 +77,39 @@ export default {
     uids () {
       return this.$store.state.user?.id
     }
+  }, watch: {
+    $route (to, from) {
+      this.showBack = window.history.length > 1;
+      let orgId = this.$route.query.org || '';
+      if(orgId==''){
+        this.orgId = '';
+      }else if (orgId != this.orgId) {
+        this.orgId = orgId;
+        this.orgName = this.orgId;
+        this.getOrgInfo(this.orgId);
+      } 
+    }
   },
   mounted () {
     // console.log('window.history.length', window.history.length);
-    this.showBack = window.history.length > 1
+    this.showBack = window.history.length > 1;
   },
   methods: {
     goBack () {
       this.$router.back(-1)
-    }
+    }, goOrg (id) {
+      this.$router.push(`/org/info/${id}`);
+    },
+    getOrgInfo (id) {
+      this.loading = true;
+      OrgInfo(id)
+        .then((res) => {
+          this.orgName = res.data.org.name;
+        })
+        .catch((err) =>
+          UtilCatch(this, err)
+        );
+    },
   }
 }
 </script>

@@ -22,7 +22,7 @@
               <CIcon name="cil-calculator" />
               构建历史
             </template>
-            <VersionlistView :items="versionItems" :loading="loading" :hidepipe="true" />
+            <VersionlistView :orgId="orgId" :items="versionItems" :loading="loading" :hidepipe="true" />
             <CPagination :activePage="versionPage" :pages="versionPages" @update:activePage="getVersionList"
               style="float: right; margin-top: 20px" />
           </CTab>
@@ -168,7 +168,7 @@
         </CTabs>
       </CCardBody>
     </CCard>
-    <SelectBranches :shown.sync="selectShow" :id="this.$route.params.id" />
+    <SelectBranches :shown.sync="selectShow" :id="this.$route.params.id" :orgId="orgId" />
     <CModal title="添加变量" :show="varsShow" @update:show="closeVars" :centered="true">
       <template #footer>
         <CButton color="warning" @click="closeVars">关闭</CButton>
@@ -239,6 +239,7 @@ export default {
   },
   data () {
     return {
+      orgId: '',
       loading: true,
       versionPage: 0,
       versionPages: 0,
@@ -340,6 +341,7 @@ export default {
       this.$router.push("/404");
       return;
     }
+    this.orgId = this.$route.query.org || '';
     this.pipelineId = this.$route.params.id;
     this.getVersionList();
     this.pipeInfo();
@@ -375,16 +377,16 @@ export default {
       this.selectShow = true;
     },
     goVersion (id) {
-      this.$router.push("/pipeline/build/" + id);
+      this.$router.push(`/pipeline/build/${id}?org=${this.orgId}`);
     },
     goEdit (id) {
-      this.$router.push("/pipeline/info/" + id);
+      this.$router.push(`/pipeline/info/${id}?org=${this.orgId}`);
     },
     copy () {
       this.$confirm("确定复制流水线?", null, () => {
         CopyPipeline(this.pipelineId)
           .then((res) => {
-            this.$router.push("/pipeline/info/" + res.data.id);
+            this.$router.push(`/pipeline/info/${res.data.id}?org=${this.orgId}`);
           })
           .catch((err) => UtilCatch(this, err));
       });
@@ -402,11 +404,9 @@ export default {
       PipelineVars({ pipelineId: this.pipelineId, page: this.varPage })
         .then((res) => {
           this.varItems = [];
-          let ls = [];
           for (const resKey in res.data.data) {
             let v = res.data.data[resKey];
             v.public = v.public == 1;
-            ls.push(v);
           }
           this.varPage = res.data.page;
           this.varPages = res.data.pages;
@@ -420,11 +420,9 @@ export default {
       PipelineVars({ pipelineId: this.pipelineId, page: this.varPage })
         .then((res) => {
           this.infoVarItems = [];
-          let ls = [];
           for (const resKey in res.data.data) {
             let v = res.data.data[resKey];
             v.public = v.public == 1;
-            ls.push(v);
           }
           this.infoVarPage = res.data.page;
           this.infoVarPages = res.data.pages;

@@ -41,11 +41,11 @@ export default {
                 case 1:
                     return mom.format('YYYY-MMM-DD');
                 case 2:
-                    return mom.format('hh:mm:ss');
+                    return mom.format('HH:mm:ss');
                 case 3:
                     return mom.format('mm:ss');
             }
-            return mom.format('YYYY-MM-DD hh:mm:ss');
+            return mom.format('YYYY-MM-DD HH:mm:ss');
         }
         Vue.prototype.$dateZero = function(dates) {
             if (!dates || dates == '' || dates == '0001-01-01T00:00:00Z')

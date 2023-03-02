@@ -1,7 +1,7 @@
 <template>
   <CModal title="请输入仓库分支或者commitSha" :show="shown" @update:show="(val) => $emit('update:shown', val)" :centered="true">
     <template #footer>
-      <CButton color="warning" variant="outline" @click="$emit('update:shown', false )">取消</CButton>
+      <CButton color="warning" variant="outline" @click="$emit('update:shown', false)">取消</CButton>
       <CButton color="info" @click="run">确定</CButton>
     </template>
     <div>
@@ -23,26 +23,26 @@ export default {
     shown: Boolean,
   },
   watch: {
-    id (nv) {
+    id(nv) {
       if (nv != "") {
         this.searchSha()
       }
     },
-    shown (nv) {
-      this.value = {}
+    shown(nv) {
+      this.value = {};
     }
   },
-  mounted () {
+  mounted() {
     this.searchSha();
   },
-  data () {
+  data() {
     return {
       value: {},
       options: []
     }
   },
   methods: {
-    searchSha (q) {
+    searchSha(q) {
       if (this.id === "") {
         return
       }
@@ -53,13 +53,14 @@ export default {
         this.options = res.data;
       }).catch((err) => UtilCatch(this, err));
     },
-    change (value, id) {
+    change(value, id) {
       this.value = { name: value }
       this.searchSha(value)
     },
-    run () {
+    run() {
+      console.log('run value:',this.value);
       let par = { pipelineId: this.id, }
-      if (this.value != null) {
+      if (this.value) {
         par.sha = this.value.name
       }
       RunPipeline(par)

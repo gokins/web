@@ -22,7 +22,7 @@ module.exports = {
         https: false, // 启用https
         proxy: {
             '/api': {
-                target: 'http://localhost:8030',
+                target: 'http://192.168.50.11:8030',
                 changeOrigin: true,
                 secure: false,
                 /* pathRewrite: {
